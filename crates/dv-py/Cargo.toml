@@ -1,0 +1,19 @@
+[package]
+name = "dataventura-py"
+description = "The connected-runtime host: control channel and Arrow shared memory for Python (and later R and Julia)."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+authors.workspace = true
+publish.workspace = true
+
+[lib]
+name = "dv_py"
+
+[lints]
+workspace = true
+
+[dependencies]

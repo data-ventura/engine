@@ -1,0 +1,20 @@
+[package]
+name = "dataventura-serve"
+description = "Headless remote helper: reads data where it lives and returns only what the app needs, over stdio."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+authors.workspace = true
+publish.workspace = true
+
+[[bin]]
+name = "dv-serve"
+path = "src/main.rs"
+
+[lints]
+workspace = true
+
+[dependencies]

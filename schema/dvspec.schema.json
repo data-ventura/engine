@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dataventura.com/schema/dvspec/0.json",
+  "title": "Data Ventura workspace (.dvspec)",
+  "description": "Draft. Sources, recipes, views and layout. Never data or secrets.",
+  "type": "object",
+  "required": ["dvspec"],
+  "properties": {
+    "dvspec": { "type": "integer", "const": 0, "description": "Format version." },
+    "sources": { "type": "object", "additionalProperties": { "$ref": "#/$defs/source" } },
+    "fields": { "type": "object", "description": "Derived fields by name.", "additionalProperties": { "type": "object" } },
+    "views": { "type": "array", "items": { "type": "object" } },
+    "layout": { "type": "object" },
+    "selection": { "type": "object" }
+  },
+  "$defs": {
+    "source": {
+      "type": "object",
+      "required": ["url"],
+      "properties": {
+        "url": { "type": "string", "description": "File path or URL (file, https, s3, gs, az, ssh)." },
+        "connection": { "type": "string", "description": "Name of a saved connection. Credentials stay in the keychain." }
+      }
+    }
+  }
+}

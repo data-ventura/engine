@@ -1,0 +1,19 @@
+[package]
+name = "dataventura-query"
+description = "Lazy table queries on Apache DataFusion: scans, filters, aggregates and joins by key, time and place."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+authors.workspace = true
+publish.workspace = true
+
+[lib]
+name = "dv_query"
+
+[lints]
+workspace = true
+
+[dependencies]

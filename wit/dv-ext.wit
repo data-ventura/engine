@@ -1,0 +1,82 @@
+package dv:ext@0.4.0;
+
+interface types {
+  enum dtype { f32, f64, i8, i16, i32, i64, u8, u16, u32, u64, boolean, utf8, timestamp, duration, category }
+  enum role { none, time, latitude, longitude, x, y, level, member, category, identifier, geometry }
+  record field-info { name: string, dtype: dtype, units: option<string>, role: role, dims: list<string> }
+
+  variant value { %bool(bool), int(s64), float(f64), text(string), choice(string) }
+  record param { name: string, value: value }
+  record param-spec { name: string, label: string, kind: string, default: value, help: string }
+  variant values { f64s(list<f64>), i64s(list<s64>), strings(list<string>), bools(list<bool>), arrow(list<u8>) }
+  variant error { invalid-input(string), unsupported(string), cancelled, failed(string) }
+
+  /// A lazy expression owned by the host. Guests build graphs and never hold the data.
+  resource expr {
+    info: func() -> field-info;
+    /// + - * / ** == < & | and friends.
+    binary: func(op: string, rhs: borrow<expr>) -> expr;
+    scalar: func(op: string, value: f64) -> expr;
+    /// sqrt, abs, rolling-mean, resample, regrid, ...
+    call: func(name: string, args: list<borrow<expr>>, params: list<param>) -> result<expr, error>;
+    /// mean, std, sum ... over dimensions or rows.
+    reduce: func(op: string, over: list<string>) -> expr;
+    filter: func(mask: borrow<expr>) -> expr;
+    /// Escape hatch: pull real values (chunked) for logic the host can't express.
+    collect: func(offset: u64, len: u64) -> result<values, error>;
+  }
+}
+
+interface host {
+  use types.{expr};
+  log: func(level: u8, msg: string);
+  /// Returns false when the user cancelled.
+  progress: func(fraction: f32, note: string) -> bool;
+  constant: func(v: f64, like: borrow<expr>) -> expr;
+  convert-units: func(e: borrow<expr>, to: string) -> result<expr, string>;
+  cache-get: func(key: string) -> option<list<u8>>;
+  cache-put: func(key: string, value: list<u8>);
+}
+
+/// Derived fields and transforms, for tables and arrays alike.
+interface transform {
+  use types.{expr, param, param-spec, error};
+  record op-info { id: string, label: string, inputs: list<tuple<string, string>>, params: list<param-spec>, output-units: option<string> }
+  describe: func() -> list<op-info>;
+  run: func(op: string, inputs: list<borrow<expr>>, params: list<param>) -> result<expr, error>;
+}
+
+/// Custom chart types: return marks, and dv-plot draws them.
+interface view {
+  use types.{expr, param, param-spec, error};
+  record view-info { id: string, label: string, fields: list<tuple<string, string>>, params: list<param-spec> }
+  variant mark { line(list<expr>), band(list<expr>), points(list<expr>), bars(list<expr>), rects(list<expr>), rule(f64), text(string) }
+  /// Style uses theme tokens, never raw colors.
+  record styled { mark: mark, style-json: string }
+  describe: func() -> list<view-info>;
+  build: func(id: string, fields: list<borrow<expr>>, params: list<param>) -> result<list<styled>, error>;
+}
+
+/// New formats. The host supplies byte ranges and does the caching.
+interface reader {
+  use types.{field-info, values, error};
+  /// Confidence 0-100 that this reader handles the source.
+  sniff: func(url: string, head: list<u8>) -> u8;
+  resource dataset {
+    open: static func(url: string) -> result<dataset, error>;
+    /// table | array | features
+    family: func() -> string;
+    fields: func() -> list<field-info>;
+    /// Arrow IPC for tables.
+    read: func(field: string, selection: string) -> result<values, error>;
+  }
+}
+
+interface bytes {
+  size: func(url: string) -> result<u64, string>;
+  read-range: func(url: string, offset: u64, len: u64) -> result<list<u8>, string>;
+}
+
+world transform-ext { import host; export transform; }
+world view-ext { import host; export view; }
+world reader-ext { import host; import bytes; export reader; }

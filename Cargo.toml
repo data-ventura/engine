@@ -1,0 +1,47 @@
+[workspace]
+resolver = "3"
+members = [
+    "crates/dv-data",
+    "crates/dv-query",
+    "crates/dv-model",
+    "crates/dv-grid",
+    "crates/dv-compute",
+    "crates/dv-render",
+    "crates/dv-spec",
+    "crates/dv-ext",
+    "crates/dv-py",
+    "crates/dv-serve",
+]
+
+[workspace.package]
+version = "0.0.0"
+edition = "2024"
+rust-version = "1.99"
+license = "Apache-2.0"
+repository = "https://github.com/data-ventura/engine"
+homepage = "https://dataventura.com"
+authors = ["Data Ventura contributors"]
+# Nothing is published until the M3 milestone (see README).
+publish = false
+
+[workspace.dependencies]
+dataventura-data = { path = "crates/dv-data" }
+dataventura-query = { path = "crates/dv-query" }
+dataventura-model = { path = "crates/dv-model" }
+dataventura-grid = { path = "crates/dv-grid" }
+dataventura-compute = { path = "crates/dv-compute" }
+dataventura-render = { path = "crates/dv-render" }
+dataventura-spec = { path = "crates/dv-spec" }
+dataventura-ext = { path = "crates/dv-ext" }
+dataventura-py = { path = "crates/dv-py" }
+
+[workspace.lints.rust]
+unsafe_op_in_unsafe_fn = "deny"
+missing_debug_implementations = "warn"
+
+[workspace.lints.clippy]
+all = { level = "warn", priority = -1 }
+
+[profile.release]
+lto = "thin"
+codegen-units = 1

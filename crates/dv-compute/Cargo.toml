@@ -1,0 +1,19 @@
+[package]
+name = "dataventura-compute"
+description = "The expression language, window functions, reductions and verification metrics."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+authors.workspace = true
+publish.workspace = true
+
+[lib]
+name = "dv_compute"
+
+[lints]
+workspace = true
+
+[dependencies]

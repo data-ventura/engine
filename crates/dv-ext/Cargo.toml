@@ -1,0 +1,19 @@
+[package]
+name = "dataventura-ext"
+description = "The dv:ext WebAssembly extension host and the Rust SDK for writing extensions."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+authors.workspace = true
+publish.workspace = true
+
+[lib]
+name = "dv_ext"
+
+[lints]
+workspace = true
+
+[dependencies]

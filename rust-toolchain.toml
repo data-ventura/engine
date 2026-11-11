@@ -1,0 +1,5 @@
+[toolchain]
+# Same pin as SourceRift: the app links both into one static library.
+channel = "1.99.1"
+profile = "minimal"
+components = ["clippy", "rustfmt"]

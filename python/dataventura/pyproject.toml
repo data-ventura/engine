@@ -1,0 +1,16 @@
+[project]
+name = "dataventura"
+version = "0.0.0"
+description = "Connect your own Python code to Data Ventura: transforms, views and readers that run in your environment."
+readme = "README.md"
+license = "Apache-2.0"
+requires-python = ">=3.11"
+dependencies = ["pyarrow>=18"]
+
+[project.urls]
+Homepage = "https://dataventura.com"
+Repository = "https://github.com/data-ventura/engine"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

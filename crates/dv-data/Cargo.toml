@@ -1,0 +1,19 @@
+[package]
+name = "dataventura-data"
+description = "Readers for tables, arrays and geospatial data, plus object storage and SFTP access."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+authors.workspace = true
+publish.workspace = true
+
+[lib]
+name = "dv_data"
+
+[lints]
+workspace = true
+
+[dependencies]

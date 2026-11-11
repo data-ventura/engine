@@ -1,0 +1,10 @@
+.DS_Store
+/target/
+**/*.rs.bk
+# Python
+__pycache__/
+.venv/
+*.egg-info/
+dist/
+# Spike data (downloaded by scripts/fetch-spike-data.sh)
+/fixtures/spike/data/
