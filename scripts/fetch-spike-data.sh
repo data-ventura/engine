@@ -1,28 +1,45 @@
 #!/usr/bin/env bash
 # Downloads the M0 spike's local test data into fixtures/spike/data/ (git-ignored).
 #
-# S1-S3: NYC TLC yellow taxi trips for 2025, 12 monthly Parquet files (about 40M rows, roughly 0.7 GB).
-#        Source: NYC Taxi & Limousine Commission trip record data (public).
-# S4:    ERA5 is read directly from Google's public ARCO-ERA5 Zarr store; nothing is downloaded.
+# S1-S3: NYC yellow taxi trips, January-March 2015 (38.5M rows), with the original pickup and dropoff
+#        coordinates. The official TLC Parquet files replaced coordinates with zone IDs, so this uses the
+#        Azure Open Datasets copy, which kept them. The 60 Spark part files are compacted into one Parquet
+#        file with 1M-row groups: fixtures/spike/data/nyc-taxi-2015q1.parquet.
+#        Source: NYC Taxi & Limousine Commission trip records, via Azure Open Datasets (public).
+# S4/S9: ERA5 is read directly from Google's public ARCO-ERA5 Zarr store; nothing is downloaded.
+#
+# Needs curl and uv (for the one-off compaction with pyarrow).
 set -euo pipefail
 
 root="$(cd "$(dirname "$0")/.." && pwd)"
-out="$root/fixtures/spike/data/nyc-taxi-2025"
-mkdir -p "$out"
+data="$root/fixtures/spike/data"
+out="$data/nyc-taxi-2015q1.parquet"
+parts="$data/nyc-taxi-2015q1.parts"
+base="https://azureopendatastorage.blob.core.windows.net/nyctlc"
 
-for m in 01 02 03 04 05 06 07 08 09 10 11 12; do
-  f="yellow_tripdata_2025-$m.parquet"
-  if [[ -s "$out/$f" ]]; then
-    echo "have $f"
-    continue
-  fi
-  echo "fetching $f"
-  curl -fL --retry 3 -o "$out/$f.part" "https://d37ci6vzurychx.cloudfront.net/trip-data/$f"
-  mv "$out/$f.part" "$out/$f"
-done
+if [[ -s "$out" ]]; then
+  echo "have $out"
+else
+  mkdir -p "$parts"
+  for m in 1 2 3; do
+    curl -fsS "$base?restype=container&comp=list&prefix=yellow/puYear=2015/puMonth=$m/part" \
+      | grep -o '<Name>[^<]*\.parquet</Name>' | sed -E 's#</?Name>##g' \
+      | while read -r name; do
+          f="$parts/2015-$m-$(basename "$name")"
+          if [[ -s "$f" ]]; then continue; fi
+          echo "fetching $name"
+          curl -fL --retry 3 -sS -o "$f.part" "$base/$name"
+          mv "$f.part" "$f"
+        done
+  done
+  echo "compacting into $out"
+  uv run -q --with 'pyarrow>=17' python -I "$root/scripts/compact-parquet.py" "$parts" "$out.tmp"
+  mv "$out.tmp" "$out"
+  rm -rf "$parts"
+fi
 
 cat <<'NOTE'
 
-Done. ERA5 for S4 is read in place from the public ARCO store:
+Done. ERA5 for S4 is read in place from the public ARCO store (Zarr format 2, one chunk per hourly step):
   gs://gcp-public-data-arco-era5/ar/full_37-1h-0p25deg-chunk-1.zarr-v3
 NOTE

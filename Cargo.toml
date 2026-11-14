@@ -11,6 +11,7 @@ members = [
     "crates/dv-ext",
     "crates/dv-py",
     "crates/dv-serve",
+    "spike",
 ]
 
 [workspace.package]

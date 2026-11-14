@@ -17,3 +17,17 @@ name = "dv_data"
 workspace = true
 
 [dependencies]
+tokio = { version = "1", default-features = false, features = ["sync", "macros", "time", "rt"] }
+libc = "0.2"
+arrow = { version = "60.1", default-features = false, features = ["prettyprint"] }
+parquet = { version = "60.1", default-features = false, features = ["arrow", "zstd", "snap", "lz4", "flate2-rust_backend"] }
+bytes = "1"
+rayon = "1.12"
+serde_json = "1"
+thiserror = "2"
+zarrs = { version = "0.23", default-features = false, features = ["async", "blosc"] }
+zarrs_object_store = { version = "0.7", default-features = false, features = ["http", "fs"] }
+
+[dev-dependencies]
+serde_json = "1"
+tokio = { version = "1", features = ["rt", "macros", "time", "test-util"] }
