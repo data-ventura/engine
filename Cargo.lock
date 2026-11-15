@@ -69,6 +69,7 @@ dependencies = [
  "arrow-buffer",
  "arrow-cast",
  "arrow-data",
+ "arrow-ipc",
  "arrow-ord",
  "arrow-row",
  "arrow-schema",
@@ -686,6 +687,13 @@ dependencies = [
 [[package]]
 name = "dataventura-py"
 version = "0.0.0"
+dependencies = [
+ "arrow",
+ "dataventura-data",
+ "libc",
+ "serde_json",
+ "thiserror",
+]
 
 [[package]]
 name = "dataventura-query"
@@ -724,6 +732,7 @@ dependencies = [
  "dataventura-data",
  "dataventura-grid",
  "dataventura-model",
+ "dataventura-py",
  "dataventura-render",
  "libc",
  "png",

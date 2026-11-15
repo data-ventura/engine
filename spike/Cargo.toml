@@ -24,6 +24,7 @@ dataventura-data.workspace = true
 dataventura-model.workspace = true
 dataventura-grid.workspace = true
 dataventura-render.workspace = true
+dataventura-py.workspace = true
 arrow = { version = "60.1", default-features = false }
 rayon = "1.12"
 wgpu = "30"
