@@ -82,7 +82,7 @@ pub fn cached_fraction(path: &std::path::Path) -> f64 {
             0,
         );
         assert_ne!(addr, libc::MAP_FAILED, "mmap");
-        let rc = libc::mincore(addr, len, resident.as_mut_ptr());
+        let rc = libc::mincore(addr, len, resident.as_mut_ptr().cast());
         libc::munmap(addr, len);
         assert_eq!(rc, 0, "mincore");
     }
