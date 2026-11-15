@@ -21,9 +21,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: Swatinem/rust-cache@v2
+      # NetCDF/HDF5 support (dv-data's `netcdf` feature) links the system netCDF-C library.
+      - if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y libnetcdf-dev
+      - if: runner.os == 'macOS'
+        run: brew install netcdf
       - run: cargo fmt --all --check
-      - run: cargo clippy --all-targets -- -D warnings
-      - run: cargo test --all-targets
+      - run: cargo clippy --all-targets --all-features -- -D warnings
+      - run: cargo test --all-targets --all-features
 
   deny:
     runs-on: ubuntu-latest

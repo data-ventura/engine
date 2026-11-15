@@ -8,6 +8,7 @@ Small datasets for tests live here (each under a few MB, with its source noted).
 | `tables/trips.*` | 500 taxi trips with text, boolean and null edge cases, in CSV, TSV, NDJSON, JSON, Parquet, Arrow, Excel and SQLite | Derived from `taxi-20k.parquet` | `scripts/reference/make-table-fixtures.py` |
 | `tables/payment-types.csv`, `tables/payment-fees.csv` | Lookup tables for join tests: unique keys, and several rows per key | Hand-written | — |
 | `tables/obs.csv`, `tables/visits.csv` | Synthetic observations at two stations (odd-second spacing, so nearest is never a tie) and station visits, for time joins | Generated | `scripts/reference/time-join.py` |
+| `arrays/*` | Tiny arrays: packed NetCDF 4 (int16 + scale/offset, `_FillValue`, `missing_value`, `_Unsigned`, noleap time), NetCDF 3, plain HDF5, `.npy` (C and Fortran order), `.npz` | Generated | `scripts/reference/make-array-fixtures.py` |
 | `arco-like.zarr` | A tiny synthetic array in ARCO-ERA5's layout: Zarr format 2, Blosc LZ4 + shuffle, NaN fill, one chunk missing | Generated (no external data) | `scripts/reference/make-zarr-fixture.py` |
 
 Reference results in `reference/` are computed by other tools, so tests compare against an independent implementation:
@@ -25,3 +26,4 @@ Reference results in `reference/` are computed by other tools, so tests compare 
 | `reference/cftime.json` | cftime and xarray `convert_calendar` (`scripts/reference/cftime-calendars.py`) |
 | `reference/time-join.json` | polars `join_asof` (`scripts/reference/time-join.py`) |
 | `reference/grid.json` | pyproj (PROJ) transforms, xarray pointwise interpolation, scipy nearest nodes, on synthetic grids (`scripts/reference/grid.py`) |
+| `reference/arrays.json` | xarray with cftime (`scripts/reference/make-array-fixtures.py`) |

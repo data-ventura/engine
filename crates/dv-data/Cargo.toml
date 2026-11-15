@@ -16,6 +16,11 @@ name = "dv_data"
 [lints]
 workspace = true
 
+[features]
+# NetCDF 3/4 and HDF5 through the system netCDF-C library (`brew install netcdf`,
+# `apt install libnetcdf-dev`).
+netcdf = ["dep:netcdf"]
+
 [dependencies]
 tokio = { version = "1", default-features = false, features = ["sync", "macros", "time", "rt"] }
 libc = "0.2"
@@ -25,6 +30,8 @@ bytes = "1"
 calamine = { version = "0.38", features = ["dates"] }
 chrono = { version = "0.4", default-features = false, features = ["std"] }
 glob = "0.3"
+netcdf = { version = "0.12", default-features = false, optional = true }
+npyz = { version = "0.9", features = ["npz"] }
 rusqlite = { version = "0.43", default-features = false, features = ["bundled", "column_decltype"] }
 async-trait = "0.1"
 futures-util = { version = "0.3", default-features = false, features = ["std"] }

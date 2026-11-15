@@ -4,6 +4,7 @@
 
 #[cfg(unix)]
 pub mod alloc;
+pub mod array;
 pub mod budget;
 mod excel;
 pub mod parquet;
