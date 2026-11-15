@@ -1,10 +1,11 @@
 //! Chart views drawn through the vector [`Scene`]: a line chart with a band, and a bar chart.
 //!
 //! The layout follows the chart quality bar: a 4 pt grid with 16 pt margins; a title at 1.2× the
-//! label size with a subtitle; faint gridlines one device pixel wide, snapped to pixel centers;
-//! Wilkinson ticks with the value axis ending on ticks; date axes with context shown once; tick
-//! labels that never overlap (a collision pass thins them instead of rotating them); and direct
-//! labels at the end of each series, nudged apart.
+//! label size with a subtitle; light gridlines one device pixel wide, snapped to pixel centers,
+//! with time gridlines dashed and running down beside their labels; Wilkinson ticks with the value
+//! axis ending on ticks; date axes with context shown once; tick labels that never overlap (a
+//! collision pass thins them instead of rotating them); and direct labels at the end of each
+//! series, nudged apart.
 //!
 //! Sizes are in points; `scale` device pixels per point. The returned [`Layout`] records where
 //! everything went, in device pixels, for tests.
@@ -31,7 +32,7 @@ pub const LIGHT: Theme = Theme {
     background: Rgba::rgb(255, 255, 255),
     text: Rgba::rgb(29, 29, 31),
     secondary: Rgba::rgb(110, 110, 115),
-    grid: Rgba::rgb(0, 0, 0).with_alpha(20),
+    grid: Rgba::rgb(0, 0, 0).with_alpha(48),
     axis: Rgba::rgb(0, 0, 0).with_alpha(90),
     series: Rgba::rgb(37, 99, 235),
 };
@@ -44,6 +45,8 @@ const LABEL_GAP: f64 = 8.0;
 /// Minimum space between two tick labels.
 const LABEL_SPACE: f64 = 8.0;
 const LINE_WIDTH: f64 = 2.0;
+/// Dash and gap of vertical gridlines.
+const DASH: f64 = 3.0;
 const BAND_ALPHA: u8 = 46;
 
 /// The size of a chart.
@@ -144,12 +147,18 @@ impl<S: Scene> Ctx<'_, S> {
         self.layout.hairlines.push((row, color));
     }
 
-    /// A vertical hairline one device pixel thick, centered on a pixel column.
-    fn vline(&mut self, x: f64, y0: f64, y1: f64, color: Rgba) {
+    /// A dashed vertical hairline one device pixel thick, centered on a pixel column, with dashes
+    /// and gaps of [`DASH`] points on whole pixels, starting with a dash at `y0`.
+    fn dashed_vline(&mut self, x: f64, y0: f64, y1: f64, color: Rgba) {
         let col = x.floor() + 0.5;
+        let dash = self.px(DASH).round();
+        let (mut y, end) = (y0.round(), y1.round());
         let mut p = BezPath::new();
-        p.move_to(Point::new(col, y0.round()));
-        p.line_to(Point::new(col, y1.round()));
+        while y < end {
+            p.move_to(Point::new(col, y));
+            p.line_to(Point::new(col, (y + dash).min(end)));
+            y += 2.0 * dash;
+        }
         self.scene.stroke(&p, 1.0, color, false);
     }
 
@@ -334,11 +343,20 @@ pub fn line_chart(
         .into_iter()
         .map(|t| (t.t, x_of(t.t), t.label))
         .collect();
-    for t in &ticks {
-        c.vline(t.1, plot.y0, plot.y1, theme.grid);
-    }
     c.y_axis(&y_ticks, plot, y_of, true);
     c.x_labels(&ticks, plot.y1 + c.px(6.0), true);
+    // Dashed time gridlines. Labeled ones run down beside their label, which starts just after
+    // the tick; ones thinned out of the labels stop at the plot.
+    let labels_bottom = plot.y1 + c.px(6.0) + label_h;
+    let x_ticks = c.layout.x_ticks.clone();
+    for (_, x, label) in &x_ticks {
+        let y1 = if label.is_empty() {
+            plot.y1
+        } else {
+            labels_bottom
+        };
+        c.dashed_vline(*x, plot.y0, y1, theme.grid);
+    }
 
     // The band, then the line over it.
     let mut ends = Vec::new();
