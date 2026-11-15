@@ -240,6 +240,17 @@ impl Reservation {
         Ok(())
     }
 
+    /// Accounts for `more` bytes that are already allocated, even past the limit. For consumers
+    /// that report memory after the fact (DataFusion's infallible `grow`); everything else should
+    /// use [`Reservation::grow`].
+    pub fn grow_unchecked(&mut self, more: u64) {
+        let inner = &self.budget.inner;
+        let before = inner.used.fetch_add(more, Ordering::AcqRel);
+        inner.peak.fetch_max(before + more, Ordering::Relaxed);
+        inner.by_consumer[self.consumer.slot()].fetch_add(more, Ordering::Relaxed);
+        self.bytes += more;
+    }
+
     /// Gives back all but `bytes` of this reservation.
     pub fn shrink_to(&mut self, bytes: u64) {
         let back = self.bytes.saturating_sub(bytes);
