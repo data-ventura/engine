@@ -1,0 +1,27 @@
+{
+ "taxi-20k.parquet": {
+  "size": 760027,
+  "metadata": "a10eb3829c06800359bcf4211d36e813572a00e6249a6af6b04f1c95fcf71468",
+  "content": "64e34d26ff77dcbead30b70a58f73ed8669366ec8428664c3932b63d59d1dc7e"
+ },
+ "tables/trips.csv": {
+  "size": 26032,
+  "metadata": "c75c1129e1b7ac5b7f748e46406a6ea4c8ef7ad2aec56e67720ed59cabc3872f",
+  "content": "c75c1129e1b7ac5b7f748e46406a6ea4c8ef7ad2aec56e67720ed59cabc3872f"
+ },
+ "tables/obs.csv": {
+  "size": 110874,
+  "metadata": "7230afa87d9e24c685fe3d63609324aa54d1bd422857053ad11ee2e63b75caf8",
+  "content": "cf278e60ed2cc88390442cb6cc372d61284a750e4e484d004cf8bbfd640c2813"
+ },
+ "arrays/packed.nc": {
+  "size": 10769,
+  "metadata": "ad2c76947c285ac966b47eac75ed8a607b16cff94e10f0dd457f644b8b842382",
+  "content": "ad2c76947c285ac966b47eac75ed8a607b16cff94e10f0dd457f644b8b842382"
+ },
+ "arco-like.zarr": {
+  "size": 4979,
+  "metadata": "0070616e18e79e90cbf2be0e30bacf84a123bb751dc9a13d78a4f1b017372972",
+  "content": "f1b8799e52ab2c29c48c67f44577f76b41e08221be1c416626e23d68ebe1e906"
+ }
+}

@@ -2,13 +2,16 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://dataventura.com/schema/dvspec/0.json",
   "title": "Data Ventura workspace (.dvspec)",
-  "description": "Draft. Sources, recipes, views and layout. Never data or secrets.",
+  "description": "Draft. Sources, field fixes, derived fields and joins as recipes, views, layout and selection. Never data or secrets.",
   "type": "object",
   "required": ["dvspec"],
+  "additionalProperties": false,
   "properties": {
     "dvspec": { "type": "integer", "const": 0, "description": "Format version." },
     "sources": { "type": "object", "additionalProperties": { "$ref": "#/$defs/source" } },
-    "fields": { "type": "object", "description": "Derived fields by name.", "additionalProperties": { "type": "object" } },
+    "fixes": { "type": "array", "items": { "$ref": "#/$defs/fix" }, "description": "Corrections to inferred roles and units." },
+    "fields": { "type": "object", "description": "Derived fields by name.", "additionalProperties": { "$ref": "#/$defs/derived" } },
+    "joins": { "type": "object", "description": "Joins by name.", "additionalProperties": { "$ref": "#/$defs/join" } },
     "views": { "type": "array", "items": { "type": "object" } },
     "layout": { "type": "object" },
     "selection": { "type": "object" }
@@ -17,10 +20,67 @@
     "source": {
       "type": "object",
       "required": ["url"],
+      "additionalProperties": false,
       "properties": {
-        "url": { "type": "string", "description": "File path or URL (file, https, s3, gs, az, ssh)." },
-        "connection": { "type": "string", "description": "Name of a saved connection. Credentials stay in the keychain." }
+        "url": { "type": "string", "description": "File path or URL (file, https, s3, gs, az, ssh). Never with a password." },
+        "connection": { "type": "string", "description": "Name of a saved connection. Credentials stay in the keychain." },
+        "format": { "type": "string", "description": "The format when the extension doesn't say, such as csv or geojson." },
+        "part": { "type": "string", "description": "A sheet, table, layer or variable within the file." }
       }
+    },
+    "fix": {
+      "type": "object",
+      "required": ["source", "field"],
+      "anyOf": [{ "required": ["role"] }, { "required": ["unit"] }],
+      "additionalProperties": false,
+      "properties": {
+        "source": { "type": "string" },
+        "field": { "type": "string" },
+        "role": { "enum": ["time", "latitude", "longitude", "x", "y", "vertical", "geometry", "identifier", "category", "measure", "text", "other"] },
+        "unit": { "type": "string", "description": "A UDUNITS-style unit, such as kg m-2 s-1." }
+      }
+    },
+    "derived": {
+      "type": "object",
+      "required": ["source", "formula"],
+      "additionalProperties": false,
+      "properties": {
+        "source": { "type": "string" },
+        "formula": { "type": "string", "minLength": 1 }
+      }
+    },
+    "join": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["by", "left", "right", "left_keys", "right_keys"],
+          "additionalProperties": false,
+          "properties": {
+            "by": { "const": "key" },
+            "left": { "type": "string" },
+            "right": { "type": "string" },
+            "left_keys": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+            "right_keys": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+            "duplicates": { "enum": ["keep_all", "first", "last", "mean", "sum", "min", "max", "count"] },
+            "order_by": { "type": "string" }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["by", "left", "right", "left_time", "right_time", "tolerance"],
+          "additionalProperties": false,
+          "properties": {
+            "by": { "const": "time" },
+            "left": { "type": "string" },
+            "right": { "type": "string" },
+            "left_time": { "type": "string" },
+            "right_time": { "type": "string" },
+            "tolerance": { "type": "string", "pattern": "^[0-9]+(\\.[0-9]+)?(us|µs|ms|s|m|min|h|d)$" },
+            "direction": { "enum": ["nearest", "backward", "forward"] },
+            "match_on": { "type": "array", "items": { "type": "array", "items": { "type": "string" }, "minItems": 2, "maxItems": 2 } }
+          }
+        }
+      ]
     }
   }
 }

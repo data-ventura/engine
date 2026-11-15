@@ -1,0 +1,54 @@
+dvspec = 0
+
+[sources.trips]
+url = "../tables/trips.csv"
+
+[sources.obs]
+url = "../tables/obs.csv"
+
+[sources.types]
+url = "../tables/payment-types.csv"
+
+[sources.era5]
+url = "https://storage.googleapis.com/gcp-public-data-arco-era5/ar/full_37-1h-0p25deg-chunk-1.zarr-v3"
+part = "2m_temperature"
+
+[[fixes]]
+source = "trips"
+field = "payment"
+role = "category"
+
+[[fixes]]
+source = "trips"
+field = "distance"
+unit = "mi"
+
+[fields.fare_per_km]
+source = "trips"
+formula = "fare / convert(distance, \"km\")"
+
+[joins.trip_types]
+by = "key"
+left = "trips"
+right = "types"
+left_keys = ["payment"]
+right_keys = ["code"]
+
+[joins.trip_weather]
+by = "time"
+left = "trip_types"
+right = "obs"
+left_time = "pickup"
+right_time = "time"
+tolerance = "10m"
+
+[[views]]
+kind = "histogram"
+source = "trips"
+x = "fare_per_km"
+
+[layout]
+columns = 2
+
+[selection]
+generation = 0

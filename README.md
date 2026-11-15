@@ -4,7 +4,7 @@ The open-source engine behind [Data Ventura](https://dataventura.com), a fast, n
 
 This repository holds everything that reads, computes and draws data, so results stay reproducible and citable. It's Apache-2.0. The desktop apps live in a separate, private repository and depend on this one.
 
-> **Status:** pre-alpha. The M0 spike is in progress; nothing here is usable yet.
+> **Status:** pre-alpha. The M0 spike is done and M1 (the engine crates) is in progress; nothing here is stable yet.
 
 ## Crates
 
@@ -39,6 +39,8 @@ cargo build
 cargo test
 cargo clippy --all-targets -- -D warnings
 ```
+
+NetCDF and HDF5 support is behind `dv-data`'s `netcdf` feature, which links the system netCDF-C library (`brew install netcdf` or `apt install libnetcdf-dev`). CI builds and tests with `--all-features`.
 
 ## Contributing
 
