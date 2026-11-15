@@ -1503,6 +1503,16 @@ dependencies = [
 [[package]]
 name = "dataventura-compute"
 version = "0.0.0"
+dependencies = [
+ "arrow",
+ "datafusion",
+ "dataventura-data",
+ "dataventura-model",
+ "dataventura-query",
+ "serde_json",
+ "thiserror",
+ "tokio",
+]
 
 [[package]]
 name = "dataventura-data"

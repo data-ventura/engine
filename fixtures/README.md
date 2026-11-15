@@ -19,3 +19,5 @@ Reference results in `reference/` are computed by other tools, so tests compare 
 | `reference/units.json` | pint (`scripts/reference/units.py`) |
 | `reference/tables.json` | DuckDB reading each file; pandas + openpyxl for Excel, pyarrow for Arrow (`scripts/reference/make-table-fixtures.py`) |
 | `reference/query.json` | DuckDB (`scripts/reference/query.py`) |
+| `reference/formulas.json` | polars (`scripts/reference/formulas.py`) |
+| `reference/verification.json` | Synthetic data and xskillscore scores (`scripts/reference/verification.py`) |

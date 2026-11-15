@@ -111,6 +111,58 @@ impl Unit {
             parts.join(" ")
         }
     }
+
+    /// The product of two units. Offsets don't carry into products.
+    pub fn mul(&self, other: &Unit) -> Unit {
+        self.combine(other, 1, format!("{} {}", self.wrapped(), other.wrapped()))
+    }
+
+    /// The quotient of two units.
+    pub fn div(&self, other: &Unit) -> Unit {
+        self.combine(other, -1, format!("{}/{}", self.wrapped(), other.wrapped()))
+    }
+
+    /// The unit raised to an integer power.
+    pub fn powi(&self, n: i32) -> Unit {
+        Unit {
+            text: format!("{}^{n}", self.wrapped()),
+            dims: self.dims.map(|d| d * n as i8),
+            scale: self.scale.powi(n),
+            offset: 0.0,
+        }
+    }
+
+    /// The square root, if every dimension's exponent is even.
+    pub fn sqrt(&self) -> Option<Unit> {
+        self.dims.iter().all(|d| d % 2 == 0).then(|| Unit {
+            text: format!("sqrt({})", self.text),
+            dims: self.dims.map(|d| d / 2),
+            scale: self.scale.sqrt(),
+            offset: 0.0,
+        })
+    }
+
+    fn combine(&self, other: &Unit, sign: i8, text: String) -> Unit {
+        let mut dims = self.dims;
+        for (d, e) in dims.iter_mut().zip(other.dims) {
+            *d += sign * e;
+        }
+        Unit {
+            text,
+            dims,
+            scale: self.scale * other.scale.powi(sign as i32),
+            offset: 0.0,
+        }
+    }
+
+    /// The text, in parentheses if it has more than one factor.
+    fn wrapped(&self) -> String {
+        if self.text.contains([' ', '/', '.', '*', '^']) {
+            format!("({})", self.text)
+        } else {
+            self.text.clone()
+        }
+    }
 }
 
 impl fmt::Display for Unit {
