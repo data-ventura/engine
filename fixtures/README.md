@@ -13,3 +13,5 @@ Reference results in `reference/` are computed by other tools, so tests compare 
 |---|---|
 | `reference/taxi-20k.profile.json` | DuckDB (`scripts/reference/profile.py`) |
 | `reference/arco-like.json` | xarray (`scripts/reference/make-zarr-fixture.py`) |
+| `reference/taxi-20k.selection.json` | DuckDB (`scripts/reference/selection.py`) |
+| `reference/units.json` | pint (`scripts/reference/units.py`) |

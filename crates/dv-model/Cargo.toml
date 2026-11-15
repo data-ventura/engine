@@ -17,9 +17,10 @@ name = "dv_model"
 workspace = true
 
 [dependencies]
-arrow = { version = "60.1", default-features = false }
+arrow = { workspace = true }
 rayon = "1.12"
 serde = { version = "1", features = ["derive"] }
+thiserror = "2"
 
 [dev-dependencies]
 dataventura-data.workspace = true

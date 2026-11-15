@@ -19,8 +19,8 @@ workspace = true
 [dependencies]
 tokio = { version = "1", default-features = false, features = ["sync", "macros", "time", "rt"] }
 libc = "0.2"
-arrow = { version = "60.1", default-features = false, features = ["prettyprint"] }
-parquet = { version = "60.1", default-features = false, features = ["arrow", "zstd", "snap", "lz4", "flate2-rust_backend"] }
+arrow = { workspace = true, features = ["prettyprint"] }
+parquet = { workspace = true, features = ["arrow", "zstd", "snap", "lz4", "flate2-rust_backend"] }
 bytes = "1"
 async-trait = "0.1"
 futures-util = { version = "0.3", default-features = false, features = ["std"] }

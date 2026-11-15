@@ -1,0 +1,116 @@
+[
+ {
+  "from": "km",
+  "to": "m",
+  "value": 3.5,
+  "result": 3500.0
+ },
+ {
+  "from": "hPa",
+  "to": "Pa",
+  "value": 1013.25,
+  "result": 101325.0
+ },
+ {
+  "from": "mbar",
+  "to": "kPa",
+  "value": 850.0,
+  "result": 85.0
+ },
+ {
+  "from": "degC",
+  "to": "K",
+  "value": -40.0,
+  "result": 233.14999999999998
+ },
+ {
+  "from": "degF",
+  "to": "degC",
+  "value": 98.6,
+  "result": 37.00000000000006
+ },
+ {
+  "from": "K",
+  "to": "degF",
+  "value": 300.0,
+  "result": 80.32999999999997
+ },
+ {
+  "from": "knots",
+  "to": "m/s",
+  "value": 25.0,
+  "result": 12.861111111111112
+ },
+ {
+  "from": "mph",
+  "to": "km/h",
+  "value": 60.0,
+  "result": 96.56064
+ },
+ {
+  "from": "ft",
+  "to": "m",
+  "value": 1000.0,
+  "result": 304.79999999999995
+ },
+ {
+  "from": "inch",
+  "to": "mm",
+  "value": 2.0,
+  "result": 50.8
+ },
+ {
+  "from": "W m-2",
+  "to": "J m-2 h-1",
+  "value": 340.0,
+  "result": 1224000.0
+ },
+ {
+  "from": "days",
+  "to": "hours",
+  "value": 1.5,
+  "result": 36.0
+ },
+ {
+  "from": "%",
+  "to": "1",
+  "value": 42.0,
+  "result": 0.42
+ },
+ {
+  "from": "ppm",
+  "to": "1",
+  "value": 410.0,
+  "result": 0.00041
+ },
+ {
+  "from": "degrees_north",
+  "to": "rad",
+  "value": 45.0,
+  "result": 0.7853981633974483
+ },
+ {
+  "from": "m3 s-1",
+  "to": "L/min",
+  "value": 0.25,
+  "result": 14999.999999999998
+ },
+ {
+  "from": "g/kg",
+  "to": "1",
+  "value": 12.0,
+  "result": 0.012
+ },
+ {
+  "from": "t",
+  "to": "lb",
+  "value": 2.0,
+  "result": 4409.245243697551
+ },
+ {
+  "from": "ha",
+  "to": "km2",
+  "value": 250.0,
+  "result": 2.5
+ }
+]

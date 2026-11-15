@@ -1,0 +1,76 @@
+[
+ {
+  "predicates": [
+   {
+    "kind": "range",
+    "field": "tripDistance",
+    "min": 1.0,
+    "max": 3.0
+   }
+  ],
+  "sql": "\"tripDistance\" between 1.0 and 3.0",
+  "rows": 10139
+ },
+ {
+  "predicates": [
+   {
+    "kind": "range",
+    "field": "fareAmount",
+    "min": null,
+    "max": 10.0
+   }
+  ],
+  "sql": "\"fareAmount\" <= 10.0",
+  "rows": 11507
+ },
+ {
+  "predicates": [
+   {
+    "kind": "range",
+    "field": "tpepPickupDateTime",
+    "min": 1422748800000000,
+    "max": null
+   },
+   {
+    "kind": "one_of",
+    "field": "paymentType",
+    "values": [
+     "1",
+     "2"
+    ]
+   }
+  ],
+  "sql": "epoch_us(\"tpepPickupDateTime\") >= 1422748800000000 and \"paymentType\" in ('1', '2')",
+  "rows": 13322
+ },
+ {
+  "predicates": [
+   {
+    "kind": "one_of",
+    "field": "passengerCount",
+    "values": [
+     1,
+     5
+    ]
+   }
+  ],
+  "sql": "\"passengerCount\" in (1, 5)",
+  "rows": 15222
+ },
+ {
+  "predicates": [
+   {
+    "kind": "range",
+    "field": "startLat",
+    "min": 40.7,
+    "max": 40.8
+   },
+   {
+    "kind": "not_null",
+    "field": "endLat"
+   }
+  ],
+  "sql": "\"startLat\" between 40.7 and 40.8 and \"endLat\" is not null",
+  "rows": 18554
+ }
+]

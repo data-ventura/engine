@@ -10,7 +10,7 @@ use arrow::array::{Array, ArrayRef, AsArray, RecordBatch};
 use arrow::compute::cast;
 use arrow::datatypes::{DataType, Float64Type, Int64Type, TimeUnit};
 use rayon::prelude::*;
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 
 /// Bins in a sampled histogram.
 pub const HISTOGRAM_BINS: usize = 40;
@@ -62,7 +62,7 @@ impl Kind {
 }
 
 /// A single value, in a column's [`Kind`].
-#[derive(Debug, Clone, PartialEq, Serialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum Value {
     Integer(i64),

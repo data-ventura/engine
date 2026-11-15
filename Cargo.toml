@@ -35,6 +35,11 @@ dataventura-render = { path = "crates/dv-render" }
 dataventura-spec = { path = "crates/dv-spec" }
 dataventura-ext = { path = "crates/dv-ext" }
 dataventura-py = { path = "crates/dv-py" }
+# Arrow and Parquet follow the versions DataFusion uses, so record batches pass between crates
+# without conversion. Upgrade them together with `datafusion`.
+arrow = { version = "59.2", default-features = false }
+parquet = { version = "59.2", default-features = false }
+datafusion = { version = "55.2", default-features = false }
 
 [workspace.lints.rust]
 unsafe_op_in_unsafe_fn = "deny"
