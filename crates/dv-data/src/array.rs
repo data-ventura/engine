@@ -376,14 +376,22 @@ mod npy {
         /// Every array in the archive, by name. Each has its own dimensions (`<name>_dim_N`),
         /// since `.npz` doesn't say which arrays share one.
         pub fn open_npz(path: &Path) -> Result<Self> {
-            let mut zip = npyz::npz::NpzArchive::open(path)?;
-            let names: Vec<String> = zip.array_names().map(str::to_string).collect();
+            let bad = |e: zip::result::ZipError| Error::Unsupported(format!(".npz: {e}"));
+            let mut zip = zip::ZipArchive::new(BufReader::new(File::open(path)?)).map_err(bad)?;
             let mut vars = Vec::new();
             let mut data = Vec::new();
-            for name in names {
-                let f = zip
-                    .by_name(&name)?
-                    .ok_or_else(|| Error::Unsupported(format!("no array {name:?}")))?;
+            for i in 0..zip.len() {
+                let entry = zip.by_index(i).map_err(bad)?;
+                // numpy names each member `<array>.npy`.
+                let Some(name) = entry
+                    .name()
+                    .map_err(bad)?
+                    .strip_suffix(".npy")
+                    .map(str::to_string)
+                else {
+                    continue;
+                };
+                let f = NpyFile::new(entry)?;
                 let (mut var, d) = to_f64(f)?;
                 var.dims = var.dims.iter().map(|x| format!("{name}_{x}")).collect();
                 var.name = name;

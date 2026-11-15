@@ -26,15 +26,15 @@ authors = ["Data Ventura contributors"]
 publish = false
 
 [workspace.dependencies]
-dataventura-data = { path = "crates/dv-data" }
-dataventura-query = { path = "crates/dv-query" }
-dataventura-model = { path = "crates/dv-model" }
-dataventura-grid = { path = "crates/dv-grid" }
-dataventura-compute = { path = "crates/dv-compute" }
-dataventura-render = { path = "crates/dv-render" }
-dataventura-spec = { path = "crates/dv-spec" }
-dataventura-ext = { path = "crates/dv-ext" }
-dataventura-py = { path = "crates/dv-py" }
+dataventura-data = { path = "crates/dv-data", version = "0.0.0" }
+dataventura-query = { path = "crates/dv-query", version = "0.0.0" }
+dataventura-model = { path = "crates/dv-model", version = "0.0.0" }
+dataventura-grid = { path = "crates/dv-grid", version = "0.0.0" }
+dataventura-compute = { path = "crates/dv-compute", version = "0.0.0" }
+dataventura-render = { path = "crates/dv-render", version = "0.0.0" }
+dataventura-spec = { path = "crates/dv-spec", version = "0.0.0" }
+dataventura-ext = { path = "crates/dv-ext", version = "0.0.0" }
+dataventura-py = { path = "crates/dv-py", version = "0.0.0" }
 # Arrow and Parquet follow the versions DataFusion uses, so record batches pass between crates
 # without conversion. Upgrade them together with `datafusion`.
 arrow = { version = "59.2", default-features = false }

@@ -21,9 +21,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: Swatinem/rust-cache@v2
-      # NetCDF/HDF5 support (dv-data's `netcdf` feature) links the system netCDF-C library.
+      # NetCDF/HDF5 support (dv-data's `netcdf` feature) links the system netCDF-C library;
+      # dv-render's text layout finds fonts through fontconfig on Linux.
       - if: runner.os == 'Linux'
-        run: sudo apt-get update && sudo apt-get install -y libnetcdf-dev
+        run: sudo apt-get update && sudo apt-get install -y libnetcdf-dev libfontconfig1-dev
       - if: runner.os == 'macOS'
         run: brew install netcdf
       - run: cargo fmt --all --check

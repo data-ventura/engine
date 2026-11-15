@@ -9,10 +9,17 @@ allow = [
     "ISC", "Zlib", "Unicode-3.0", "Unicode-DFS-2016", "BSL-1.0", "CC0-1.0", "MPL-2.0", "OFL-1.1",
 ]
 confidence-threshold = 0.9
+# Mozilla's root certificates, shipped as data (via reqwest's rustls verifier). CDLA-Permissive-2.0
+# is a permissive data licence that puts no conditions on the code using it.
+exceptions = [
+    { name = "webpki-root-certs", allow = ["CDLA-Permissive-2.0"] },
+]
 
 [bans]
 multiple-versions = "warn"
 wildcards = "deny"
+# Workspace crates depend on each other by path; none are published yet (see Cargo.toml).
+allow-wildcard-paths = true
 # The engine must never depend on proprietary Data Ventura code or SourceRift's chassis.
 deny = [
     { name = "dv-license" }, { name = "dv-mcp" }, { name = "dv-cli" }, { name = "dv-app-ffi" },
@@ -21,3 +28,10 @@ deny = [
 [sources]
 unknown-registry = "deny"
 unknown-git = "deny"
+
+[advisories]
+ignore = [
+    # Unmaintained, with no known vulnerability: a build-time macro crate that zarrs uses. Remove
+    # once zarrs moves off it.
+    { id = "RUSTSEC-2024-0436", reason = "build-time only, pulled in by zarrs" },
+]
