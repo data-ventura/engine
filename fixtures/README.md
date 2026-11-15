@@ -9,6 +9,7 @@ Small datasets for tests live here (each under a few MB, with its source noted).
 | `tables/payment-types.csv`, `tables/payment-fees.csv` | Lookup tables for join tests: unique keys, and several rows per key | Hand-written | — |
 | `tables/obs.csv`, `tables/visits.csv` | Synthetic observations at two stations (odd-second spacing, so nearest is never a tie) and station visits, for time joins | Generated | `scripts/reference/time-join.py` |
 | `arrays/*` | Tiny arrays: packed NetCDF 4 (int16 + scale/offset, `_FillValue`, `missing_value`, `_Unsigned`, noleap time), NetCDF 3, plain HDF5, `.npy` (C and Fortran order), `.npz` | Generated | `scripts/reference/make-array-fixtures.py` |
+| `geo/*` | Small vector layers (GeoJSON with mixed types, Shapefile, FlatGeobuf in EPSG:3857, a two-layer GeoPackage, GeoParquet) with non-ASCII names, a hole and a multipolygon; and two GeoTIFFs (tiled deflate float32 in UTM 33N with nodata, striped LZW uint8 in WGS 84) | Generated | `scripts/reference/make-geo-fixtures.py` |
 | `arco-like.zarr` | A tiny synthetic array in ARCO-ERA5's layout: Zarr format 2, Blosc LZ4 + shuffle, NaN fill, one chunk missing | Generated (no external data) | `scripts/reference/make-zarr-fixture.py` |
 
 Reference results in `reference/` are computed by other tools, so tests compare against an independent implementation:
@@ -27,3 +28,4 @@ Reference results in `reference/` are computed by other tools, so tests compare 
 | `reference/time-join.json` | polars `join_asof` (`scripts/reference/time-join.py`) |
 | `reference/grid.json` | pyproj (PROJ) transforms, xarray pointwise interpolation, scipy nearest nodes, on synthetic grids (`scripts/reference/grid.py`) |
 | `reference/arrays.json` | xarray with cftime (`scripts/reference/make-array-fixtures.py`) |
+| `reference/geo.json` | GDAL through pyogrio and rasterio; geopandas for GeoParquet (`scripts/reference/make-geo-fixtures.py`) |

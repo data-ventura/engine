@@ -92,7 +92,7 @@ impl Engine {
             )),
             Format::Ndjson => Some(Arc::new(JsonFormat::default())),
             Format::Arrow => Some(Arc::new(ArrowFormat)),
-            Format::Json | Format::Excel { .. } | Format::Sqlite { .. } => None,
+            _ => None,
         };
         let provider: Arc<dyn datafusion::catalog::TableProvider> = match format {
             Some(format) => {

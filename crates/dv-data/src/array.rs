@@ -1,5 +1,5 @@
-//! N-dimensional arrays from files: NumPy `.npy`/`.npz`, and NetCDF 3/4 and HDF5 (with the
-//! `netcdf` feature, through the netCDF-C library).
+//! N-dimensional arrays from files: NumPy `.npy`/`.npz`, GeoTIFF rasters, and NetCDF 3/4 and
+//! HDF5 (with the `netcdf` feature, through the netCDF-C library).
 //!
 //! Every format opens as an [`ArraySource`]: named variables on named dimensions, with their
 //! attributes. [`read`] returns a hyperslab as `f64`, decoded as xarray decodes CF data: values
@@ -83,7 +83,7 @@ pub trait ArraySource: Send + Sync + std::fmt::Debug {
     }
 }
 
-/// Opens an array file by its extension: `.npy`, `.npz`, or (with the `netcdf` feature) `.nc`,
+/// Opens an array file by its extension: `.npy`, `.npz`, `.tif` (GeoTIFF), or (with the `netcdf` feature) `.nc`,
 /// `.nc4`, `.cdf`, `.h5`, `.hdf5`, `.he5`, `.h5ad`.
 pub fn open(path: impl AsRef<Path>) -> Result<Box<dyn ArraySource>> {
     let path = path.as_ref();
@@ -95,6 +95,7 @@ pub fn open(path: impl AsRef<Path>) -> Result<Box<dyn ArraySource>> {
     match ext.as_str() {
         "npy" => Ok(Box::new(npy::Npy::open(path)?)),
         "npz" => Ok(Box::new(npy::Npy::open_npz(path)?)),
+        "tif" | "tiff" => Ok(Box::new(crate::raster::GeoTiff::open(path)?)),
         "nc" | "nc4" | "cdf" | "netcdf" | "h5" | "hdf5" | "he5" | "h5ad" => open_netcdf(path),
         _ => Err(Error::Unsupported(format!(
             "{path:?} isn't a known array format"
@@ -180,7 +181,7 @@ pub fn decode(data: &mut [f64], v: &Variable) {
 }
 
 /// Copies a hyperslab out of a whole row-major array.
-fn slab(data: &[f64], shape: &[u64], start: &[u64], count: &[u64]) -> Result<Vec<f64>> {
+pub(crate) fn slab(data: &[f64], shape: &[u64], start: &[u64], count: &[u64]) -> Result<Vec<f64>> {
     if start.len() != shape.len() || count.len() != shape.len() {
         return Err(Error::Unsupported(
             "start and count need one entry per dimension".into(),

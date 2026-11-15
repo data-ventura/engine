@@ -44,6 +44,14 @@ pub enum Format {
     Sqlite {
         table: Option<String>,
     },
+    GeoJson,
+    FlatGeobuf,
+    /// A Shapefile's `.shp` (with its `.dbf` and `.prj` beside it).
+    Shapefile,
+    /// A GeoPackage; its only feature layer unless one is named.
+    GeoPackage {
+        layer: Option<String>,
+    },
 }
 
 impl Format {
@@ -62,6 +70,10 @@ impl Format {
             "arrow" | "feather" | "ipc" | "arrows" => Some(Format::Arrow),
             "xlsx" | "xlsm" | "xlsb" | "xls" | "ods" => Some(Format::Excel { sheet: None }),
             "sqlite" | "sqlite3" | "db" => Some(Format::Sqlite { table: None }),
+            "geojson" => Some(Format::GeoJson),
+            "fgb" => Some(Format::FlatGeobuf),
+            "shp" => Some(Format::Shapefile),
+            "gpkg" => Some(Format::GeoPackage { layer: None }),
             _ => None,
         };
         if let Some(f) = by_ext {
@@ -120,7 +132,10 @@ impl Table {
             let s = match &format {
                 Format::Parquet => {
                     let t = ParquetTable::open(f)?;
-                    let s = t.schema().clone();
+                    let s = crate::geo::annotate_geoparquet(
+                        t.schema(),
+                        t.schema().metadata().get("geo"),
+                    );
                     parquet.push(t);
                     s
                 }
@@ -181,8 +196,11 @@ impl Table {
                     let batches: Vec<_> = (0..t.group_rows().len())
                         .map(|g| t.batches(g, &names))
                         .collect::<Result<_>>()?;
-                    Box::new(batches.into_iter().flatten())
-                        as Box<dyn Iterator<Item = Result<RecordBatch>> + Send>
+                    // Batches carry the table's schema, with GeoParquet's geometry marked.
+                    let schema = self.schema.clone();
+                    Box::new(batches.into_iter().flatten().map(move |b| {
+                        Ok(RecordBatch::try_new(schema.clone(), b?.columns().to_vec())?)
+                    })) as Box<dyn Iterator<Item = Result<RecordBatch>> + Send>
                 }
                 format => read_file(f, format, self.schema.clone())?,
             });
@@ -332,6 +350,7 @@ fn infer_schema(path: &Path, format: &Format) -> Result<SchemaRef> {
         Format::Arrow => Ok(open_ipc(path)?.schema()),
         Format::Excel { sheet } => excel::schema(path, sheet.as_deref()),
         Format::Sqlite { table } => sqlite::schema(path, table.as_deref()),
+        geo => Ok(read_geo(path, geo)?.0),
     }
 }
 
@@ -380,7 +399,19 @@ fn read_file(
                 .into_iter()
                 .map(Ok),
         ),
+        geo => Box::new(read_geo(path, geo)?.1.into_iter().map(Ok)),
     })
+}
+
+/// Reads a vector geospatial file whole.
+fn read_geo(path: &Path, format: &Format) -> Result<(SchemaRef, Vec<RecordBatch>)> {
+    match format {
+        Format::GeoJson => crate::geo::read_geojson(path),
+        Format::FlatGeobuf => crate::geo::read_flatgeobuf(path),
+        Format::Shapefile => crate::geo::read_shapefile(path),
+        Format::GeoPackage { layer } => crate::geo::read_gpkg(path, layer.as_deref()),
+        other => unreachable!("{other:?} isn't a vector format"),
+    }
 }
 
 fn csv_format(delimiter: u8) -> arrow::csv::reader::Format {
