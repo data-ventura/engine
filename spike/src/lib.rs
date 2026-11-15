@@ -39,7 +39,8 @@ pub fn peak_rss() -> u64 {
 
 /// Physical footprint of this process now and at its peak, in bytes: what macOS charges the process
 /// for memory, including GPU buffers in unified memory and compressed pages. This is the number
-/// Activity Monitor shows and memory pressure acts on.
+/// Activity Monitor shows and memory pressure acts on. Elsewhere, the resident set size now and at
+/// its peak, which leaves out GPU memory.
 #[cfg(target_os = "macos")]
 pub fn footprint() -> (u64, u64) {
     // SAFETY: proc_pid_rusage writes a rusage_info_v4 into the buffer we pass, which is plain old
@@ -54,6 +55,18 @@ pub fn footprint() -> (u64, u64) {
         assert_eq!(rc, 0, "proc_pid_rusage");
         (info.ri_phys_footprint, info.ri_lifetime_max_phys_footprint)
     }
+}
+
+#[cfg(not(target_os = "macos"))]
+pub fn footprint() -> (u64, u64) {
+    // /proc/self/statm: total and resident sizes, in pages.
+    let resident = fs::read_to_string("/proc/self/statm")
+        .ok()
+        .and_then(|s| s.split_whitespace().nth(1)?.parse::<u64>().ok())
+        .unwrap_or(0);
+    // SAFETY: sysconf has no preconditions.
+    let page = unsafe { libc::sysconf(libc::_SC_PAGESIZE) } as u64;
+    (resident * page, peak_rss())
 }
 
 /// The fraction of `path`'s pages in the OS file cache, to confirm a cold run is cold. Maps the
@@ -238,7 +251,6 @@ impl Report {
     }
 
     /// Records the current and peak physical footprint, labeled with the phase just finished.
-    #[cfg(target_os = "macos")]
     pub fn memory(&mut self, phase: &str) {
         let (now, peak) = footprint();
         self.metric(
