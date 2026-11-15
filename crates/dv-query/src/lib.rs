@@ -30,6 +30,7 @@ use futures_util::StreamExt;
 pub mod join;
 pub mod pool;
 pub mod select;
+pub mod time;
 
 pub use select::selection_expr;
 
@@ -40,6 +41,8 @@ pub enum Error {
     DataFusion(#[from] datafusion::error::DataFusionError),
     #[error(transparent)]
     Data(#[from] dv_data::Error),
+    #[error(transparent)]
+    Arrow(#[from] arrow::error::ArrowError),
     #[error(transparent)]
     Cancelled(#[from] Cancelled),
     #[error(transparent)]
