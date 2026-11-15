@@ -40,6 +40,8 @@ cargo test
 cargo clippy --all-targets -- -D warnings
 ```
 
+Projections use PROJ 9.9 or later (`brew install proj`). Without it, the build compiles PROJ from source, which needs CMake, SQLite and libtiff (`apt install cmake sqlite3 libtiff-dev`). The engine never downloads PROJ's datum grids; it uses the ones installed and reports when a more accurate transform needs a grid that isn't.
+
 NetCDF and HDF5 support is behind `dv-data`'s `netcdf` feature, which links the system netCDF-C library (`brew install netcdf` or `apt install libnetcdf-dev`). CI builds and tests with `--all-features`.
 
 ## Contributing

@@ -17,7 +17,9 @@ name = "dv_grid"
 workspace = true
 
 [dependencies]
-proj4rs = { version = "0.3", features = ["crs-definitions"] }
+# PROJ 9.9 from the system (pkg-config), or built from source when that's missing or older.
+# `tiff` lets a source build read grid files, which are GeoTIFFs.
+proj-sys = { version = "0.28", features = ["tiff"] }
 thiserror = "2"
 
 [dev-dependencies]

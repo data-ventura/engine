@@ -4,14 +4,18 @@ Usage: grid.py <out.json>
 
 Run with: uv run --with pyproj --with xarray --with scipy python scripts/reference/grid.py fixtures/reference/grid.json
 
-Transforms go straight from EPSG codes. Without PROJ's grid files (pyproj wheels don't ship them),
-datum shifts use the EPSG Helmert transformation, as the engine does; the pipeline is recorded.
+Transforms go straight from EPSG codes. pyproj wheels ship no grid files, and the engine's tests
+point PROJ at fixtures/proj only, so both see the same grids. The datum cases transform NAD27 to
+NAD83 without and then with the NADCON grid in fixtures/proj (us_noaa_conus.tif), and record the
+more accurate operations that need grids that aren't installed.
 Bilinear interpolation on a global grid
 pads one longitude column at 360° so xarray sees the wrap the engine does.
 """
 
 import json
+import warnings
 import sys
+from pathlib import Path
 
 import numpy as np
 import pyproj
@@ -19,6 +23,8 @@ import xarray as xr
 from scipy.spatial import cKDTree
 
 rng = np.random.default_rng(11)
+# pyproj warns when the best transformation needs a missing grid; the datum cases record that.
+warnings.filterwarnings("ignore", message="Best transformation is not available")
 
 
 def clean(a):
@@ -85,8 +91,40 @@ m_lat = rng.uniform(-90, 90, 400)
 chord, idx = cKDTree(unit(n_lon, n_lat)).query(unit(m_lon, m_lat))
 meters = 2 * np.arcsin(np.minimum(chord / 2, 1)) * 6371008.8
 
+# Datum shifts, with their own random stream so the cases above don't change.
+drng = np.random.default_rng(27)
+d_lon = drng.uniform(-120, -75, 30)
+d_lat = drng.uniform(28, 47, 30)
+
+
+def unavailable(src, dst):
+    group = pyproj.transformer.TransformerGroup(src, dst, always_xy=True)
+    return [
+        {"operation": op.name, "accuracy_m": op.accuracy,
+         "grids": [g.short_name for g in op.grids if not g.available]}
+        for op in group.unavailable_operations
+    ]
+
+
+def datum(src, dst):
+    t = pyproj.Transformer.from_crs(src, dst, always_xy=True)
+    x, y = t.transform(d_lon, d_lat)
+    # The operation PROJ picked for the first point.
+    t.transform(d_lon[0], d_lat[0])
+    used = t.get_last_used_operation()
+    return {"x": clean(x), "y": clean(y), "operation": used.description, "accuracy_m": used.accuracy}
+
+
+datum_cases = {"lon": clean(d_lon), "lat": clean(d_lat)}
+datum_cases["no_grids"] = datum("EPSG:4267", "EPSG:4269")
+datum_cases["unavailable_nad27"] = unavailable("EPSG:4267", "EPSG:4269")
+datum_cases["unavailable_bng"] = unavailable("EPSG:4326", "EPSG:27700")
+pyproj.datadir.append_data_dir(str(Path(__file__).resolve().parents[2] / "fixtures" / "proj"))
+datum_cases["conus_grid"] = datum("EPSG:4267", "EPSG:4269")
+
 ref = {
     "transforms": transforms,
+    "datum": datum_cases,
     "grid": {"lon": clean(lon), "lat": clean(lat), "values": clean(data)},
     "points": {"lon": clean(qlon), "lat": clean(qlat), "bilinear": clean(points.values), "nearest": clean(nearest.values)},
     "regrid": {"lon": clean(target_lon), "lat": clean(target_lat), "values": clean(regrid.values)},
