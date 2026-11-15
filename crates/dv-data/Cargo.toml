@@ -22,6 +22,8 @@ libc = "0.2"
 arrow = { version = "60.1", default-features = false, features = ["prettyprint"] }
 parquet = { version = "60.1", default-features = false, features = ["arrow", "zstd", "snap", "lz4", "flate2-rust_backend"] }
 bytes = "1"
+async-trait = "0.1"
+futures-util = { version = "0.3", default-features = false, features = ["std"] }
 rayon = "1.12"
 serde_json = "1"
 thiserror = "2"

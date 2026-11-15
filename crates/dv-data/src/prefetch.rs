@@ -13,14 +13,16 @@
 //! recently used steps outside the window, and it gives steps back when another consumer needs the
 //! memory.
 
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 use std::future::Future;
 use std::pin::Pin;
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::sync::{Arc, Mutex, Weak};
+use std::time::Duration;
 
 use tokio::sync::{OnceCell, watch};
 use tokio::task::{AbortHandle, JoinSet};
+use tokio::time::Instant;
 
 use crate::Result;
 use crate::budget::{Budget, Consumer, Evict, Reservation};
@@ -277,9 +279,10 @@ impl Evict for Inner {
 async fn read_ahead(inner: Weak<Inner>, mut rx: watch::Receiver<Window>, parallel: usize) {
     let mut reads = JoinSet::new();
     let mut running: HashMap<u64, AbortHandle> = HashMap::new();
-    // Steps whose read failed at this window position: left to the view's own read, so a failing
-    // store isn't retried in a loop.
-    let mut failed = HashSet::new();
+    // Steps whose read failed (after the store's own retries), and when. They're read again once
+    // [`RETRY_FAILED_AFTER`] has passed, so a step that failed while the network was down recovers
+    // when it's back, without hammering a store that keeps failing.
+    let mut failed: HashMap<u64, Instant> = HashMap::new();
     let mut at = None;
     loop {
         let w = *rx.borrow_and_update();
@@ -287,6 +290,7 @@ async fn read_ahead(inner: Weak<Inner>, mut rx: watch::Receiver<Window>, paralle
             at = Some(w);
             failed.clear();
         }
+        failed.retain(|_, at| at.elapsed() < RETRY_FAILED_AFTER);
         {
             let Some(this) = inner.upgrade() else { return };
             running.retain(|&s, read| {
@@ -299,7 +303,7 @@ async fn read_ahead(inner: Weak<Inner>, mut rx: watch::Receiver<Window>, paralle
             let missing: Vec<u64> = {
                 let slots = this.slots.lock().expect("slots");
                 this.window_steps(w)
-                    .filter(|s| !running.contains_key(s) && !failed.contains(s))
+                    .filter(|s| !running.contains_key(s) && !failed.contains_key(s))
                     .filter(|s| slots.get(s).is_none_or(|slot| slot.values.get().is_none()))
                     .take(parallel.saturating_sub(running.len()))
                     .collect()
@@ -316,10 +320,11 @@ async fn read_ahead(inner: Weak<Inner>, mut rx: watch::Receiver<Window>, paralle
                 if let Ok((step, ok)) = done {
                     running.remove(&step);
                     if !ok {
-                        failed.insert(step);
+                        failed.insert(step, Instant::now());
                     }
                 }
             }
+            () = tokio::time::sleep(next_retry(&failed)), if !failed.is_empty() => {}
             changed = rx.changed() => {
                 if changed.is_err() {
                     reads.abort_all();
@@ -328,6 +333,18 @@ async fn read_ahead(inner: Weak<Inner>, mut rx: watch::Receiver<Window>, paralle
             }
         }
     }
+}
+
+/// How long read-ahead waits before reading a step again after its read failed.
+pub const RETRY_FAILED_AFTER: Duration = Duration::from_secs(1);
+
+/// Time until the earliest failed step may be read again.
+fn next_retry(failed: &HashMap<u64, Instant>) -> Duration {
+    failed
+        .values()
+        .map(|at| RETRY_FAILED_AFTER.saturating_sub(at.elapsed()))
+        .min()
+        .unwrap_or(RETRY_FAILED_AFTER)
 }
 
 #[cfg(test)]
@@ -375,6 +392,36 @@ mod tests {
         let read = log.lock().unwrap().clone();
         assert_eq!(read[..10], (10..20).collect::<Vec<_>>()[..]);
         assert!(read.windows(2).all(|w| w[0] < w[1]), "{read:?}");
+    }
+
+    #[tokio::test(start_paused = true)]
+    async fn steps_that_failed_are_read_again_once_the_store_recovers() {
+        let down = Arc::new(std::sync::atomic::AtomicBool::new(true));
+        let d = down.clone();
+        let fetch: Fetch = Arc::new(move |step| {
+            let d = d.clone();
+            Box::pin(async move {
+                tokio::time::sleep(Duration::from_millis(50)).await;
+                if d.load(Ordering::Relaxed) {
+                    Err(crate::Error::Zarr("network down".into()))
+                } else {
+                    Ok(vec![step as f32; 4])
+                }
+            })
+        });
+        let p = Prefetch::new(Budget::new(1 << 20), 100, 2, 3, fetch);
+        p.go_to(5, 1);
+        // The view's read fails, and nothing wrong is cached.
+        assert!(p.get(5).await.is_err());
+        tokio::time::sleep(Duration::from_millis(200)).await;
+        assert!(p.cached(5).is_none() && p.cached(6).is_none());
+        // The network comes back; read-ahead tries the window again within a second, with no
+        // help from the view.
+        down.store(false, Ordering::Relaxed);
+        tokio::time::sleep(RETRY_FAILED_AFTER + Duration::from_millis(200)).await;
+        for s in 5..=7 {
+            assert_eq!(p.cached(s).expect("recovered")[0], s as f32);
+        }
     }
 
     #[tokio::test(start_paused = true)]

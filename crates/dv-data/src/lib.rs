@@ -7,7 +7,9 @@ pub mod alloc;
 pub mod budget;
 pub mod parquet;
 pub mod prefetch;
+pub mod pressure;
 pub mod request;
+pub mod store;
 pub mod zarr;
 
 /// Errors from opening or reading a source.

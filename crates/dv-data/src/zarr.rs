@@ -10,10 +10,10 @@ use zarrs::array::{Array, ArrayMetadata, ArrayMetadataV2, ArraySubset};
 use zarrs::node::{NodePath, meta_key_v2_array, meta_key_v2_attributes, meta_key_v3};
 use zarrs::storage::AsyncReadableStorageTraits;
 use zarrs_object_store::AsyncObjectStore;
-use zarrs_object_store::object_store::http::HttpBuilder;
+use zarrs_object_store::object_store::ObjectStore;
 use zarrs_object_store::object_store::local::LocalFileSystem;
-use zarrs_object_store::object_store::{ClientOptions, ObjectStore};
 
+use crate::store::{RetryPolicy, RetryStore, http_store};
 use crate::{Error, Result};
 
 type Store = AsyncObjectStore<Box<dyn ObjectStore>>;
@@ -35,16 +35,17 @@ impl std::fmt::Debug for ZarrArray {
 
 impl ZarrArray {
     /// Opens the array at `path` (such as `/2m_temperature`) in the store at `url`, reading only
-    /// its metadata.
+    /// its metadata. Reads are retried as [`RetryStore`] describes.
     pub async fn open_http(url: &str, path: &str) -> Result<Self> {
-        // HTTP/2 measured about twice as fast as HTTP/1.1 per chunk against Google Cloud Storage.
-        let options = ClientOptions::new().with_allow_http2();
-        let http = HttpBuilder::new()
-            .with_url(url)
-            .with_client_options(options)
-            .build()
-            .map_err(zarr_err)?;
-        Self::open(Box::new(http), path).await
+        let http = http_store(url).map_err(zarr_err)?;
+        let retry = RetryStore::new(http, RetryPolicy::default());
+        Self::open(Box::new(retry), path).await
+    }
+
+    /// Opens the array at `path` in any object store, such as a [`RetryStore`] over a store with
+    /// faults injected.
+    pub async fn open_store(store: Box<dyn ObjectStore>, path: &str) -> Result<Self> {
+        Self::open(store, path).await
     }
 
     /// Opens the array at `path` in a store directory on disk. Read-only: nothing is written.

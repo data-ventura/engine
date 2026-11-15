@@ -654,7 +654,9 @@ name = "dataventura-data"
 version = "0.0.0"
 dependencies = [
  "arrow",
+ "async-trait",
  "bytes",
+ "futures-util",
  "libc",
  "parquet",
  "rayon",
