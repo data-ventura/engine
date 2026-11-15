@@ -19,9 +19,13 @@ workspace = true
 [dependencies]
 tokio = { version = "1", default-features = false, features = ["sync", "macros", "time", "rt"] }
 libc = "0.2"
-arrow = { workspace = true, features = ["prettyprint"] }
+arrow = { workspace = true, features = ["prettyprint", "csv", "json", "ipc"] }
 parquet = { workspace = true, features = ["arrow", "zstd", "snap", "lz4", "flate2-rust_backend"] }
 bytes = "1"
+calamine = { version = "0.38", features = ["dates"] }
+chrono = { version = "0.4", default-features = false, features = ["std"] }
+glob = "0.3"
+rusqlite = { version = "0.43", default-features = false, features = ["bundled", "column_decltype"] }
 async-trait = "0.1"
 futures-util = { version = "0.3", default-features = false, features = ["std"] }
 rayon = "1.12"

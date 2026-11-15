@@ -5,11 +5,14 @@
 #[cfg(unix)]
 pub mod alloc;
 pub mod budget;
+mod excel;
 pub mod parquet;
 pub mod prefetch;
 pub mod pressure;
 pub mod request;
+pub mod sqlite;
 pub mod store;
+pub mod table;
 pub mod zarr;
 
 /// Errors from opening or reading a source.
@@ -23,6 +26,8 @@ pub enum Error {
     Arrow(#[from] arrow::error::ArrowError),
     #[error("Zarr error: {0}")]
     Zarr(String),
+    #[error("{0}")]
+    Unsupported(String),
 }
 
 pub type Result<T, E = Error> = std::result::Result<T, E>;

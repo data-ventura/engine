@@ -1,0 +1,500 @@
+{"id":1,"pickup":"2015-01-02T21:27:43","distance":0.68,"fare":4.5,"payment":"2","note":"plain","tipped":true}
+{"id":2,"pickup":"2015-01-30T21:47:11","distance":0.6,"fare":4.5,"payment":"2","note":"say \"hi\", twice","tipped":false}
+{"id":3,"pickup":"2015-01-03T23:54:02","distance":1.62,"fare":8.0,"payment":"1","note":"comma, here","tipped":false}
+{"id":4,"pickup":"2015-01-26T10:58:51","distance":2.49,"fare":11.5,"payment":"2","note":"naïve café","tipped":true}
+{"id":5,"pickup":"2015-01-19T09:39:19","distance":0.54,"fare":4.0,"payment":"2","note":"日本語","tipped":false}
+{"id":6,"pickup":"2015-01-05T15:50:32","distance":2.9,"fare":12.5,"payment":"1","note":"plain","tipped":false}
+{"id":7,"pickup":"2015-01-23T23:42:52","distance":2.4,"fare":11.5,"payment":"1","note":"say \"hi\", twice","tipped":true}
+{"id":8,"pickup":null,"distance":0.57,"fare":4.5,"payment":"2","note":"comma, here","tipped":false}
+{"id":9,"pickup":"2015-01-08T19:14:38","distance":null,"fare":10.0,"payment":"1","note":"naïve café","tipped":false}
+{"id":10,"pickup":"2015-01-06T15:08:04","distance":2.4,"fare":null,"payment":"1","note":"日本語","tipped":true}
+{"id":11,"pickup":"2015-01-03T19:43:52","distance":2.5,"fare":10.5,"payment":null,"note":"plain","tipped":false}
+{"id":12,"pickup":"2015-01-07T09:48:24","distance":1.7,"fare":9.0,"payment":"1","note":null,"tipped":false}
+{"id":13,"pickup":"2015-01-29T23:16:25","distance":1.81,"fare":9.0,"payment":"1","note":"comma, here","tipped":null}
+{"id":14,"pickup":"2015-01-07T14:46:31","distance":2.1,"fare":11.5,"payment":"1","note":"naïve café","tipped":false}
+{"id":15,"pickup":"2015-01-06T10:06:48","distance":2.29,"fare":13.0,"payment":"1","note":"日本語","tipped":false}
+{"id":16,"pickup":"2015-01-19T21:52:07","distance":8.85,"fare":28.0,"payment":"1","note":"plain","tipped":true}
+{"id":17,"pickup":"2015-01-13T08:23:30","distance":2.38,"fare":12.5,"payment":"1","note":"say \"hi\", twice","tipped":false}
+{"id":18,"pickup":"2015-01-29T12:29:43","distance":2.94,"fare":16.5,"payment":"1","note":"comma, here","tipped":false}
+{"id":19,"pickup":"2015-01-28T16:09:29","distance":8.7,"fare":35.0,"payment":"1","note":"naïve café","tipped":true}
+{"id":20,"pickup":"2015-01-05T23:27:14","distance":2.65,"fare":10.0,"payment":"1","note":"日本語","tipped":false}
+{"id":21,"pickup":"2015-01-16T02:22:32","distance":3.3,"fare":11.5,"payment":"2","note":"plain","tipped":false}
+{"id":22,"pickup":"2015-01-07T22:22:21","distance":3.45,"fare":13.0,"payment":"1","note":"say \"hi\", twice","tipped":true}
+{"id":23,"pickup":"2015-01-16T12:28:58","distance":0.7,"fare":5.5,"payment":"1","note":"comma, here","tipped":false}
+{"id":24,"pickup":"2015-01-07T15:20:11","distance":1.36,"fare":9.0,"payment":"1","note":"naïve café","tipped":false}
+{"id":25,"pickup":"2015-01-08T18:33:26","distance":3.22,"fare":13.5,"payment":"1","note":"日本語","tipped":true}
+{"id":26,"pickup":"2015-01-31T13:38:30","distance":1.15,"fare":8.0,"payment":"2","note":"plain","tipped":false}
+{"id":27,"pickup":"2015-01-10T11:35:18","distance":1.76,"fare":10.0,"payment":"2","note":"say \"hi\", twice","tipped":false}
+{"id":28,"pickup":"2015-01-07T14:28:07","distance":1.2,"fare":8.0,"payment":"1","note":"comma, here","tipped":true}
+{"id":29,"pickup":"2015-01-15T12:44:40","distance":0.8,"fare":6.5,"payment":"2","note":"naïve café","tipped":false}
+{"id":30,"pickup":"2015-01-10T23:30:07","distance":2.37,"fare":13.0,"payment":"1","note":"日本語","tipped":false}
+{"id":31,"pickup":"2015-01-19T20:35:18","distance":3.45,"fare":13.0,"payment":"2","note":"plain","tipped":true}
+{"id":32,"pickup":"2015-01-16T15:41:00","distance":2.7,"fare":14.5,"payment":"1","note":"say \"hi\", twice","tipped":false}
+{"id":33,"pickup":"2015-01-09T19:19:38","distance":3.0,"fare":14.5,"payment":"2","note":"comma, here","tipped":false}
+{"id":34,"pickup":"2015-01-11T16:58:20","distance":1.1,"fare":6.0,"payment":"2","note":"naïve café","tipped":true}
+{"id":35,"pickup":"2015-01-14T15:11:13","distance":0.9,"fare":6.5,"payment":"2","note":"日本語","tipped":false}
+{"id":36,"pickup":"2015-01-08T21:48:35","distance":1.29,"fare":7.0,"payment":"1","note":"plain","tipped":false}
+{"id":37,"pickup":"2015-01-14T22:46:52","distance":9.0,"fare":29.0,"payment":"1","note":"say \"hi\", twice","tipped":true}
+{"id":38,"pickup":"2015-01-04T11:43:27","distance":2.8,"fare":10.5,"payment":"1","note":"comma, here","tipped":false}
+{"id":39,"pickup":"2015-01-17T07:59:33","distance":0.6,"fare":4.5,"payment":"2","note":"naïve café","tipped":false}
+{"id":40,"pickup":"2015-01-11T03:39:14","distance":2.33,"fare":10.5,"payment":"1","note":"日本語","tipped":true}
+{"id":41,"pickup":"2015-01-03T19:35:38","distance":2.8,"fare":11.5,"payment":"1","note":"plain","tipped":false}
+{"id":42,"pickup":"2015-01-05T18:23:26","distance":2.57,"fare":12.5,"payment":"2","note":"say \"hi\", twice","tipped":false}
+{"id":43,"pickup":"2015-01-19T22:44:49","distance":0.75,"fare":4.5,"payment":"2","note":"comma, here","tipped":true}
+{"id":44,"pickup":"2015-01-14T23:33:06","distance":1.2,"fare":7.0,"payment":"1","note":"naïve café","tipped":false}
+{"id":45,"pickup":"2015-01-17T21:27:32","distance":2.0,"fare":10.5,"payment":"1","note":"日本語","tipped":false}
+{"id":46,"pickup":"2015-01-08T21:45:37","distance":2.07,"fare":9.0,"payment":"1","note":"plain","tipped":true}
+{"id":47,"pickup":"2015-01-26T17:34:39","distance":0.7,"fare":5.0,"payment":"2","note":"say \"hi\", twice","tipped":false}
+{"id":48,"pickup":"2015-01-07T19:48:29","distance":2.1,"fare":10.0,"payment":"2","note":"comma, here","tipped":false}
+{"id":49,"pickup":"2015-01-30T13:51:06","distance":0.5,"fare":4.0,"payment":"2","note":"naïve café","tipped":true}
+{"id":50,"pickup":"2015-01-17T22:02:19","distance":3.98,"fare":14.5,"payment":"1","note":"日本語","tipped":false}
+{"id":51,"pickup":"2015-01-04T14:20:42","distance":0.85,"fare":7.5,"payment":"1","note":"plain","tipped":false}
+{"id":52,"pickup":"2015-01-10T21:55:51","distance":1.1,"fare":7.0,"payment":"1","note":"say \"hi\", twice","tipped":true}
+{"id":53,"pickup":"2015-01-12T22:18:28","distance":5.4,"fare":20.5,"payment":"1","note":"comma, here","tipped":false}
+{"id":54,"pickup":"2015-01-08T11:36:14","distance":1.32,"fare":9.0,"payment":"2","note":"naïve café","tipped":false}
+{"id":55,"pickup":"2015-01-01T11:28:33","distance":1.61,"fare":8.0,"payment":"2","note":"日本語","tipped":true}
+{"id":56,"pickup":"2015-01-03T12:58:12","distance":1.17,"fare":6.0,"payment":"1","note":"plain","tipped":false}
+{"id":57,"pickup":"2015-01-04T02:28:00","distance":3.66,"fare":14.5,"payment":"1","note":"say \"hi\", twice","tipped":false}
+{"id":58,"pickup":null,"distance":2.08,"fare":9.5,"payment":"1","note":"comma, here","tipped":true}
+{"id":59,"pickup":"2015-01-05T08:44:33","distance":null,"fare":14.5,"payment":"1","note":"naïve café","tipped":false}
+{"id":60,"pickup":"2015-01-30T15:01:34","distance":1.1,"fare":null,"payment":"2","note":"日本語","tipped":false}
+{"id":61,"pickup":"2015-01-06T13:53:54","distance":9.87,"fare":32.0,"payment":null,"note":"plain","tipped":true}
+{"id":62,"pickup":"2015-01-09T08:04:46","distance":2.1,"fare":11.0,"payment":"1","note":null,"tipped":false}
+{"id":63,"pickup":"2015-01-26T09:43:14","distance":1.93,"fare":9.5,"payment":"1","note":"comma, here","tipped":null}
+{"id":64,"pickup":"2015-01-18T14:15:40","distance":0.51,"fare":4.0,"payment":"2","note":"naïve café","tipped":true}
+{"id":65,"pickup":"2015-01-02T20:53:40","distance":1.37,"fare":7.0,"payment":"2","note":"日本語","tipped":false}
+{"id":66,"pickup":"2015-01-27T13:51:18","distance":1.2,"fare":5.5,"payment":"2","note":"plain","tipped":false}
+{"id":67,"pickup":"2015-01-10T10:01:10","distance":0.04,"fare":2.5,"payment":"2","note":"say \"hi\", twice","tipped":true}
+{"id":68,"pickup":"2015-01-19T15:56:26","distance":1.42,"fare":9.5,"payment":"2","note":"comma, here","tipped":false}
+{"id":69,"pickup":"2015-01-23T19:17:12","distance":0.88,"fare":5.5,"payment":"2","note":"naïve café","tipped":false}
+{"id":70,"pickup":"2015-01-24T12:58:22","distance":2.9,"fare":12.5,"payment":"1","note":"日本語","tipped":true}
+{"id":71,"pickup":"2015-01-22T10:03:28","distance":1.2,"fare":8.5,"payment":"1","note":"plain","tipped":false}
+{"id":72,"pickup":"2015-01-05T08:38:36","distance":4.0,"fare":19.5,"payment":"1","note":"say \"hi\", twice","tipped":false}
+{"id":73,"pickup":"2015-01-28T08:31:34","distance":0.4,"fare":5.0,"payment":"2","note":"comma, here","tipped":true}
+{"id":74,"pickup":"2015-01-09T19:49:52","distance":2.4,"fare":11.0,"payment":"2","note":"naïve café","tipped":false}
+{"id":75,"pickup":"2015-01-19T18:51:16","distance":1.7,"fare":7.5,"payment":"1","note":"日本語","tipped":false}
+{"id":76,"pickup":"2015-01-08T17:25:16","distance":1.8,"fare":11.0,"payment":"2","note":"plain","tipped":true}
+{"id":77,"pickup":"2015-01-23T09:21:25","distance":1.1,"fare":9.0,"payment":"1","note":"say \"hi\", twice","tipped":false}
+{"id":78,"pickup":"2015-01-22T22:15:30","distance":0.79,"fare":5.0,"payment":"1","note":"comma, here","tipped":false}
+{"id":79,"pickup":"2015-01-04T01:20:18","distance":1.29,"fare":6.0,"payment":"1","note":"naïve café","tipped":true}
+{"id":80,"pickup":"2015-01-15T11:08:26","distance":1.4,"fare":9.5,"payment":"2","note":"日本語","tipped":false}
+{"id":81,"pickup":"2015-01-17T00:10:05","distance":6.1,"fare":19.0,"payment":"1","note":"plain","tipped":false}
+{"id":82,"pickup":"2015-01-24T15:19:38","distance":3.7,"fare":15.5,"payment":"2","note":"say \"hi\", twice","tipped":true}
+{"id":83,"pickup":"2015-01-08T10:59:20","distance":1.6,"fare":8.0,"payment":"1","note":"comma, here","tipped":false}
+{"id":84,"pickup":"2015-01-25T04:16:19","distance":1.1,"fare":6.0,"payment":"2","note":"naïve café","tipped":false}
+{"id":85,"pickup":"2015-01-22T18:29:02","distance":0.5,"fare":6.0,"payment":"1","note":"日本語","tipped":true}
+{"id":86,"pickup":"2015-01-26T13:11:55","distance":0.44,"fare":4.0,"payment":"2","note":"plain","tipped":false}
+{"id":87,"pickup":"2015-01-04T22:15:20","distance":1.44,"fare":8.5,"payment":"1","note":"say \"hi\", twice","tipped":false}
+{"id":88,"pickup":"2015-01-22T18:46:32","distance":1.7,"fare":8.0,"payment":"1","note":"comma, here","tipped":true}
+{"id":89,"pickup":"2015-01-05T23:50:31","distance":2.1,"fare":8.5,"payment":"2","note":"naïve café","tipped":false}
+{"id":90,"pickup":"2015-01-19T21:40:00","distance":1.91,"fare":10.0,"payment":"1","note":"日本語","tipped":false}
+{"id":91,"pickup":"2015-01-22T14:39:34","distance":6.22,"fare":24.5,"payment":"1","note":"plain","tipped":true}
+{"id":92,"pickup":"2015-01-09T13:49:45","distance":21.53,"fare":52.0,"payment":"1","note":"say \"hi\", twice","tipped":false}
+{"id":93,"pickup":"2015-01-21T23:16:44","distance":2.0,"fare":8.5,"payment":"1","note":"comma, here","tipped":false}
+{"id":94,"pickup":"2015-01-18T17:40:07","distance":7.29,"fare":21.5,"payment":"1","note":"naïve café","tipped":true}
+{"id":95,"pickup":"2015-01-13T20:11:44","distance":4.4,"fare":18.0,"payment":"1","note":"日本語","tipped":false}
+{"id":96,"pickup":"2015-01-19T14:34:16","distance":1.1,"fare":6.0,"payment":"2","note":"plain","tipped":false}
+{"id":97,"pickup":"2015-01-07T07:47:23","distance":17.68,"fare":52.0,"payment":"2","note":"say \"hi\", twice","tipped":true}
+{"id":98,"pickup":"2015-01-03T05:54:53","distance":12.46,"fare":35.0,"payment":"2","note":"comma, here","tipped":false}
+{"id":99,"pickup":"2015-01-26T08:25:36","distance":2.2,"fare":12.5,"payment":"2","note":"naïve café","tipped":false}
+{"id":100,"pickup":"2015-01-07T15:08:27","distance":12.21,"fare":36.5,"payment":"2","note":"日本語","tipped":true}
+{"id":101,"pickup":"2015-01-31T17:47:29","distance":0.7,"fare":9.0,"payment":"2","note":"plain","tipped":false}
+{"id":102,"pickup":"2015-01-23T23:21:14","distance":2.3,"fare":12.0,"payment":"1","note":"say \"hi\", twice","tipped":false}
+{"id":103,"pickup":"2015-01-30T13:05:49","distance":1.03,"fare":8.5,"payment":"2","note":"comma, here","tipped":true}
+{"id":104,"pickup":"2015-01-29T09:35:29","distance":2.9,"fare":23.0,"payment":"1","note":"naïve café","tipped":false}
+{"id":105,"pickup":"2015-01-25T21:38:25","distance":1.8,"fare":8.0,"payment":"1","note":"日本語","tipped":false}
+{"id":106,"pickup":"2015-01-02T14:58:52","distance":1.9,"fare":9.0,"payment":"1","note":"plain","tipped":true}
+{"id":107,"pickup":"2015-01-27T21:27:27","distance":0.93,"fare":6.5,"payment":"1","note":"say \"hi\", twice","tipped":false}
+{"id":108,"pickup":null,"distance":3.8,"fare":18.5,"payment":"2","note":"comma, here","tipped":false}
+{"id":109,"pickup":"2015-01-13T10:45:56","distance":null,"fare":9.5,"payment":"1","note":"naïve café","tipped":true}
+{"id":110,"pickup":"2015-01-13T19:23:05","distance":0.5,"fare":null,"payment":"1","note":"日本語","tipped":false}
+{"id":111,"pickup":"2015-01-06T19:20:14","distance":14.94,"fare":40.0,"payment":null,"note":"plain","tipped":false}
+{"id":112,"pickup":"2015-01-08T17:21:15","distance":1.13,"fare":10.0,"payment":"1","note":null,"tipped":true}
+{"id":113,"pickup":"2015-01-16T11:57:43","distance":5.65,"fare":19.0,"payment":"1","note":"comma, here","tipped":null}
+{"id":114,"pickup":"2015-01-16T23:23:26","distance":0.63,"fare":4.0,"payment":"2","note":"naïve café","tipped":false}
+{"id":115,"pickup":"2015-01-17T12:49:31","distance":1.0,"fare":5.0,"payment":"1","note":"日本語","tipped":true}
+{"id":116,"pickup":"2015-01-24T20:17:15","distance":1.1,"fare":7.0,"payment":"1","note":"plain","tipped":false}
+{"id":117,"pickup":"2015-01-22T08:09:58","distance":0.6,"fare":4.5,"payment":"2","note":"say \"hi\", twice","tipped":false}
+{"id":118,"pickup":"2015-01-08T09:54:12","distance":1.3,"fare":8.0,"payment":"1","note":"comma, here","tipped":true}
+{"id":119,"pickup":"2015-01-03T16:49:39","distance":3.17,"fare":16.0,"payment":"2","note":"naïve café","tipped":false}
+{"id":120,"pickup":"2015-01-03T17:49:30","distance":2.64,"fare":10.5,"payment":"2","note":"日本語","tipped":false}
+{"id":121,"pickup":"2015-01-02T21:59:51","distance":2.1,"fare":8.0,"payment":"2","note":"plain","tipped":true}
+{"id":122,"pickup":"2015-01-24T17:27:03","distance":3.5,"fare":14.5,"payment":"2","note":"say \"hi\", twice","tipped":false}
+{"id":123,"pickup":"2015-01-18T01:39:52","distance":6.63,"fare":19.5,"payment":"2","note":"comma, here","tipped":false}
+{"id":124,"pickup":"2015-01-07T09:42:09","distance":2.1,"fare":13.5,"payment":"2","note":"naïve café","tipped":true}
+{"id":125,"pickup":"2015-01-24T16:20:55","distance":1.41,"fare":6.0,"payment":"1","note":"日本語","tipped":false}
+{"id":126,"pickup":"2015-01-21T15:40:13","distance":5.27,"fare":22.0,"payment":"1","note":"plain","tipped":false}
+{"id":127,"pickup":"2015-01-22T12:01:09","distance":1.0,"fare":6.5,"payment":"1","note":"say \"hi\", twice","tipped":true}
+{"id":128,"pickup":"2015-01-30T18:55:15","distance":0.6,"fare":5.0,"payment":"1","note":"comma, here","tipped":false}
+{"id":129,"pickup":"2015-01-29T15:05:46","distance":2.1,"fare":13.5,"payment":"1","note":"naïve café","tipped":false}
+{"id":130,"pickup":"2015-01-19T15:13:48","distance":17.34,"fare":52.0,"payment":"1","note":"日本語","tipped":true}
+{"id":131,"pickup":"2015-01-31T08:22:08","distance":1.1,"fare":6.5,"payment":"1","note":"plain","tipped":false}
+{"id":132,"pickup":"2015-01-31T01:33:46","distance":4.3,"fare":21.0,"payment":"1","note":"say \"hi\", twice","tipped":false}
+{"id":133,"pickup":"2015-01-04T14:40:36","distance":1.1,"fare":6.0,"payment":"2","note":"comma, here","tipped":true}
+{"id":134,"pickup":"2015-01-17T22:49:18","distance":0.4,"fare":5.0,"payment":"1","note":"naïve café","tipped":false}
+{"id":135,"pickup":"2015-01-17T00:37:07","distance":2.8,"fare":12.0,"payment":"1","note":"日本語","tipped":false}
+{"id":136,"pickup":"2015-01-16T21:46:08","distance":1.12,"fare":6.0,"payment":"1","note":"plain","tipped":true}
+{"id":137,"pickup":"2015-01-22T18:11:54","distance":2.4,"fare":12.0,"payment":"1","note":"say \"hi\", twice","tipped":false}
+{"id":138,"pickup":"2015-01-17T02:04:56","distance":5.22,"fare":18.5,"payment":"2","note":"comma, here","tipped":false}
+{"id":139,"pickup":"2015-01-24T12:30:58","distance":3.18,"fare":12.5,"payment":"1","note":"naïve café","tipped":true}
+{"id":140,"pickup":"2015-01-16T09:02:30","distance":4.8,"fare":16.5,"payment":"1","note":"日本語","tipped":false}
+{"id":141,"pickup":"2015-01-07T12:00:05","distance":0.61,"fare":5.0,"payment":"1","note":"plain","tipped":false}
+{"id":142,"pickup":"2015-01-23T21:36:10","distance":0.92,"fare":6.5,"payment":"2","note":"say \"hi\", twice","tipped":true}
+{"id":143,"pickup":"2015-01-25T12:40:23","distance":2.56,"fare":11.0,"payment":"1","note":"comma, here","tipped":false}
+{"id":144,"pickup":"2015-01-13T07:03:40","distance":0.8,"fare":5.5,"payment":"1","note":"naïve café","tipped":false}
+{"id":145,"pickup":"2015-01-08T20:33:03","distance":0.5,"fare":3.5,"payment":"2","note":"日本語","tipped":true}
+{"id":146,"pickup":"2015-01-29T12:09:38","distance":1.83,"fare":8.5,"payment":"2","note":"plain","tipped":false}
+{"id":147,"pickup":"2015-01-12T14:55:36","distance":1.01,"fare":6.5,"payment":"2","note":"say \"hi\", twice","tipped":false}
+{"id":148,"pickup":"2015-01-07T07:05:42","distance":1.1,"fare":6.0,"payment":"1","note":"comma, here","tipped":true}
+{"id":149,"pickup":"2015-01-10T23:53:09","distance":7.59,"fare":23.5,"payment":"1","note":"naïve café","tipped":false}
+{"id":150,"pickup":"2015-01-09T00:38:31","distance":8.4,"fare":26.0,"payment":"1","note":"日本語","tipped":false}
+{"id":151,"pickup":"2015-01-31T11:47:59","distance":1.2,"fare":6.5,"payment":"1","note":"plain","tipped":true}
+{"id":152,"pickup":"2015-01-20T17:49:35","distance":3.49,"fare":20.0,"payment":"2","note":"say \"hi\", twice","tipped":false}
+{"id":153,"pickup":"2015-01-09T15:31:14","distance":2.9,"fare":13.5,"payment":"1","note":"comma, here","tipped":false}
+{"id":154,"pickup":"2015-01-13T16:47:21","distance":6.1,"fare":24.0,"payment":"2","note":"naïve café","tipped":true}
+{"id":155,"pickup":"2015-01-12T12:59:27","distance":10.9,"fare":32.5,"payment":"1","note":"日本語","tipped":false}
+{"id":156,"pickup":"2015-01-24T20:38:11","distance":1.1,"fare":6.0,"payment":"1","note":"plain","tipped":false}
+{"id":157,"pickup":"2015-01-05T20:57:32","distance":1.8,"fare":7.5,"payment":"1","note":"say \"hi\", twice","tipped":true}
+{"id":158,"pickup":null,"distance":1.2,"fare":6.5,"payment":"1","note":"comma, here","tipped":false}
+{"id":159,"pickup":"2015-01-25T00:58:27","distance":null,"fare":15.5,"payment":"1","note":"naïve café","tipped":false}
+{"id":160,"pickup":"2015-01-04T00:37:03","distance":0.3,"fare":null,"payment":"2","note":"日本語","tipped":true}
+{"id":161,"pickup":"2015-01-18T13:41:58","distance":0.6,"fare":4.5,"payment":null,"note":"plain","tipped":false}
+{"id":162,"pickup":"2015-01-13T14:12:27","distance":4.3,"fare":29.0,"payment":"1","note":null,"tipped":false}
+{"id":163,"pickup":"2015-01-07T10:08:05","distance":0.62,"fare":4.5,"payment":"1","note":"comma, here","tipped":null}
+{"id":164,"pickup":"2015-01-20T12:03:01","distance":1.4,"fare":7.5,"payment":"1","note":"naïve café","tipped":false}
+{"id":165,"pickup":"2015-01-22T19:51:17","distance":0.9,"fare":6.5,"payment":"2","note":"日本語","tipped":false}
+{"id":166,"pickup":"2015-01-04T16:38:32","distance":1.6,"fare":9.0,"payment":"2","note":"plain","tipped":true}
+{"id":167,"pickup":"2015-01-01T10:29:08","distance":1.4,"fare":8.0,"payment":"2","note":"say \"hi\", twice","tipped":false}
+{"id":168,"pickup":"2015-01-14T11:49:09","distance":0.63,"fare":4.5,"payment":"2","note":"comma, here","tipped":false}
+{"id":169,"pickup":"2015-01-03T10:42:45","distance":0.8,"fare":5.5,"payment":"1","note":"naïve café","tipped":true}
+{"id":170,"pickup":"2015-01-03T19:18:29","distance":10.3,"fare":29.5,"payment":"1","note":"日本語","tipped":false}
+{"id":171,"pickup":"2015-01-01T00:52:49","distance":2.1,"fare":13.0,"payment":"2","note":"plain","tipped":false}
+{"id":172,"pickup":"2015-01-21T04:10:34","distance":6.84,"fare":20.5,"payment":"2","note":"say \"hi\", twice","tipped":true}
+{"id":173,"pickup":"2015-01-04T13:30:33","distance":1.6,"fare":8.5,"payment":"1","note":"comma, here","tipped":false}
+{"id":174,"pickup":"2015-01-11T19:19:51","distance":1.09,"fare":8.0,"payment":"2","note":"naïve café","tipped":false}
+{"id":175,"pickup":"2015-01-06T10:55:55","distance":2.0,"fare":13.5,"payment":"2","note":"日本語","tipped":true}
+{"id":176,"pickup":"2015-01-16T20:13:09","distance":1.35,"fare":8.5,"payment":"1","note":"plain","tipped":false}
+{"id":177,"pickup":"2015-01-08T18:07:47","distance":1.1,"fare":8.5,"payment":"2","note":"say \"hi\", twice","tipped":false}
+{"id":178,"pickup":"2015-01-10T03:22:42","distance":6.0,"fare":18.5,"payment":"1","note":"comma, here","tipped":true}
+{"id":179,"pickup":"2015-01-08T15:06:26","distance":9.24,"fare":28.5,"payment":"1","note":"naïve café","tipped":false}
+{"id":180,"pickup":"2015-01-17T18:13:57","distance":0.95,"fare":6.0,"payment":"1","note":"日本語","tipped":false}
+{"id":181,"pickup":"2015-01-10T21:30:55","distance":0.7,"fare":4.5,"payment":"1","note":"plain","tipped":true}
+{"id":182,"pickup":"2015-01-11T16:49:53","distance":1.9,"fare":10.0,"payment":"2","note":"say \"hi\", twice","tipped":false}
+{"id":183,"pickup":"2015-01-28T21:53:56","distance":0.6,"fare":4.5,"payment":"3","note":"comma, here","tipped":false}
+{"id":184,"pickup":"2015-01-20T13:42:52","distance":1.1,"fare":10.0,"payment":"1","note":"naïve café","tipped":true}
+{"id":185,"pickup":"2015-01-11T16:05:43","distance":2.7,"fare":12.0,"payment":"1","note":"日本語","tipped":false}
+{"id":186,"pickup":"2015-01-20T01:22:12","distance":5.83,"fare":18.0,"payment":"1","note":"plain","tipped":false}
+{"id":187,"pickup":"2015-01-01T03:19:11","distance":2.2,"fare":9.5,"payment":"1","note":"say \"hi\", twice","tipped":true}
+{"id":188,"pickup":"2015-01-22T23:31:09","distance":9.0,"fare":25.5,"payment":"2","note":"comma, here","tipped":false}
+{"id":189,"pickup":"2015-01-10T12:56:16","distance":1.18,"fare":6.0,"payment":"1","note":"naïve café","tipped":false}
+{"id":190,"pickup":"2015-01-25T20:56:10","distance":1.23,"fare":5.5,"payment":"1","note":"日本語","tipped":true}
+{"id":191,"pickup":"2015-01-07T01:50:57","distance":3.5,"fare":13.5,"payment":"2","note":"plain","tipped":false}
+{"id":192,"pickup":"2015-01-17T00:43:08","distance":1.86,"fare":8.5,"payment":"2","note":"say \"hi\", twice","tipped":false}
+{"id":193,"pickup":"2015-01-31T12:15:58","distance":0.4,"fare":3.5,"payment":"2","note":"comma, here","tipped":true}
+{"id":194,"pickup":"2015-01-31T00:48:05","distance":0.78,"fare":4.5,"payment":"1","note":"naïve café","tipped":false}
+{"id":195,"pickup":"2015-01-17T11:13:59","distance":1.2,"fare":6.5,"payment":"2","note":"日本語","tipped":false}
+{"id":196,"pickup":"2015-01-11T19:12:35","distance":7.98,"fare":23.0,"payment":"2","note":"plain","tipped":true}
+{"id":197,"pickup":"2015-01-10T03:04:04","distance":3.5,"fare":15.0,"payment":"1","note":"say \"hi\", twice","tipped":false}
+{"id":198,"pickup":"2015-01-21T08:43:13","distance":1.5,"fare":12.0,"payment":"1","note":"comma, here","tipped":false}
+{"id":199,"pickup":"2015-01-24T14:50:31","distance":0.2,"fare":3.5,"payment":"1","note":"naïve café","tipped":true}
+{"id":200,"pickup":"2015-01-01T15:14:56","distance":6.4,"fare":24.0,"payment":"1","note":"日本語","tipped":false}
+{"id":201,"pickup":"2015-01-30T20:20:29","distance":1.85,"fare":13.5,"payment":"1","note":"plain","tipped":false}
+{"id":202,"pickup":"2015-01-11T14:47:12","distance":3.2,"fare":12.0,"payment":"2","note":"say \"hi\", twice","tipped":true}
+{"id":203,"pickup":"2015-01-09T20:49:09","distance":0.7,"fare":5.0,"payment":"1","note":"comma, here","tipped":false}
+{"id":204,"pickup":"2015-01-28T15:17:40","distance":5.41,"fare":24.5,"payment":"1","note":"naïve café","tipped":false}
+{"id":205,"pickup":"2015-01-13T09:05:33","distance":0.95,"fare":8.0,"payment":"1","note":"日本語","tipped":true}
+{"id":206,"pickup":"2015-01-09T08:31:17","distance":0.8,"fare":10.5,"payment":"1","note":"plain","tipped":false}
+{"id":207,"pickup":"2015-01-03T14:42:23","distance":1.1,"fare":8.0,"payment":"1","note":"say \"hi\", twice","tipped":false}
+{"id":208,"pickup":null,"distance":9.2,"fare":27.5,"payment":"1","note":"comma, here","tipped":true}
+{"id":209,"pickup":"2015-01-10T13:43:14","distance":null,"fare":7.0,"payment":"1","note":"naïve café","tipped":false}
+{"id":210,"pickup":"2015-01-01T04:13:07","distance":7.1,"fare":null,"payment":"1","note":"日本語","tipped":false}
+{"id":211,"pickup":"2015-01-31T13:50:10","distance":0.6,"fare":5.0,"payment":null,"note":"plain","tipped":true}
+{"id":212,"pickup":"2015-01-18T18:04:55","distance":1.7,"fare":9.0,"payment":"1","note":null,"tipped":false}
+{"id":213,"pickup":"2015-01-16T13:24:48","distance":4.4,"fare":21.0,"payment":"2","note":"comma, here","tipped":null}
+{"id":214,"pickup":"2015-01-16T16:03:36","distance":1.25,"fare":6.0,"payment":"2","note":"naïve café","tipped":true}
+{"id":215,"pickup":"2015-01-06T11:11:06","distance":0.4,"fare":9.5,"payment":"2","note":"日本語","tipped":false}
+{"id":216,"pickup":"2015-01-16T09:55:32","distance":2.63,"fare":13.5,"payment":"1","note":"plain","tipped":false}
+{"id":217,"pickup":"2015-01-22T17:30:25","distance":0.8,"fare":9.0,"payment":"2","note":"say \"hi\", twice","tipped":true}
+{"id":218,"pickup":"2015-01-11T10:27:08","distance":2.5,"fare":10.0,"payment":"1","note":"comma, here","tipped":false}
+{"id":219,"pickup":"2015-01-10T11:40:58","distance":2.2,"fare":10.5,"payment":"1","note":"naïve café","tipped":false}
+{"id":220,"pickup":"2015-01-05T18:43:44","distance":1.98,"fare":9.5,"payment":"1","note":"日本語","tipped":true}
+{"id":221,"pickup":"2015-01-07T16:01:09","distance":3.65,"fare":17.0,"payment":"1","note":"plain","tipped":false}
+{"id":222,"pickup":"2015-01-10T15:59:53","distance":0.4,"fare":4.0,"payment":"2","note":"say \"hi\", twice","tipped":false}
+{"id":223,"pickup":"2015-01-23T15:30:49","distance":0.7,"fare":7.0,"payment":"2","note":"comma, here","tipped":true}
+{"id":224,"pickup":"2015-01-21T16:25:28","distance":1.2,"fare":8.0,"payment":"2","note":"naïve café","tipped":false}
+{"id":225,"pickup":"2015-01-09T16:47:26","distance":0.8,"fare":6.0,"payment":"2","note":"日本語","tipped":false}
+{"id":226,"pickup":"2015-01-18T11:53:29","distance":1.1,"fare":6.0,"payment":"2","note":"plain","tipped":true}
+{"id":227,"pickup":"2015-01-15T17:11:22","distance":1.5,"fare":9.5,"payment":"2","note":"say \"hi\", twice","tipped":false}
+{"id":228,"pickup":"2015-01-24T15:58:15","distance":2.1,"fare":10.5,"payment":"1","note":"comma, here","tipped":false}
+{"id":229,"pickup":"2015-01-03T14:12:36","distance":1.2,"fare":6.5,"payment":"2","note":"naïve café","tipped":true}
+{"id":230,"pickup":"2015-01-29T08:54:25","distance":0.9,"fare":6.0,"payment":"1","note":"日本語","tipped":false}
+{"id":231,"pickup":"2015-01-20T10:29:28","distance":4.99,"fare":20.5,"payment":"1","note":"plain","tipped":false}
+{"id":232,"pickup":"2015-01-03T11:06:57","distance":1.1,"fare":5.5,"payment":"1","note":"say \"hi\", twice","tipped":true}
+{"id":233,"pickup":"2015-01-23T09:51:43","distance":9.14,"fare":30.0,"payment":"2","note":"comma, here","tipped":false}
+{"id":234,"pickup":"2015-01-15T09:23:44","distance":2.2,"fare":14.5,"payment":"1","note":"naïve café","tipped":false}
+{"id":235,"pickup":"2015-01-03T21:46:06","distance":1.64,"fare":8.0,"payment":"2","note":"日本語","tipped":true}
+{"id":236,"pickup":"2015-01-03T03:18:37","distance":1.28,"fare":7.0,"payment":"1","note":"plain","tipped":false}
+{"id":237,"pickup":"2015-01-14T06:42:49","distance":3.96,"fare":14.5,"payment":"1","note":"say \"hi\", twice","tipped":false}
+{"id":238,"pickup":"2015-01-03T07:50:31","distance":0.74,"fare":5.5,"payment":"2","note":"comma, here","tipped":true}
+{"id":239,"pickup":"2015-01-24T16:26:47","distance":1.96,"fare":9.0,"payment":"1","note":"naïve café","tipped":false}
+{"id":240,"pickup":"2015-01-26T09:57:50","distance":1.75,"fare":10.5,"payment":"1","note":"日本語","tipped":false}
+{"id":241,"pickup":"2015-01-31T10:43:55","distance":1.9,"fare":11.0,"payment":"1","note":"plain","tipped":true}
+{"id":242,"pickup":"2015-01-11T19:18:50","distance":2.3,"fare":11.0,"payment":"2","note":"say \"hi\", twice","tipped":false}
+{"id":243,"pickup":"2015-01-24T14:30:59","distance":2.14,"fare":11.0,"payment":"1","note":"comma, here","tipped":false}
+{"id":244,"pickup":"2015-01-20T22:35:02","distance":2.01,"fare":11.0,"payment":"1","note":"naïve café","tipped":true}
+{"id":245,"pickup":"2015-01-15T21:32:43","distance":1.6,"fare":8.5,"payment":"1","note":"日本語","tipped":false}
+{"id":246,"pickup":"2015-01-15T16:34:30","distance":0.6,"fare":5.0,"payment":"2","note":"plain","tipped":false}
+{"id":247,"pickup":"2015-01-15T04:57:21","distance":13.9,"fare":38.0,"payment":"1","note":"say \"hi\", twice","tipped":true}
+{"id":248,"pickup":"2015-01-30T22:24:01","distance":3.62,"fare":15.0,"payment":"2","note":"comma, here","tipped":false}
+{"id":249,"pickup":"2015-01-01T00:56:24","distance":2.2,"fare":11.5,"payment":"2","note":"naïve café","tipped":false}
+{"id":250,"pickup":"2015-01-24T00:24:03","distance":0.7,"fare":5.5,"payment":"1","note":"日本語","tipped":true}
+{"id":251,"pickup":"2015-01-29T16:09:12","distance":0.74,"fare":6.0,"payment":"1","note":"plain","tipped":false}
+{"id":252,"pickup":"2015-01-18T22:41:21","distance":1.65,"fare":8.0,"payment":"2","note":"say \"hi\", twice","tipped":false}
+{"id":253,"pickup":"2015-01-06T17:01:41","distance":1.04,"fare":8.5,"payment":"2","note":"comma, here","tipped":true}
+{"id":254,"pickup":"2015-01-18T21:08:10","distance":0.73,"fare":6.0,"payment":"1","note":"naïve café","tipped":false}
+{"id":255,"pickup":"2015-01-24T15:44:25","distance":4.4,"fare":18.5,"payment":"1","note":"日本語","tipped":false}
+{"id":256,"pickup":"2015-01-05T00:35:02","distance":0.9,"fare":7.0,"payment":"2","note":"plain","tipped":true}
+{"id":257,"pickup":"2015-01-24T16:39:39","distance":1.0,"fare":7.0,"payment":"1","note":"say \"hi\", twice","tipped":false}
+{"id":258,"pickup":null,"distance":17.51,"fare":52.0,"payment":"1","note":"comma, here","tipped":false}
+{"id":259,"pickup":"2015-01-02T22:04:46","distance":null,"fare":9.0,"payment":"1","note":"naïve café","tipped":true}
+{"id":260,"pickup":"2015-01-21T15:15:23","distance":5.2,"fare":null,"payment":"2","note":"日本語","tipped":false}
+{"id":261,"pickup":"2015-01-10T17:35:27","distance":0.9,"fare":6.5,"payment":null,"note":"plain","tipped":false}
+{"id":262,"pickup":"2015-01-10T15:26:50","distance":1.8,"fare":7.5,"payment":"1","note":null,"tipped":true}
+{"id":263,"pickup":"2015-01-30T17:02:44","distance":10.2,"fare":34.5,"payment":"1","note":"comma, here","tipped":null}
+{"id":264,"pickup":"2015-01-15T21:59:12","distance":2.9,"fare":13.0,"payment":"2","note":"naïve café","tipped":false}
+{"id":265,"pickup":"2015-01-02T22:29:05","distance":1.9,"fare":10.0,"payment":"1","note":"日本語","tipped":true}
+{"id":266,"pickup":"2015-01-05T15:53:18","distance":18.1,"fare":52.0,"payment":"2","note":"plain","tipped":false}
+{"id":267,"pickup":"2015-01-04T18:20:03","distance":3.1,"fare":11.0,"payment":"2","note":"say \"hi\", twice","tipped":false}
+{"id":268,"pickup":"2015-01-02T06:26:08","distance":2.4,"fare":8.5,"payment":"2","note":"comma, here","tipped":true}
+{"id":269,"pickup":"2015-01-08T22:07:34","distance":1.9,"fare":10.5,"payment":"1","note":"naïve café","tipped":false}
+{"id":270,"pickup":"2015-01-22T21:23:13","distance":2.9,"fare":13.0,"payment":"1","note":"日本語","tipped":false}
+{"id":271,"pickup":"2015-01-06T23:44:53","distance":1.2,"fare":6.5,"payment":"1","note":"plain","tipped":true}
+{"id":272,"pickup":"2015-01-20T22:51:22","distance":2.18,"fare":9.0,"payment":"1","note":"say \"hi\", twice","tipped":false}
+{"id":273,"pickup":"2015-01-06T21:06:30","distance":2.46,"fare":9.5,"payment":"1","note":"comma, here","tipped":false}
+{"id":274,"pickup":"2015-01-11T22:19:29","distance":3.4,"fare":14.0,"payment":"2","note":"naïve café","tipped":true}
+{"id":275,"pickup":"2015-01-19T10:13:22","distance":1.5,"fare":8.0,"payment":"1","note":"日本語","tipped":false}
+{"id":276,"pickup":"2015-01-10T20:22:54","distance":0.84,"fare":9.0,"payment":"1","note":"plain","tipped":false}
+{"id":277,"pickup":"2015-01-10T10:20:23","distance":0.8,"fare":5.5,"payment":"2","note":"say \"hi\", twice","tipped":true}
+{"id":278,"pickup":"2015-01-16T07:11:01","distance":1.6,"fare":8.5,"payment":"1","note":"comma, here","tipped":false}
+{"id":279,"pickup":"2015-01-03T05:53:39","distance":11.0,"fare":32.5,"payment":"2","note":"naïve café","tipped":false}
+{"id":280,"pickup":"2015-01-09T14:26:01","distance":1.49,"fare":9.5,"payment":"2","note":"日本語","tipped":true}
+{"id":281,"pickup":"2015-01-10T04:22:14","distance":9.86,"fare":27.0,"payment":"1","note":"plain","tipped":false}
+{"id":282,"pickup":"2015-01-23T21:44:56","distance":9.79,"fare":28.5,"payment":"2","note":"say \"hi\", twice","tipped":false}
+{"id":283,"pickup":"2015-01-19T22:40:05","distance":2.67,"fare":12.5,"payment":"2","note":"comma, here","tipped":true}
+{"id":284,"pickup":"2015-01-31T04:23:43","distance":1.03,"fare":5.5,"payment":"1","note":"naïve café","tipped":false}
+{"id":285,"pickup":"2015-01-13T04:54:44","distance":0.4,"fare":3.5,"payment":"2","note":"日本語","tipped":false}
+{"id":286,"pickup":"2015-01-17T10:21:30","distance":0.0,"fare":3.0,"payment":"2","note":"plain","tipped":true}
+{"id":287,"pickup":"2015-01-04T19:42:20","distance":0.8,"fare":5.5,"payment":"1","note":"say \"hi\", twice","tipped":false}
+{"id":288,"pickup":"2015-01-03T15:30:54","distance":1.28,"fare":9.0,"payment":"1","note":"comma, here","tipped":false}
+{"id":289,"pickup":"2015-01-09T21:21:01","distance":1.6,"fare":8.0,"payment":"1","note":"naïve café","tipped":true}
+{"id":290,"pickup":"2015-01-31T20:29:50","distance":2.87,"fare":10.0,"payment":"1","note":"日本語","tipped":false}
+{"id":291,"pickup":"2015-01-11T10:53:49","distance":2.15,"fare":8.0,"payment":"1","note":"plain","tipped":false}
+{"id":292,"pickup":"2015-01-15T06:15:21","distance":0.8,"fare":5.0,"payment":"1","note":"say \"hi\", twice","tipped":true}
+{"id":293,"pickup":"2015-01-08T19:45:42","distance":1.42,"fare":9.0,"payment":"1","note":"comma, here","tipped":false}
+{"id":294,"pickup":"2015-01-28T10:34:24","distance":2.16,"fare":11.0,"payment":"2","note":"naïve café","tipped":false}
+{"id":295,"pickup":"2015-01-16T11:15:46","distance":1.34,"fare":7.0,"payment":"1","note":"日本語","tipped":true}
+{"id":296,"pickup":"2015-01-03T13:02:57","distance":4.0,"fare":17.0,"payment":"1","note":"plain","tipped":false}
+{"id":297,"pickup":"2015-01-29T04:43:29","distance":3.03,"fare":11.0,"payment":"2","note":"say \"hi\", twice","tipped":false}
+{"id":298,"pickup":"2015-01-01T10:01:17","distance":0.6,"fare":4.5,"payment":"1","note":"comma, here","tipped":true}
+{"id":299,"pickup":"2015-01-19T13:51:49","distance":3.69,"fare":17.5,"payment":"2","note":"naïve café","tipped":false}
+{"id":300,"pickup":"2015-01-19T08:52:00","distance":3.6,"fare":13.0,"payment":"1","note":"日本語","tipped":false}
+{"id":301,"pickup":"2015-01-26T08:41:01","distance":3.0,"fare":12.0,"payment":"1","note":"plain","tipped":true}
+{"id":302,"pickup":"2015-01-06T09:33:09","distance":3.49,"fare":22.0,"payment":"1","note":"say \"hi\", twice","tipped":false}
+{"id":303,"pickup":"2015-01-08T22:12:05","distance":2.59,"fare":10.0,"payment":"2","note":"comma, here","tipped":false}
+{"id":304,"pickup":"2015-01-28T14:33:41","distance":1.03,"fare":10.0,"payment":"2","note":"naïve café","tipped":true}
+{"id":305,"pickup":"2015-01-03T14:01:45","distance":1.98,"fare":9.5,"payment":"1","note":"日本語","tipped":false}
+{"id":306,"pickup":"2015-01-12T09:53:27","distance":0.5,"fare":3.5,"payment":"2","note":"plain","tipped":false}
+{"id":307,"pickup":"2015-01-16T07:55:57","distance":5.2,"fare":18.5,"payment":"2","note":"say \"hi\", twice","tipped":true}
+{"id":308,"pickup":null,"distance":2.42,"fare":10.5,"payment":"1","note":"comma, here","tipped":false}
+{"id":309,"pickup":"2015-01-15T06:19:05","distance":null,"fare":5.0,"payment":"2","note":"naïve café","tipped":false}
+{"id":310,"pickup":"2015-01-06T19:40:58","distance":1.1,"fare":null,"payment":"1","note":"日本語","tipped":true}
+{"id":311,"pickup":"2015-01-04T09:17:01","distance":2.3,"fare":9.5,"payment":null,"note":"plain","tipped":false}
+{"id":312,"pickup":"2015-01-13T16:21:39","distance":0.68,"fare":4.5,"payment":"1","note":null,"tipped":false}
+{"id":313,"pickup":"2015-01-06T15:39:15","distance":0.6,"fare":4.0,"payment":"1","note":"comma, here","tipped":null}
+{"id":314,"pickup":"2015-01-26T08:58:39","distance":3.0,"fare":17.5,"payment":"1","note":"naïve café","tipped":false}
+{"id":315,"pickup":"2015-01-13T13:30:57","distance":0.46,"fare":4.0,"payment":"2","note":"日本語","tipped":false}
+{"id":316,"pickup":"2015-01-23T19:06:49","distance":1.2,"fare":7.5,"payment":"2","note":"plain","tipped":true}
+{"id":317,"pickup":"2015-01-25T01:11:47","distance":0.7,"fare":5.0,"payment":"1","note":"say \"hi\", twice","tipped":false}
+{"id":318,"pickup":"2015-01-06T20:54:15","distance":0.6,"fare":4.0,"payment":"1","note":"comma, here","tipped":false}
+{"id":319,"pickup":"2015-01-13T23:00:42","distance":7.3,"fare":26.0,"payment":"1","note":"naïve café","tipped":true}
+{"id":320,"pickup":"2015-01-05T06:56:08","distance":0.92,"fare":5.5,"payment":"2","note":"日本語","tipped":false}
+{"id":321,"pickup":"2015-01-08T18:38:27","distance":2.16,"fare":14.0,"payment":"1","note":"plain","tipped":false}
+{"id":322,"pickup":"2015-01-30T10:42:16","distance":1.27,"fare":7.5,"payment":"2","note":"say \"hi\", twice","tipped":true}
+{"id":323,"pickup":"2015-01-23T07:33:55","distance":1.69,"fare":8.5,"payment":"1","note":"comma, here","tipped":false}
+{"id":324,"pickup":"2015-01-21T16:10:07","distance":8.84,"fare":28.5,"payment":"1","note":"naïve café","tipped":false}
+{"id":325,"pickup":"2015-01-03T16:38:44","distance":1.0,"fare":5.5,"payment":"2","note":"日本語","tipped":true}
+{"id":326,"pickup":"2015-01-09T18:27:11","distance":5.48,"fare":18.0,"payment":"1","note":"plain","tipped":false}
+{"id":327,"pickup":"2015-01-01T17:51:00","distance":21.3,"fare":52.0,"payment":"1","note":"say \"hi\", twice","tipped":false}
+{"id":328,"pickup":"2015-01-29T19:53:08","distance":1.12,"fare":6.5,"payment":"2","note":"comma, here","tipped":true}
+{"id":329,"pickup":"2015-01-15T23:38:38","distance":1.58,"fare":7.5,"payment":"1","note":"naïve café","tipped":false}
+{"id":330,"pickup":"2015-01-23T03:45:28","distance":2.3,"fare":10.0,"payment":"1","note":"日本語","tipped":false}
+{"id":331,"pickup":"2015-01-19T20:45:16","distance":5.6,"fare":19.0,"payment":"2","note":"plain","tipped":true}
+{"id":332,"pickup":"2015-01-16T12:49:24","distance":0.36,"fare":3.5,"payment":"2","note":"say \"hi\", twice","tipped":false}
+{"id":333,"pickup":"2015-01-01T18:56:25","distance":0.6,"fare":4.0,"payment":"2","note":"comma, here","tipped":false}
+{"id":334,"pickup":"2015-01-10T15:36:28","distance":0.8,"fare":5.5,"payment":"1","note":"naïve café","tipped":true}
+{"id":335,"pickup":"2015-01-10T11:30:27","distance":8.95,"fare":26.5,"payment":"2","note":"日本語","tipped":false}
+{"id":336,"pickup":"2015-01-14T09:14:58","distance":0.5,"fare":7.5,"payment":"2","note":"plain","tipped":false}
+{"id":337,"pickup":"2015-01-21T18:53:12","distance":1.34,"fare":7.0,"payment":"1","note":"say \"hi\", twice","tipped":true}
+{"id":338,"pickup":"2015-01-30T20:35:28","distance":3.02,"fare":16.5,"payment":"2","note":"comma, here","tipped":false}
+{"id":339,"pickup":"2015-01-25T12:46:34","distance":0.97,"fare":5.5,"payment":"2","note":"naïve café","tipped":false}
+{"id":340,"pickup":"2015-01-15T08:54:00","distance":1.1,"fare":8.0,"payment":"2","note":"日本語","tipped":true}
+{"id":341,"pickup":"2015-01-19T17:21:36","distance":13.5,"fare":39.0,"payment":"2","note":"plain","tipped":false}
+{"id":342,"pickup":"2015-01-23T09:29:56","distance":1.1,"fare":7.5,"payment":"1","note":"say \"hi\", twice","tipped":false}
+{"id":343,"pickup":"2015-01-18T14:12:40","distance":0.35,"fare":3.0,"payment":"1","note":"comma, here","tipped":true}
+{"id":344,"pickup":"2015-01-06T06:55:50","distance":1.9,"fare":7.5,"payment":"2","note":"naïve café","tipped":false}
+{"id":345,"pickup":"2015-01-16T13:44:35","distance":1.9,"fare":13.0,"payment":"1","note":"日本語","tipped":false}
+{"id":346,"pickup":"2015-01-10T16:25:09","distance":0.52,"fare":4.5,"payment":"2","note":"plain","tipped":true}
+{"id":347,"pickup":"2015-01-10T00:17:41","distance":1.84,"fare":7.5,"payment":"2","note":"say \"hi\", twice","tipped":false}
+{"id":348,"pickup":"2015-01-21T17:15:42","distance":1.6,"fare":13.0,"payment":"2","note":"comma, here","tipped":false}
+{"id":349,"pickup":"2015-01-23T21:54:28","distance":0.3,"fare":5.0,"payment":"1","note":"naïve café","tipped":true}
+{"id":350,"pickup":"2015-01-14T02:27:03","distance":7.13,"fare":22.0,"payment":"1","note":"日本語","tipped":false}
+{"id":351,"pickup":"2015-01-22T06:33:34","distance":0.8,"fare":6.0,"payment":"2","note":"plain","tipped":false}
+{"id":352,"pickup":"2015-01-08T16:48:26","distance":0.76,"fare":4.0,"payment":"1","note":"say \"hi\", twice","tipped":true}
+{"id":353,"pickup":"2015-01-02T07:56:21","distance":1.4,"fare":7.5,"payment":"1","note":"comma, here","tipped":false}
+{"id":354,"pickup":"2015-01-20T09:47:09","distance":2.24,"fare":12.0,"payment":"1","note":"naïve café","tipped":false}
+{"id":355,"pickup":"2015-01-17T17:14:57","distance":1.7,"fare":7.5,"payment":"3","note":"日本語","tipped":true}
+{"id":356,"pickup":"2015-01-01T12:06:59","distance":1.7,"fare":8.5,"payment":"2","note":"plain","tipped":false}
+{"id":357,"pickup":"2015-01-15T08:25:37","distance":0.6,"fare":6.0,"payment":"1","note":"say \"hi\", twice","tipped":false}
+{"id":358,"pickup":null,"distance":1.2,"fare":7.0,"payment":"2","note":"comma, here","tipped":true}
+{"id":359,"pickup":"2015-01-22T08:54:28","distance":null,"fare":4.0,"payment":"1","note":"naïve café","tipped":false}
+{"id":360,"pickup":"2015-01-18T18:34:00","distance":13.4,"fare":null,"payment":"1","note":"日本語","tipped":false}
+{"id":361,"pickup":"2015-01-02T19:11:37","distance":4.5,"fare":20.7,"payment":null,"note":"plain","tipped":true}
+{"id":362,"pickup":"2015-01-27T15:44:25","distance":3.74,"fare":14.0,"payment":"1","note":null,"tipped":false}
+{"id":363,"pickup":"2015-01-01T03:43:50","distance":3.7,"fare":14.5,"payment":"1","note":"comma, here","tipped":null}
+{"id":364,"pickup":"2015-01-28T16:57:06","distance":1.21,"fare":7.0,"payment":"1","note":"naïve café","tipped":true}
+{"id":365,"pickup":"2015-01-17T21:52:14","distance":1.6,"fare":10.0,"payment":"1","note":"日本語","tipped":false}
+{"id":366,"pickup":"2015-01-15T14:32:06","distance":5.34,"fare":22.0,"payment":"1","note":"plain","tipped":false}
+{"id":367,"pickup":"2015-01-10T04:34:39","distance":0.57,"fare":4.0,"payment":"1","note":"say \"hi\", twice","tipped":true}
+{"id":368,"pickup":"2015-01-14T20:39:25","distance":1.02,"fare":5.5,"payment":"1","note":"comma, here","tipped":false}
+{"id":369,"pickup":"2015-01-13T20:37:24","distance":0.7,"fare":4.0,"payment":"2","note":"naïve café","tipped":false}
+{"id":370,"pickup":"2015-01-07T15:37:55","distance":2.49,"fare":12.0,"payment":"2","note":"日本語","tipped":true}
+{"id":371,"pickup":"2015-01-23T06:55:05","distance":1.72,"fare":8.0,"payment":"1","note":"plain","tipped":false}
+{"id":372,"pickup":"2015-01-29T18:27:18","distance":1.85,"fare":12.0,"payment":"1","note":"say \"hi\", twice","tipped":false}
+{"id":373,"pickup":"2015-01-24T22:04:25","distance":2.1,"fare":9.5,"payment":"1","note":"comma, here","tipped":true}
+{"id":374,"pickup":"2015-01-19T03:05:21","distance":0.8,"fare":5.0,"payment":"2","note":"naïve café","tipped":false}
+{"id":375,"pickup":"2015-01-24T02:19:28","distance":0.66,"fare":5.0,"payment":"1","note":"日本語","tipped":false}
+{"id":376,"pickup":"2015-01-23T19:33:16","distance":1.9,"fare":9.5,"payment":"1","note":"plain","tipped":true}
+{"id":377,"pickup":"2015-01-09T12:34:35","distance":2.1,"fare":11.0,"payment":"1","note":"say \"hi\", twice","tipped":false}
+{"id":378,"pickup":"2015-01-30T19:03:18","distance":2.97,"fare":18.5,"payment":"1","note":"comma, here","tipped":false}
+{"id":379,"pickup":"2015-01-21T09:41:30","distance":1.36,"fare":10.0,"payment":"1","note":"naïve café","tipped":true}
+{"id":380,"pickup":"2015-01-10T00:31:31","distance":1.6,"fare":7.5,"payment":"2","note":"日本語","tipped":false}
+{"id":381,"pickup":"2015-01-23T13:31:04","distance":2.3,"fare":13.0,"payment":"2","note":"plain","tipped":false}
+{"id":382,"pickup":"2015-01-28T10:41:36","distance":5.44,"fare":19.0,"payment":"1","note":"say \"hi\", twice","tipped":true}
+{"id":383,"pickup":"2015-01-20T13:02:27","distance":2.1,"fare":11.5,"payment":"1","note":"comma, here","tipped":false}
+{"id":384,"pickup":"2015-01-30T08:53:57","distance":0.6,"fare":4.5,"payment":"2","note":"naïve café","tipped":false}
+{"id":385,"pickup":"2015-01-16T20:13:10","distance":2.5,"fare":12.0,"payment":"1","note":"日本語","tipped":true}
+{"id":386,"pickup":"2015-01-21T14:34:45","distance":0.9,"fare":9.5,"payment":"1","note":"plain","tipped":false}
+{"id":387,"pickup":"2015-01-22T11:07:48","distance":1.49,"fare":12.0,"payment":"1","note":"say \"hi\", twice","tipped":false}
+{"id":388,"pickup":"2015-01-12T00:00:12","distance":6.1,"fare":21.0,"payment":"1","note":"comma, here","tipped":true}
+{"id":389,"pickup":"2015-01-14T18:36:58","distance":5.7,"fare":24.0,"payment":"1","note":"naïve café","tipped":false}
+{"id":390,"pickup":"2015-01-23T18:13:39","distance":0.8,"fare":6.5,"payment":"1","note":"日本語","tipped":false}
+{"id":391,"pickup":"2015-01-11T19:30:09","distance":1.3,"fare":7.5,"payment":"1","note":"plain","tipped":true}
+{"id":392,"pickup":"2015-01-01T03:09:47","distance":2.74,"fare":10.5,"payment":"1","note":"say \"hi\", twice","tipped":false}
+{"id":393,"pickup":"2015-01-13T17:47:20","distance":2.53,"fare":14.5,"payment":"1","note":"comma, here","tipped":false}
+{"id":394,"pickup":"2015-01-31T12:41:35","distance":0.25,"fare":3.5,"payment":"2","note":"naïve café","tipped":true}
+{"id":395,"pickup":"2015-01-03T20:37:45","distance":1.3,"fare":6.5,"payment":"2","note":"日本語","tipped":false}
+{"id":396,"pickup":"2015-01-12T15:28:27","distance":0.62,"fare":4.0,"payment":"1","note":"plain","tipped":false}
+{"id":397,"pickup":"2015-01-30T07:43:50","distance":1.33,"fare":7.0,"payment":"1","note":"say \"hi\", twice","tipped":true}
+{"id":398,"pickup":"2015-01-20T08:00:20","distance":1.0,"fare":6.0,"payment":"2","note":"comma, here","tipped":false}
+{"id":399,"pickup":"2015-01-28T20:26:07","distance":2.6,"fare":12.0,"payment":"2","note":"naïve café","tipped":false}
+{"id":400,"pickup":"2015-01-08T02:55:03","distance":2.8,"fare":10.0,"payment":"2","note":"日本語","tipped":true}
+{"id":401,"pickup":"2015-01-19T11:06:43","distance":0.3,"fare":3.5,"payment":"1","note":"plain","tipped":false}
+{"id":402,"pickup":"2015-01-21T18:44:46","distance":17.8,"fare":52.0,"payment":"1","note":"say \"hi\", twice","tipped":false}
+{"id":403,"pickup":"2015-01-22T20:16:05","distance":3.8,"fare":14.5,"payment":"2","note":"comma, here","tipped":true}
+{"id":404,"pickup":"2015-01-28T07:15:58","distance":1.37,"fare":6.5,"payment":"1","note":"naïve café","tipped":false}
+{"id":405,"pickup":"2015-01-29T20:29:40","distance":0.7,"fare":4.0,"payment":"2","note":"日本語","tipped":false}
+{"id":406,"pickup":"2015-01-30T14:40:00","distance":1.0,"fare":6.0,"payment":"2","note":"plain","tipped":true}
+{"id":407,"pickup":"2015-01-19T14:19:29","distance":2.4,"fare":12.5,"payment":"1","note":"say \"hi\", twice","tipped":false}
+{"id":408,"pickup":null,"distance":2.5,"fare":10.0,"payment":"1","note":"comma, here","tipped":false}
+{"id":409,"pickup":"2015-01-31T08:00:06","distance":null,"fare":4.0,"payment":"2","note":"naïve café","tipped":true}
+{"id":410,"pickup":"2015-01-11T23:29:43","distance":1.7,"fare":null,"payment":"1","note":"日本語","tipped":false}
+{"id":411,"pickup":"2015-01-12T06:29:28","distance":0.66,"fare":4.0,"payment":null,"note":"plain","tipped":false}
+{"id":412,"pickup":"2015-01-28T11:25:18","distance":3.5,"fare":16.5,"payment":"1","note":null,"tipped":true}
+{"id":413,"pickup":"2015-01-31T15:21:38","distance":0.6,"fare":4.0,"payment":"1","note":"comma, here","tipped":null}
+{"id":414,"pickup":"2015-01-29T18:35:35","distance":2.12,"fare":14.0,"payment":"1","note":"naïve café","tipped":false}
+{"id":415,"pickup":"2015-01-11T16:29:43","distance":1.07,"fare":6.0,"payment":"1","note":"日本語","tipped":true}
+{"id":416,"pickup":"2015-01-20T13:21:19","distance":2.12,"fare":13.0,"payment":"1","note":"plain","tipped":false}
+{"id":417,"pickup":"2015-01-11T17:55:54","distance":1.3,"fare":8.0,"payment":"1","note":"say \"hi\", twice","tipped":false}
+{"id":418,"pickup":"2015-01-14T10:27:18","distance":0.8,"fare":5.5,"payment":"1","note":"comma, here","tipped":true}
+{"id":419,"pickup":"2015-01-01T15:19:10","distance":1.0,"fare":6.5,"payment":"1","note":"naïve café","tipped":false}
+{"id":420,"pickup":"2015-01-21T03:51:45","distance":17.4,"fare":52.0,"payment":"1","note":"日本語","tipped":false}
+{"id":421,"pickup":"2015-01-16T09:56:58","distance":0.78,"fare":7.5,"payment":"1","note":"plain","tipped":true}
+{"id":422,"pickup":"2015-01-16T13:50:52","distance":1.0,"fare":8.0,"payment":"1","note":"say \"hi\", twice","tipped":false}
+{"id":423,"pickup":"2015-01-03T17:26:27","distance":1.08,"fare":5.5,"payment":"2","note":"comma, here","tipped":false}
+{"id":424,"pickup":"2015-01-25T16:28:31","distance":2.2,"fare":10.5,"payment":"1","note":"naïve café","tipped":true}
+{"id":425,"pickup":"2015-01-21T11:41:04","distance":2.0,"fare":10.5,"payment":"1","note":"日本語","tipped":false}
+{"id":426,"pickup":"2015-01-10T22:56:12","distance":1.82,"fare":9.0,"payment":"1","note":"plain","tipped":false}
+{"id":427,"pickup":"2015-01-24T11:06:28","distance":3.94,"fare":14.5,"payment":"2","note":"say \"hi\", twice","tipped":true}
+{"id":428,"pickup":"2015-01-26T15:14:11","distance":0.56,"fare":5.5,"payment":"1","note":"comma, here","tipped":false}
+{"id":429,"pickup":"2015-01-05T08:30:27","distance":1.82,"fare":10.5,"payment":"2","note":"naïve café","tipped":false}
+{"id":430,"pickup":"2015-01-07T19:06:43","distance":0.6,"fare":5.0,"payment":"1","note":"日本語","tipped":true}
+{"id":431,"pickup":"2015-01-11T11:12:11","distance":0.66,"fare":4.0,"payment":"2","note":"plain","tipped":false}
+{"id":432,"pickup":"2015-01-30T14:47:13","distance":0.63,"fare":5.5,"payment":"1","note":"say \"hi\", twice","tipped":false}
+{"id":433,"pickup":"2015-01-03T23:58:10","distance":0.8,"fare":4.5,"payment":"2","note":"comma, here","tipped":true}
+{"id":434,"pickup":"2015-01-30T17:20:35","distance":17.73,"fare":52.0,"payment":"1","note":"naïve café","tipped":false}
+{"id":435,"pickup":"2015-01-12T14:30:30","distance":0.98,"fare":5.5,"payment":"1","note":"日本語","tipped":false}
+{"id":436,"pickup":"2015-01-09T18:02:12","distance":1.7,"fare":10.0,"payment":"2","note":"plain","tipped":true}
+{"id":437,"pickup":"2015-01-16T13:54:59","distance":4.29,"fare":21.5,"payment":"1","note":"say \"hi\", twice","tipped":false}
+{"id":438,"pickup":"2015-01-07T16:33:14","distance":1.7,"fare":9.5,"payment":"2","note":"comma, here","tipped":false}
+{"id":439,"pickup":"2015-01-16T23:34:25","distance":9.61,"fare":29.0,"payment":"1","note":"naïve café","tipped":true}
+{"id":440,"pickup":"2015-01-26T14:44:09","distance":1.04,"fare":9.0,"payment":"2","note":"日本語","tipped":false}
+{"id":441,"pickup":"2015-01-25T23:16:18","distance":6.7,"fare":20.0,"payment":"1","note":"plain","tipped":false}
+{"id":442,"pickup":"2015-01-23T10:35:01","distance":0.5,"fare":5.0,"payment":"2","note":"say \"hi\", twice","tipped":true}
+{"id":443,"pickup":"2015-01-16T07:40:52","distance":4.5,"fare":17.5,"payment":"2","note":"comma, here","tipped":false}
+{"id":444,"pickup":"2015-01-10T00:10:17","distance":2.31,"fare":9.0,"payment":"1","note":"naïve café","tipped":false}
+{"id":445,"pickup":"2015-01-15T10:05:22","distance":1.33,"fare":10.0,"payment":"1","note":"日本語","tipped":true}
+{"id":446,"pickup":"2015-01-03T21:34:40","distance":1.3,"fare":7.5,"payment":"2","note":"plain","tipped":false}
+{"id":447,"pickup":"2015-01-31T19:56:25","distance":1.2,"fare":7.5,"payment":"2","note":"say \"hi\", twice","tipped":false}
+{"id":448,"pickup":"2015-01-24T23:21:06","distance":0.5,"fare":4.5,"payment":"2","note":"comma, here","tipped":true}
+{"id":449,"pickup":"2015-01-22T19:23:50","distance":0.9,"fare":5.5,"payment":"1","note":"naïve café","tipped":false}
+{"id":450,"pickup":"2015-01-25T07:40:01","distance":17.48,"fare":52.0,"payment":"2","note":"日本語","tipped":false}
+{"id":451,"pickup":"2015-01-18T23:15:08","distance":3.34,"fare":11.5,"payment":"1","note":"plain","tipped":true}
+{"id":452,"pickup":"2015-01-24T15:17:51","distance":2.18,"fare":9.0,"payment":"1","note":"say \"hi\", twice","tipped":false}
+{"id":453,"pickup":"2015-01-20T10:26:41","distance":7.06,"fare":26.5,"payment":"1","note":"comma, here","tipped":false}
+{"id":454,"pickup":"2015-01-13T09:32:30","distance":0.65,"fare":4.5,"payment":"1","note":"naïve café","tipped":true}
+{"id":455,"pickup":"2015-01-14T10:26:25","distance":0.7,"fare":5.5,"payment":"1","note":"日本語","tipped":false}
+{"id":456,"pickup":"2015-01-18T03:51:44","distance":0.3,"fare":4.0,"payment":"1","note":"plain","tipped":false}
+{"id":457,"pickup":"2015-01-19T12:11:09","distance":0.81,"fare":6.0,"payment":"2","note":"say \"hi\", twice","tipped":true}
+{"id":458,"pickup":null,"distance":1.6,"fare":8.0,"payment":"1","note":"comma, here","tipped":false}
+{"id":459,"pickup":"2015-01-30T19:56:12","distance":null,"fare":14.5,"payment":"1","note":"naïve café","tipped":false}
+{"id":460,"pickup":"2015-01-20T18:02:36","distance":0.97,"fare":null,"payment":"2","note":"日本語","tipped":true}
+{"id":461,"pickup":"2015-01-30T14:27:49","distance":1.35,"fare":6.5,"payment":null,"note":"plain","tipped":false}
+{"id":462,"pickup":"2015-01-06T11:45:55","distance":2.71,"fare":13.0,"payment":"1","note":null,"tipped":false}
+{"id":463,"pickup":"2015-01-16T05:08:53","distance":17.2,"fare":52.0,"payment":"2","note":"comma, here","tipped":null}
+{"id":464,"pickup":"2015-01-31T18:10:05","distance":1.39,"fare":7.0,"payment":"1","note":"naïve café","tipped":false}
+{"id":465,"pickup":"2015-01-10T00:18:20","distance":0.5,"fare":5.5,"payment":"2","note":"日本語","tipped":false}
+{"id":466,"pickup":"2015-01-04T01:09:42","distance":1.1,"fare":6.5,"payment":"1","note":"plain","tipped":true}
+{"id":467,"pickup":"2015-01-10T13:34:23","distance":1.89,"fare":9.5,"payment":"2","note":"say \"hi\", twice","tipped":false}
+{"id":468,"pickup":"2015-01-11T16:52:55","distance":2.4,"fare":10.5,"payment":"1","note":"comma, here","tipped":false}
+{"id":469,"pickup":"2015-01-31T14:29:04","distance":4.66,"fare":20.0,"payment":"1","note":"naïve café","tipped":true}
+{"id":470,"pickup":"2015-01-29T13:46:00","distance":8.4,"fare":28.0,"payment":"2","note":"日本語","tipped":false}
+{"id":471,"pickup":"2015-01-24T01:41:55","distance":1.94,"fare":9.5,"payment":"2","note":"plain","tipped":false}
+{"id":472,"pickup":"2015-01-07T18:45:57","distance":1.13,"fare":8.0,"payment":"2","note":"say \"hi\", twice","tipped":true}
+{"id":473,"pickup":"2015-01-13T15:48:44","distance":1.98,"fare":9.0,"payment":"1","note":"comma, here","tipped":false}
+{"id":474,"pickup":"2015-01-22T23:16:10","distance":0.8,"fare":6.0,"payment":"2","note":"naïve café","tipped":false}
+{"id":475,"pickup":"2015-01-08T15:05:27","distance":0.53,"fare":4.0,"payment":"1","note":"日本語","tipped":true}
+{"id":476,"pickup":"2015-01-12T13:10:45","distance":2.85,"fare":13.0,"payment":"2","note":"plain","tipped":false}
+{"id":477,"pickup":"2015-01-07T14:40:20","distance":1.69,"fare":12.0,"payment":"2","note":"say \"hi\", twice","tipped":false}
+{"id":478,"pickup":"2015-01-10T20:50:56","distance":0.93,"fare":7.5,"payment":"2","note":"comma, here","tipped":true}
+{"id":479,"pickup":"2015-01-23T23:33:04","distance":1.2,"fare":7.0,"payment":"1","note":"naïve café","tipped":false}
+{"id":480,"pickup":"2015-01-29T20:55:42","distance":1.7,"fare":9.5,"payment":"1","note":"日本語","tipped":false}
+{"id":481,"pickup":"2015-01-10T22:27:48","distance":1.5,"fare":6.5,"payment":"1","note":"plain","tipped":true}
+{"id":482,"pickup":"2015-01-17T18:52:47","distance":1.19,"fare":7.0,"payment":"2","note":"say \"hi\", twice","tipped":false}
+{"id":483,"pickup":"2015-01-02T22:27:46","distance":1.3,"fare":9.7,"payment":"1","note":"comma, here","tipped":false}
+{"id":484,"pickup":"2015-01-29T10:39:17","distance":0.33,"fare":4.0,"payment":"1","note":"naïve café","tipped":true}
+{"id":485,"pickup":"2015-01-24T02:21:48","distance":2.73,"fare":11.0,"payment":"2","note":"日本語","tipped":false}
+{"id":486,"pickup":"2015-01-25T11:41:40","distance":2.09,"fare":9.5,"payment":"1","note":"plain","tipped":false}
+{"id":487,"pickup":"2015-01-26T08:22:19","distance":7.66,"fare":24.0,"payment":"1","note":"say \"hi\", twice","tipped":true}
+{"id":488,"pickup":"2015-01-24T18:39:26","distance":3.66,"fare":15.0,"payment":"1","note":"comma, here","tipped":false}
+{"id":489,"pickup":"2015-01-15T08:56:54","distance":4.09,"fare":13.5,"payment":"1","note":"naïve café","tipped":false}
+{"id":490,"pickup":"2015-01-23T10:16:42","distance":1.09,"fare":7.5,"payment":"1","note":"日本語","tipped":true}
+{"id":491,"pickup":"2015-01-10T18:14:18","distance":5.3,"fare":20.5,"payment":"2","note":"plain","tipped":false}
+{"id":492,"pickup":"2015-01-09T11:09:26","distance":1.57,"fare":7.5,"payment":"1","note":"say \"hi\", twice","tipped":false}
+{"id":493,"pickup":"2015-01-12T16:43:11","distance":0.94,"fare":5.0,"payment":"2","note":"comma, here","tipped":true}
+{"id":494,"pickup":"2015-01-06T19:33:34","distance":2.3,"fare":10.0,"payment":"1","note":"naïve café","tipped":false}
+{"id":495,"pickup":"2015-01-31T08:20:38","distance":0.79,"fare":5.0,"payment":"2","note":"日本語","tipped":false}
+{"id":496,"pickup":"2015-01-05T13:38:23","distance":1.4,"fare":8.5,"payment":"2","note":"plain","tipped":true}
+{"id":497,"pickup":"2015-01-21T20:55:02","distance":4.14,"fare":15.0,"payment":"1","note":"say \"hi\", twice","tipped":false}
+{"id":498,"pickup":"2015-01-11T14:47:18","distance":18.24,"fare":52.0,"payment":"1","note":"comma, here","tipped":false}
+{"id":499,"pickup":"2015-01-16T20:05:13","distance":2.84,"fare":13.0,"payment":"1","note":"naïve café","tipped":true}
+{"id":500,"pickup":"2015-01-07T21:18:43","distance":2.4,"fare":10.5,"payment":"1","note":"日本語","tipped":false}

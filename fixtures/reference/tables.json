@@ -1,0 +1,322 @@
+{
+ "csv": {
+  "rows": 500,
+  "columns": {
+   "id": {
+    "nulls": 0,
+    "sum": 125250.0,
+    "min": 1.0,
+    "max": 500.0
+   },
+   "pickup": {
+    "nulls": 10,
+    "min": 1420073569000000,
+    "max": 1422736190000000
+   },
+   "distance": {
+    "nulls": 10,
+    "sum": 1382.4399999999998,
+    "min": 0.0,
+    "max": 21.53
+   },
+   "fare": {
+    "nulls": 10,
+    "sum": 5808.4,
+    "min": 2.5,
+    "max": 52.0
+   },
+   "payment": {
+    "nulls": 10,
+    "distinct": 3
+   },
+   "note": {
+    "nulls": 10,
+    "distinct": 5
+   },
+   "tipped": {
+    "nulls": 10,
+    "true": 163
+   }
+  }
+ },
+ "tsv": {
+  "rows": 500,
+  "columns": {
+   "id": {
+    "nulls": 0,
+    "sum": 125250.0,
+    "min": 1.0,
+    "max": 500.0
+   },
+   "pickup": {
+    "nulls": 10,
+    "min": 1420073569000000,
+    "max": 1422736190000000
+   },
+   "distance": {
+    "nulls": 10,
+    "sum": 1382.4399999999998,
+    "min": 0.0,
+    "max": 21.53
+   },
+   "fare": {
+    "nulls": 10,
+    "sum": 5808.4,
+    "min": 2.5,
+    "max": 52.0
+   },
+   "payment": {
+    "nulls": 10,
+    "distinct": 3
+   },
+   "note": {
+    "nulls": 10,
+    "distinct": 5
+   },
+   "tipped": {
+    "nulls": 10,
+    "true": 163
+   }
+  }
+ },
+ "ndjson": {
+  "rows": 500,
+  "columns": {
+   "id": {
+    "nulls": 0,
+    "sum": 125250.0,
+    "min": 1.0,
+    "max": 500.0
+   },
+   "pickup": {
+    "nulls": 10,
+    "min": 1420073569000000,
+    "max": 1422736190000000
+   },
+   "distance": {
+    "nulls": 10,
+    "sum": 1382.4399999999998,
+    "min": 0.0,
+    "max": 21.53
+   },
+   "fare": {
+    "nulls": 10,
+    "sum": 5808.4,
+    "min": 2.5,
+    "max": 52.0
+   },
+   "payment": {
+    "nulls": 10,
+    "distinct": 3
+   },
+   "note": {
+    "nulls": 10,
+    "distinct": 5
+   },
+   "tipped": {
+    "nulls": 10,
+    "true": 163
+   }
+  }
+ },
+ "json": {
+  "rows": 500,
+  "columns": {
+   "id": {
+    "nulls": 0,
+    "sum": 125250.0,
+    "min": 1.0,
+    "max": 500.0
+   },
+   "pickup": {
+    "nulls": 10,
+    "min": 1420073569000000,
+    "max": 1422736190000000
+   },
+   "distance": {
+    "nulls": 10,
+    "sum": 1382.4399999999998,
+    "min": 0.0,
+    "max": 21.53
+   },
+   "fare": {
+    "nulls": 10,
+    "sum": 5808.4,
+    "min": 2.5,
+    "max": 52.0
+   },
+   "payment": {
+    "nulls": 10,
+    "distinct": 3
+   },
+   "note": {
+    "nulls": 10,
+    "distinct": 5
+   },
+   "tipped": {
+    "nulls": 10,
+    "true": 163
+   }
+  }
+ },
+ "parquet": {
+  "rows": 500,
+  "columns": {
+   "id": {
+    "nulls": 0,
+    "sum": 125250.0,
+    "min": 1.0,
+    "max": 500.0
+   },
+   "pickup": {
+    "nulls": 10,
+    "min": 1420073569000000,
+    "max": 1422736190000000
+   },
+   "distance": {
+    "nulls": 10,
+    "sum": 1382.4399999999998,
+    "min": 0.0,
+    "max": 21.53
+   },
+   "fare": {
+    "nulls": 10,
+    "sum": 5808.4,
+    "min": 2.5,
+    "max": 52.0
+   },
+   "payment": {
+    "nulls": 10,
+    "distinct": 3
+   },
+   "note": {
+    "nulls": 10,
+    "distinct": 5
+   },
+   "tipped": {
+    "nulls": 10,
+    "true": 163
+   }
+  }
+ },
+ "sqlite": {
+  "rows": 500,
+  "columns": {
+   "id": {
+    "nulls": 0,
+    "sum": 125250.0,
+    "min": 1.0,
+    "max": 500.0
+   },
+   "pickup": {
+    "nulls": 10,
+    "min": 1420073569000000,
+    "max": 1422736190000000
+   },
+   "distance": {
+    "nulls": 10,
+    "sum": 1382.4399999999998,
+    "min": 0.0,
+    "max": 21.53
+   },
+   "fare": {
+    "nulls": 10,
+    "sum": 5808.4,
+    "min": 2.5,
+    "max": 52.0
+   },
+   "payment": {
+    "nulls": 10,
+    "distinct": 3
+   },
+   "note": {
+    "nulls": 10,
+    "distinct": 5
+   },
+   "tipped": {
+    "nulls": 10,
+    "true": 163
+   }
+  }
+ },
+ "xlsx": {
+  "rows": 500,
+  "columns": {
+   "id": {
+    "nulls": 0,
+    "sum": 125250.0,
+    "min": 1.0,
+    "max": 500.0
+   },
+   "pickup": {
+    "nulls": 10,
+    "min": 1420073569000000,
+    "max": 1422736190000000
+   },
+   "distance": {
+    "nulls": 10,
+    "sum": 1382.4399999999998,
+    "min": 0.0,
+    "max": 21.53
+   },
+   "fare": {
+    "nulls": 10,
+    "sum": 5808.4,
+    "min": 2.5,
+    "max": 52.0
+   },
+   "payment": {
+    "nulls": 10,
+    "distinct": 3
+   },
+   "note": {
+    "nulls": 10,
+    "distinct": 5
+   },
+   "tipped": {
+    "nulls": 10,
+    "true": 163
+   }
+  }
+ },
+ "arrow": {
+  "rows": 500,
+  "columns": {
+   "id": {
+    "nulls": 0,
+    "sum": 125250.0,
+    "min": 1.0,
+    "max": 500.0
+   },
+   "pickup": {
+    "nulls": 10,
+    "min": 1420073569000000,
+    "max": 1422736190000000
+   },
+   "distance": {
+    "nulls": 10,
+    "sum": 1382.4399999999998,
+    "min": 0.0,
+    "max": 21.53
+   },
+   "fare": {
+    "nulls": 10,
+    "sum": 5808.4,
+    "min": 2.5,
+    "max": 52.0
+   },
+   "payment": {
+    "nulls": 10,
+    "distinct": 3
+   },
+   "note": {
+    "nulls": 10,
+    "distinct": 5
+   },
+   "tipped": {
+    "nulls": 10,
+    "true": 163
+   }
+  }
+ }
+}
