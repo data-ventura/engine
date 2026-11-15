@@ -24,3 +24,4 @@ Reference results in `reference/` are computed by other tools, so tests compare 
 | `reference/verification.json` | Synthetic data and xskillscore scores (`scripts/reference/verification.py`) |
 | `reference/cftime.json` | cftime and xarray `convert_calendar` (`scripts/reference/cftime-calendars.py`) |
 | `reference/time-join.json` | polars `join_asof` (`scripts/reference/time-join.py`) |
+| `reference/grid.json` | pyproj (PROJ) transforms, xarray pointwise interpolation, scipy nearest nodes, on synthetic grids (`scripts/reference/grid.py`) |
