@@ -359,7 +359,8 @@ impl ArraySource for ZarrSource {
     }
 }
 
-/// The runtime every [`ZarrSource`] opens and reads on.
+/// The runtime every [`ZarrSource`] and remote [`GeoTiff`](crate::raster::GeoTiff) opens and reads
+/// on.
 fn runtime() -> &'static tokio::runtime::Runtime {
     static RUNTIME: OnceLock<tokio::runtime::Runtime> = OnceLock::new();
     RUNTIME.get_or_init(|| {
@@ -373,13 +374,15 @@ fn runtime() -> &'static tokio::runtime::Runtime {
 
 /// Runs `fut` on the Zarr runtime and blocks this thread until it finishes. Unlike
 /// `Runtime::block_on`, this works inside another runtime too.
-fn block_on<T: Send + 'static>(fut: impl Future<Output = Result<T>> + Send + 'static) -> Result<T> {
+pub(crate) fn block_on<T: Send + 'static>(
+    fut: impl Future<Output = Result<T>> + Send + 'static,
+) -> Result<T> {
     let (tx, rx) = std::sync::mpsc::sync_channel(1);
     runtime().spawn(async move {
         let _ = tx.send(fut.await);
     });
     rx.recv()
-        .map_err(|_| Error::Zarr("a Zarr task panicked".into()))?
+        .map_err(|_| Error::Zarr("a read task panicked".into()))?
 }
 
 async fn read_f64(array: Arc<Array<DynStore>>, subset: ArraySubset) -> Result<Vec<f64>> {
@@ -600,7 +603,7 @@ fn object_store_at(location: &str) -> Result<Box<dyn ObjectStore>> {
 }
 
 /// Cloud settings from the environment, keyed as object_store's builders read them.
-fn cloud_env() -> Vec<(String, String)> {
+pub(crate) fn cloud_env() -> Vec<(String, String)> {
     std::env::vars()
         .filter(|(k, _)| {
             ["AWS_", "GOOGLE_", "AZURE_"]

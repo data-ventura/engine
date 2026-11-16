@@ -46,7 +46,8 @@ serde_json = "1"
 shapefile = "0.9"
 thiserror = "2"
 url = "2"
-tiff = "0.11"
+# zstd is already built for zarrs; GDAL writes zstd COGs.
+tiff = { version = "0.11", features = ["zstd"] }
 zarrs = { version = "0.23", default-features = false, features = ["async", "blosc", "gzip", "zlib", "zstd", "crc32c", "adler32", "fletcher32", "sharding", "transpose", "bitround", "pcodec"] }
 zarrs_object_store = { version = "0.7", default-features = false, features = ["http", "fs", "aws", "gcp", "azure"] }
 icechunk = { version = "2.3", default-features = false, features = ["object-store-s3", "object-store-gcs", "object-store-http", "object-store-fs"], optional = true }

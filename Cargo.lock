@@ -5842,6 +5842,7 @@ dependencies = [
  "half",
  "quick-error",
  "weezl",
+ "zstd 0.13.5",
  "zune-jpeg",
 ]
 

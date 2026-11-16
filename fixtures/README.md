@@ -10,6 +10,7 @@ Small datasets for tests live here (each under a few MB, with its source noted).
 | `tables/obs.csv`, `tables/visits.csv` | Synthetic observations at two stations (odd-second spacing, so nearest is never a tie) and station visits, for time joins | Generated | `scripts/reference/time-join.py` |
 | `arrays/*` | Tiny arrays: packed NetCDF 4 (int16 + scale/offset, `_FillValue`, `missing_value`, `_Unsigned`, noleap time), NetCDF 3, plain HDF5, `.npy` (C and Fortran order), `.npz` | Generated | `scripts/reference/make-array-fixtures.py` |
 | `geo/*` | Small vector layers (GeoJSON with mixed types, Shapefile, FlatGeobuf in EPSG:3857, a two-layer GeoPackage, GeoParquet) with non-ASCII names, a hole and a multipolygon; and two GeoTIFFs (tiled deflate float32 in UTM 33N with nodata, striped LZW uint8 in WGS 84) | Generated | `scripts/reference/make-geo-fixtures.py` |
+| `geo/cog-*.tif` | Cloud Optimized GeoTIFFs written by GDAL's COG driver: a float32 DEM (deflate + floating-point predictor, nodata, partial edge tiles, three average overviews) and a 3-band uint8 image (zstd, pixel-interleaved, three nearest overviews) | Generated | `scripts/reference/make-cog-fixtures.py` |
 | `proj/us_noaa_conus.tif` | NADCON grid for NAD27 to NAD83 in the conterminous US (173 KB) | NOAA, public domain, from PROJ-data (`cdn.proj.org`) | Copied unchanged |
 | `spec/example.dvspec` | A workspace using every recipe kind | Hand-written | — |
 | `zarr/*` | The `packed.nc` variables as a Zarr format 2 store (consolidated; Blosc zstd, gzip, zlib, `/` chunk keys, a Fortran-order array, a missing chunk), a Zarr format 3 store (unconsolidated; zstd, gzip + crc32c, sharding with Blosc LZ4, a missing chunk) and an Icechunk repository with two branches, a tag and three commits | Generated | `scripts/reference/make-zarr-stores.py` |
@@ -33,4 +34,5 @@ Reference results in `reference/` are computed by other tools, so tests compare 
 | `reference/zarr.json` | xarray on zarr-python 3, and Icechunk read-only sessions (`scripts/reference/make-zarr-stores.py`) |
 | `reference/arrays.json` | xarray with cftime (`scripts/reference/make-array-fixtures.py`) |
 | `reference/geo.json` | GDAL through pyogrio and rasterio; geopandas for GeoParquet (`scripts/reference/make-geo-fixtures.py`) |
+| `reference/cog.json` | GDAL through rasterio: levels, windows, tile sizes (`BLOCK_SIZE`) and the overviews reads into smaller buffers chose (`scripts/reference/make-cog-fixtures.py`) |
 | `reference/fingerprints.json` | Python hashlib (`scripts/reference/fingerprints.py`) |

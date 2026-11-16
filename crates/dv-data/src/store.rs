@@ -35,9 +35,12 @@ use zarrs_object_store::object_store::{
 type StoreResult<T> = object_store::Result<T>;
 
 /// An HTTP(S) store with the client's own retries off, for wrapping in a [`RetryStore`]. HTTP/2
-/// measured about twice as fast as HTTP/1.1 per chunk against Google Cloud Storage.
+/// measured about twice as fast as HTTP/1.1 per chunk against Google Cloud Storage. Plain HTTP is
+/// allowed only when `url` asks for it.
 pub fn http_store(url: &str) -> StoreResult<Box<dyn ObjectStore>> {
-    let options = ClientOptions::new().with_allow_http2();
+    let options = ClientOptions::new()
+        .with_allow_http2()
+        .with_allow_http(url.starts_with("http://"));
     let retry = RetryConfig {
         max_retries: 0,
         ..RetryConfig::default()
