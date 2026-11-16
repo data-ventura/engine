@@ -1,5 +1,5 @@
 //! Tables in any supported format, opened the same way: Parquet, CSV/TSV, JSON/NDJSON, Arrow
-//! IPC (Feather v2), Excel and SQLite, one file or a folder or glob of files with one schema.
+//! IPC (Feather v2), Excel, SQLite and DuckDB (with the `duckdb` feature), one file or a folder or glob of files with one schema.
 //!
 //! Opening a table finds its format and schema. Text formats infer the schema from their first
 //! rows; JSON strings that all parse as ISO-8601 timestamps become timestamps, since JSON has no
@@ -15,7 +15,7 @@ use arrow::compute::concat_batches;
 use arrow::datatypes::{DataType, Field, Schema, SchemaRef, TimeUnit};
 
 use crate::parquet::{ParquetTable, Sample};
-use crate::{Error, Result, excel, sqlite};
+use crate::{Error, Result, duckdb, excel, sqlite};
 
 /// Rows read to infer a text format's schema.
 const INFER_ROWS: usize = 10_000;
@@ -44,6 +44,11 @@ pub enum Format {
     Sqlite {
         table: Option<String>,
     },
+    /// A DuckDB database; its only table or view unless one is named (`schema.name` outside the
+    /// `main` schema).
+    DuckDb {
+        table: Option<String>,
+    },
     GeoJson,
     FlatGeobuf,
     /// A Shapefile's `.shp` (with its `.dbf` and `.prj` beside it).
@@ -69,7 +74,8 @@ impl Format {
             "ndjson" | "jsonl" => Some(Format::Ndjson),
             "arrow" | "feather" | "ipc" | "arrows" => Some(Format::Arrow),
             "xlsx" | "xlsm" | "xlsb" | "xls" | "ods" => Some(Format::Excel { sheet: None }),
-            "sqlite" | "sqlite3" | "db" => Some(Format::Sqlite { table: None }),
+            "sqlite" | "sqlite3" => Some(Format::Sqlite { table: None }),
+            "duckdb" | "ddb" => Some(Format::DuckDb { table: None }),
             "geojson" => Some(Format::GeoJson),
             "fgb" => Some(Format::FlatGeobuf),
             "shp" => Some(Format::Shapefile),
@@ -89,6 +95,8 @@ impl Format {
                 Format::Arrow
             }
             h if h.starts_with(b"SQLite format 3\0") => Format::Sqlite { table: None },
+            // A checksum, then DuckDB's magic bytes.
+            h if h.get(8..12) == Some(b"DUCK") => Format::DuckDb { table: None },
             h if h.starts_with(b"PK\x03\x04") => Format::Excel { sheet: None },
             _ if first == Some(b'[') => Format::Json,
             _ if first == Some(b'{') => Format::Ndjson,
@@ -350,6 +358,7 @@ fn infer_schema(path: &Path, format: &Format) -> Result<SchemaRef> {
         Format::Arrow => Ok(open_ipc(path)?.schema()),
         Format::Excel { sheet } => excel::schema(path, sheet.as_deref()),
         Format::Sqlite { table } => sqlite::schema(path, table.as_deref()),
+        Format::DuckDb { table } => duckdb::schema(path, table.as_deref()),
         geo => Ok(read_geo(path, geo)?.0),
     }
 }
@@ -399,6 +408,7 @@ fn read_file(
                 .into_iter()
                 .map(Ok),
         ),
+        Format::DuckDb { table } => duckdb::read(path, table.as_deref(), schema)?,
         geo => Box::new(read_geo(path, geo)?.1.into_iter().map(Ok)),
     })
 }

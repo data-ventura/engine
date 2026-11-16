@@ -1,0 +1,140 @@
+{
+ "tables": [
+  "long_trips",
+  "trips",
+  "extra.types"
+ ],
+ "trips": {
+  "rows": 500,
+  "columns": {
+   "id": {
+    "nulls": 0,
+    "sum": 125250.0,
+    "min": 1.0,
+    "max": 500.0,
+    "arrow": "int64"
+   },
+   "pickup": {
+    "nulls": 10,
+    "min": 1420073569000000,
+    "max": 1422736190000000,
+    "arrow": "timestamp[us]"
+   },
+   "distance": {
+    "nulls": 10,
+    "sum": 1382.4399999999998,
+    "min": 0.0,
+    "max": 21.53,
+    "arrow": "double"
+   },
+   "fare": {
+    "nulls": 10,
+    "sum": 5808.4,
+    "min": 2.5,
+    "max": 52.0,
+    "arrow": "double"
+   },
+   "payment": {
+    "nulls": 10,
+    "arrow": "string",
+    "distinct": 3
+   },
+   "note": {
+    "nulls": 10,
+    "arrow": "string",
+    "distinct": 5
+   },
+   "tipped": {
+    "nulls": 10,
+    "arrow": "bool",
+    "true": 163
+   }
+  }
+ },
+ "long_trips": {
+  "rows": 68,
+  "columns": {
+   "id": {
+    "nulls": 0,
+    "sum": 16941.0,
+    "min": 16.0,
+    "max": 498.0,
+    "arrow": "int64"
+   },
+   "pickup": {
+    "nulls": 2,
+    "min": 1420085587000000,
+    "max": 1422638435000000,
+    "arrow": "timestamp[us]"
+   },
+   "distance": {
+    "nulls": 0,
+    "sum": 671.21,
+    "min": 5.2,
+    "max": 21.53,
+    "arrow": "double"
+   },
+   "fare": {
+    "nulls": 3,
+    "sum": 1991.5,
+    "min": 18.0,
+    "max": 52.0,
+    "arrow": "double"
+   }
+  }
+ },
+ "extra.types": {
+  "rows": 40,
+  "columns": {
+   "id": {
+    "nulls": 0,
+    "sum": 820.0,
+    "min": 1.0,
+    "max": 40.0,
+    "arrow": "int64"
+   },
+   "price": {
+    "nulls": 6,
+    "sum": 8604.465,
+    "min": 12.345,
+    "max": 493.8,
+    "arrow": "decimal128(10, 3)"
+   },
+   "day": {
+    "nulls": 6,
+    "min": 19781,
+    "max": 19820,
+    "arrow": "date32[day]"
+   },
+   "stamp": {
+    "nulls": 6,
+    "min": 1711838220000000,
+    "max": 1711922580000000,
+    "arrow": "timestamp[us, tz=UTC]"
+   },
+   "big": {
+    "nulls": 5,
+    "sum": 720000000000000.0,
+    "min": 1000000000000.0,
+    "max": 40000000000000.0,
+    "arrow": "decimal128(38, 0)"
+   },
+   "feeling": {
+    "nulls": 0,
+    "arrow": "dictionary<values=string, indices=uint8, ordered=0>"
+   },
+   "span": {
+    "nulls": 0,
+    "arrow": "month_day_nano_interval"
+   },
+   "tag": {
+    "nulls": 0,
+    "arrow": "string"
+   },
+   "bytes": {
+    "nulls": 0,
+    "arrow": "binary"
+   }
+  }
+ }
+}

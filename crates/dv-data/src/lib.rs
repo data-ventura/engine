@@ -6,8 +6,12 @@
 pub mod alloc;
 pub mod array;
 pub mod budget;
+#[cfg(feature = "duckdb")]
+pub mod duckdb;
 mod excel;
 pub mod geo;
+#[cfg(feature = "grib")]
+pub mod grib;
 pub mod parquet;
 pub mod prefetch;
 pub mod pressure;
@@ -34,3 +38,36 @@ pub enum Error {
 }
 
 pub type Result<T, E = Error> = std::result::Result<T, E>;
+
+/// DuckDB files in a build without the `duckdb` feature: every call says so.
+#[cfg(not(feature = "duckdb"))]
+pub mod duckdb {
+    use std::path::Path;
+
+    use arrow::array::RecordBatch;
+    use arrow::datatypes::SchemaRef;
+
+    use crate::{Error, Result};
+
+    fn off(path: &Path) -> Error {
+        Error::Unsupported(format!(
+            "{path:?} needs DuckDB support, which this build doesn't include (the `duckdb` feature)"
+        ))
+    }
+
+    pub fn tables(path: &Path) -> Result<Vec<String>> {
+        Err(off(path))
+    }
+
+    pub(crate) fn schema(path: &Path, _table: Option<&str>) -> Result<SchemaRef> {
+        Err(off(path))
+    }
+
+    pub(crate) fn read(
+        path: &Path,
+        _table: Option<&str>,
+        _schema: SchemaRef,
+    ) -> Result<Box<dyn Iterator<Item = Result<RecordBatch>> + Send>> {
+        Err(off(path))
+    }
+}

@@ -42,7 +42,7 @@ cargo clippy --all-targets -- -D warnings
 
 Projections use PROJ 9.9 or later (`brew install proj`). Without it, the build compiles PROJ from source, which needs CMake, SQLite and libtiff (`apt install cmake sqlite3 libtiff-dev`). The engine never downloads PROJ's datum grids; it uses the ones installed and reports when a more accurate transform needs a grid that isn't.
 
-NetCDF and HDF5 support is behind `dv-data`'s `netcdf` feature, which links the system netCDF-C library (`brew install netcdf` or `apt install libnetcdf-dev`). Icechunk repositories are behind its `icechunk` feature (pure Rust, no system libraries, but a large dependency tree); plain Zarr stores need neither. CI builds and tests with `--all-features`.
+NetCDF and HDF5 support is behind `dv-data`'s `netcdf` feature, which links the system netCDF-C library (`brew install netcdf` or `apt install libnetcdf-dev`). GRIB 1 and 2 support is behind its `grib` feature, which links the system ecCodes library through pkg-config (`brew install eccodes` or `apt install libeccodes-dev`). DuckDB database files are behind its `duckdb` feature, which compiles DuckDB from source (no system library, but several minutes of C++ on a clean build). Icechunk repositories are behind its `icechunk` feature (pure Rust, no system libraries, but a large dependency tree); plain Zarr stores need neither. CI builds and tests with `--all-features`.
 
 ## Contributing
 

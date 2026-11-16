@@ -22,6 +22,12 @@ workspace = true
 netcdf = ["dep:netcdf"]
 # Icechunk repositories (Zarr stores with snapshots, branches and tags).
 icechunk = ["dep:icechunk", "dep:zarrs_icechunk"]
+# DuckDB database files, through a DuckDB built from source (no system library, but a long C++
+# build).
+duckdb = ["dep:duckdb", "arrow/ffi"]
+# GRIB 1 and 2 through the system ecCodes library (`brew install eccodes`,
+# `apt install libeccodes-dev`), found with pkg-config.
+grib = ["dep:pkg-config"]
 
 [dependencies]
 tokio = { version = "1", default-features = false, features = ["sync", "macros", "time", "rt", "rt-multi-thread"] }
@@ -29,6 +35,8 @@ libc = "0.2"
 arrow = { workspace = true, features = ["prettyprint", "csv", "json", "ipc"] }
 parquet = { workspace = true, features = ["arrow", "zstd", "snap", "lz4", "flate2-rust_backend"] }
 bytes = "1"
+# Arrow 60 under DuckDB's crate; batches cross to the engine's Arrow through the C data interface.
+duckdb = { version = "1.20000", default-features = false, features = ["bundled"], optional = true }
 calamine = { version = "0.38", features = ["dates"] }
 chrono = { version = "0.4", default-features = false, features = ["std"] }
 flatgeobuf = { version = "6", default-features = false }
@@ -52,6 +60,9 @@ zarrs = { version = "0.23", default-features = false, features = ["async", "blos
 zarrs_object_store = { version = "0.7", default-features = false, features = ["http", "fs", "aws", "gcp", "azure"] }
 icechunk = { version = "2.3", default-features = false, features = ["object-store-s3", "object-store-gcs", "object-store-http", "object-store-fs"], optional = true }
 zarrs_icechunk = { version = "0.6", default-features = false, optional = true }
+
+[build-dependencies]
+pkg-config = { version = "0.3", optional = true }
 
 [dev-dependencies]
 serde_json = "1"

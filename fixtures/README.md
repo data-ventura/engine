@@ -9,6 +9,8 @@ Small datasets for tests live here (each under a few MB, with its source noted).
 | `tables/payment-types.csv`, `tables/payment-fees.csv` | Lookup tables for join tests: unique keys, and several rows per key | Hand-written | — |
 | `tables/obs.csv`, `tables/visits.csv` | Synthetic observations at two stations (odd-second spacing, so nearest is never a tie) and station visits, for time joins | Generated | `scripts/reference/time-join.py` |
 | `arrays/*` | Tiny arrays: packed NetCDF 4 (int16 + scale/offset, `_FillValue`, `missing_value`, `_Unsigned`, noleap time), NetCDF 3, plain HDF5, `.npy` (C and Fortran order), `.npz` | Generated | `scripts/reference/make-array-fixtures.py` |
+| `arrays/*.grib1`, `arrays/*.grib2` | Tiny GRIB files written by ecCodes: GRIB 2 forecasts on a regular grid (pressure levels out of order, two steps, CCSDS and complex packing, a bitmap of missing points, clashing height levels), GRIB 1 analyses at two times on a south-to-north grid, and reduced Gaussian and polar stereographic grids | Generated | `scripts/reference/make-grib-fixtures.py` |
+| `tables/trips.duckdb` | The `trips` table in a DuckDB database, with a view and a second schema holding DECIMAL, DATE, TIMESTAMPTZ, HUGEINT, ENUM, INTERVAL, UUID and BLOB columns | Derived from `tables/trips.parquet` | `scripts/reference/make-duckdb-fixture.py` |
 | `geo/*` | Small vector layers (GeoJSON with mixed types, Shapefile, FlatGeobuf in EPSG:3857, a two-layer GeoPackage, GeoParquet) with non-ASCII names, a hole and a multipolygon; and two GeoTIFFs (tiled deflate float32 in UTM 33N with nodata, striped LZW uint8 in WGS 84) | Generated | `scripts/reference/make-geo-fixtures.py` |
 | `geo/cog-*.tif` | Cloud Optimized GeoTIFFs written by GDAL's COG driver: a float32 DEM (deflate + floating-point predictor, nodata, partial edge tiles, three average overviews) and a 3-band uint8 image (zstd, pixel-interleaved, three nearest overviews) | Generated | `scripts/reference/make-cog-fixtures.py` |
 | `proj/us_noaa_conus.tif` | NADCON grid for NAD27 to NAD83 in the conterminous US (173 KB) | NOAA, public domain, from PROJ-data (`cdn.proj.org`) | Copied unchanged |
@@ -33,6 +35,8 @@ Reference results in `reference/` are computed by other tools, so tests compare 
 | `reference/grid.json` | pyproj (PROJ) transforms, xarray pointwise interpolation, scipy nearest nodes, on synthetic grids (`scripts/reference/grid.py`) |
 | `reference/zarr.json` | xarray on zarr-python 3, and Icechunk read-only sessions (`scripts/reference/make-zarr-stores.py`) |
 | `reference/arrays.json` | xarray with cftime (`scripts/reference/make-array-fixtures.py`) |
+| `reference/grib.json` | cfgrib (`open_datasets`) on ecCodes (`scripts/reference/make-grib-fixtures.py`) |
+| `reference/duckdb.json` | DuckDB reading the database, and the Arrow types it exports (`scripts/reference/make-duckdb-fixture.py`) |
 | `reference/geo.json` | GDAL through pyogrio and rasterio; geopandas for GeoParquet (`scripts/reference/make-geo-fixtures.py`) |
 | `reference/cog.json` | GDAL through rasterio: levels, windows, tile sizes (`BLOCK_SIZE`) and the overviews reads into smaller buffers chose (`scripts/reference/make-cog-fixtures.py`) |
 | `reference/fingerprints.json` | Python hashlib (`scripts/reference/fingerprints.py`) |

@@ -1,6 +1,7 @@
 //! Reads one small table in every table format and checks it against DuckDB reading the same file
 //! (pandas with openpyxl for Excel, pyarrow for Arrow). The fixtures and reference come from
-//! `scripts/reference/make-table-fixtures.py`.
+//! `scripts/reference/make-table-fixtures.py`, and for the DuckDB database from
+//! `scripts/reference/make-duckdb-fixture.py`.
 
 use std::collections::HashSet;
 use std::path::PathBuf;
@@ -124,12 +125,22 @@ fn detects_formats_by_content() {
         ("trips.parquet", Format::Parquet),
         ("trips.arrow", Format::Arrow),
         ("trips.sqlite", Format::Sqlite { table: None }),
+        ("trips.duckdb", Format::DuckDb { table: None }),
         ("trips.json", Format::Json),
         ("trips.ndjson", Format::Ndjson),
     ] {
         let to = dir.join(src.replace('.', "_"));
         std::fs::copy(fixtures().join("tables").join(src), &to).unwrap();
         assert_eq!(Format::detect(&to).unwrap(), want, "{src}");
+    }
+    // `.db` is used by both SQLite and DuckDB, so their contents decide.
+    for (src, want) in [
+        ("trips.sqlite", Format::Sqlite { table: None }),
+        ("trips.duckdb", Format::DuckDb { table: None }),
+    ] {
+        let to = dir.join(format!("{}.db", src.replace('.', "_")));
+        std::fs::copy(fixtures().join("tables").join(src), &to).unwrap();
+        assert_eq!(Format::detect(&to).unwrap(), want, "{src} as .db");
     }
     std::fs::remove_dir_all(&dir).unwrap();
 }
@@ -152,4 +163,203 @@ fn folders_and_globs_read_as_one_table() {
     let glob = Table::open(dir.join("a*.csv")).unwrap();
     assert_eq!(glob.read_all().unwrap().num_rows(), 500);
     std::fs::remove_dir_all(&dir).unwrap();
+}
+
+#[cfg(feature = "duckdb")]
+mod duckdb {
+    use super::*;
+
+    fn reference() -> Json {
+        serde_json::from_str(
+            &std::fs::read_to_string(fixtures().join("reference/duckdb.json")).unwrap(),
+        )
+        .unwrap()
+    }
+
+    fn db() -> PathBuf {
+        fixtures().join("tables/trips.duckdb")
+    }
+
+    fn open(table: &str) -> Table {
+        Table::open_as(
+            db(),
+            Format::DuckDb {
+                table: Some(table.into()),
+            },
+        )
+        .unwrap()
+    }
+
+    #[test]
+    fn lists_tables_and_views() {
+        let want: Vec<String> = reference()["tables"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .map(|t| t.as_str().unwrap().to_string())
+            .collect();
+        assert_eq!(dv_data::duckdb::tables(&db()).unwrap(), want);
+        // Several tables, so one must be named.
+        let err = Table::open(db()).unwrap_err().to_string();
+        assert!(
+            err.contains("name one of long_trips, trips, extra.types"),
+            "{err}"
+        );
+        let err = Table::open_as(
+            db(),
+            Format::DuckDb {
+                table: Some("missing".into()),
+            },
+        )
+        .unwrap_err()
+        .to_string();
+        assert!(err.contains("no table \"missing\""), "{err}");
+    }
+
+    #[test]
+    fn tables_and_views_match_duckdb() {
+        let reference = reference();
+        for name in ["trips", "long_trips"] {
+            let table = open(name);
+            let batch = table.read_all().unwrap();
+            check(name, &batch, &reference[name]);
+            for (col, want) in reference[name]["columns"].as_object().unwrap() {
+                let f = table.schema().field_with_name(col).unwrap();
+                let arrow = match f.data_type() {
+                    DataType::Int64 => "int64",
+                    DataType::Float64 => "double",
+                    DataType::Utf8 => "string",
+                    DataType::Boolean => "bool",
+                    DataType::Timestamp(TimeUnit::Microsecond, None) => "timestamp[us]",
+                    other => panic!("{name}.{col}: {other}"),
+                };
+                assert_eq!(arrow, want["arrow"], "{name}.{col}: type");
+            }
+        }
+        let sample = open("trips").sample(100).unwrap();
+        assert_eq!(sample.batch.num_rows(), 100);
+        assert_eq!(sample.of_rows, 500);
+    }
+
+    #[test]
+    fn duckdb_types_keep_their_arrow_types() {
+        use arrow::array::{Decimal128Array, IntervalMonthDayNanoArray};
+        use arrow::datatypes::{Int32Type, IntervalUnit};
+
+        let want = &reference()["extra.types"];
+        let table = open("extra.types");
+        let batch = table.read_all().unwrap();
+        assert_eq!(batch.num_rows() as u64, want["rows"].as_u64().unwrap());
+        let cols = want["columns"].as_object().unwrap();
+        for (col, w) in cols {
+            let a = batch.column_by_name(col).unwrap();
+            assert_eq!(
+                a.null_count() as u64,
+                w["nulls"].as_u64().unwrap(),
+                "{col}: nulls"
+            );
+            // pyarrow's name for the type DuckDB exports.
+            let arrow = match a.data_type() {
+                DataType::Int64 => "int64".to_string(),
+                DataType::Decimal128(p, s) => format!("decimal128({p}, {s})"),
+                DataType::Date32 => "date32[day]".into(),
+                DataType::Timestamp(TimeUnit::Microsecond, Some(tz)) => {
+                    format!("timestamp[us, tz={tz}]")
+                }
+                DataType::Dictionary(k, v) if **k == DataType::UInt8 && **v == DataType::Utf8 => {
+                    "dictionary<values=string, indices=uint8, ordered=0>".into()
+                }
+                DataType::Interval(IntervalUnit::MonthDayNano) => "month_day_nano_interval".into(),
+                DataType::Utf8 => "string".into(),
+                DataType::Binary => "binary".into(),
+                other => panic!("{col}: unexpected {other}"),
+            };
+            assert_eq!(arrow, w["arrow"], "{col}: type");
+        }
+
+        let close = |x: f64, y: &Json| (x - y.as_f64().unwrap()).abs() <= 1e-9 * x.abs().max(1.0);
+        for col in ["id", "price", "big"] {
+            let w = &cols[col];
+            let a = batch.column_by_name(col).unwrap();
+            let v: Vec<f64> = match a.data_type() {
+                DataType::Decimal128(_, s) => {
+                    let d = a.as_any().downcast_ref::<Decimal128Array>().unwrap();
+                    d.iter()
+                        .flatten()
+                        .map(|x| x as f64 / 10f64.powi(i32::from(*s)))
+                        .collect()
+                }
+                _ => f64s(a),
+            };
+            assert!(close(v.iter().sum(), &w["sum"]), "{col}: sum");
+            assert!(
+                close(v.iter().copied().fold(f64::INFINITY, f64::min), &w["min"]),
+                "{col}: min"
+            );
+            assert!(
+                close(
+                    v.iter().copied().fold(f64::NEG_INFINITY, f64::max),
+                    &w["max"]
+                ),
+                "{col}: max"
+            );
+        }
+        let stamp = micros(batch.column_by_name("stamp").unwrap());
+        assert_eq!(stamp.iter().min().copied(), cols["stamp"]["min"].as_i64());
+        assert_eq!(stamp.iter().max().copied(), cols["stamp"]["max"].as_i64());
+        let day = cast(batch.column_by_name("day").unwrap(), &DataType::Int32).unwrap();
+        let day: Vec<i32> = day.as_primitive::<Int32Type>().iter().flatten().collect();
+        assert_eq!(
+            day.iter().min().map(|d| i64::from(*d)),
+            cols["day"]["min"].as_i64()
+        );
+        assert_eq!(
+            day.iter().max().map(|d| i64::from(*d)),
+            cols["day"]["max"].as_i64()
+        );
+        // INTERVAL keeps its parts: `to_hours(i) + to_days(i % 4)` for i = 1..=40.
+        let span = batch.column_by_name("span").unwrap();
+        let span = span
+            .as_any()
+            .downcast_ref::<IntervalMonthDayNanoArray>()
+            .unwrap();
+        let first = span.value(0);
+        assert_eq!(
+            (first.months, first.days, first.nanoseconds),
+            (0, 1, 3_600_000_000_000)
+        );
+    }
+
+    #[test]
+    fn reads_in_large_batches_and_stops_early() {
+        let table = open("trips");
+        let batches: Vec<_> = table.batches().unwrap().collect::<Result<_, _>>().unwrap();
+        assert_eq!(batches.len(), 1, "DuckDB's small chunks are joined");
+        assert_eq!(batches[0].num_rows(), 500);
+        // Dropping the reader part-way ends its thread rather than blocking it.
+        let mut it = table.batches().unwrap();
+        assert!(it.next().is_some());
+        drop(it);
+    }
+
+    #[test]
+    fn opens_read_only() {
+        // A copy, so a write that slipped through couldn't touch the fixture.
+        let dir = std::env::temp_dir().join(format!("dv-duckdb-{}", std::process::id()));
+        std::fs::create_dir_all(&dir).unwrap();
+        let path = dir.join("trips.duckdb");
+        std::fs::copy(db(), &path).unwrap();
+        let before = std::fs::read(&path).unwrap();
+        let t = Table::open_as(
+            &path,
+            Format::DuckDb {
+                table: Some("trips".into()),
+            },
+        )
+        .unwrap();
+        t.read_all().unwrap();
+        assert_eq!(std::fs::read(&path).unwrap(), before);
+        assert!(!dir.join("trips.duckdb.wal").exists());
+        std::fs::remove_dir_all(&dir).unwrap();
+    }
 }

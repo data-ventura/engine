@@ -1,6 +1,7 @@
 //! N-dimensional arrays from files: NumPy `.npy`/`.npz`, GeoTIFF rasters, Zarr stores and
-//! Icechunk repositories (see [`crate::zarr`]), and NetCDF 3/4 and HDF5 (with the `netcdf`
-//! feature, through the netCDF-C library).
+//! Icechunk repositories (see [`crate::zarr`]), NetCDF 3/4 and HDF5 (with the `netcdf` feature,
+//! through the netCDF-C library), and GRIB 1 and 2 (with the `grib` feature, through ecCodes; see
+//! `grib`).
 //!
 //! Every format opens as an [`ArraySource`]: named variables on named dimensions, with their
 //! attributes. [`read`] returns a hyperslab as `f64`, decoded as xarray decodes CF data: values
@@ -84,8 +85,9 @@ pub trait ArraySource: Send + Sync + std::fmt::Debug {
     }
 }
 
-/// Opens an array file by its extension: `.npy`, `.npz`, `.tif` (GeoTIFF), or (with the `netcdf` feature) `.nc`,
-/// `.nc4`, `.cdf`, `.h5`, `.hdf5`, `.he5`, `.h5ad`. A directory opens as a Zarr store (the root
+/// Opens an array file by its extension: `.npy`, `.npz`, `.tif` (GeoTIFF), (with the `netcdf`
+/// feature) `.nc`, `.nc4`, `.cdf`, `.h5`, `.hdf5`, `.he5`, `.h5ad`, or (with the `grib` feature)
+/// `.grib`, `.grb`, `.grib1`, `.grib2`, `.grb2`. A directory opens as a Zarr store (the root
 /// group) when it has Zarr metadata, or as an Icechunk repository (branch `main`, with the
 /// `icechunk` feature) when it has Icechunk's `repo` file.
 pub fn open(path: impl AsRef<Path>) -> Result<Box<dyn ArraySource>> {
@@ -100,6 +102,7 @@ pub fn open(path: impl AsRef<Path>) -> Result<Box<dyn ArraySource>> {
         "npz" => Ok(Box::new(npy::Npy::open_npz(path)?)),
         "tif" | "tiff" => Ok(Box::new(crate::raster::GeoTiff::open(path)?)),
         "nc" | "nc4" | "cdf" | "netcdf" | "h5" | "hdf5" | "he5" | "h5ad" => open_netcdf(path),
+        "grib" | "grb" | "grib1" | "grib2" | "grb1" | "grb2" | "gb2" => open_grib(path),
         _ if path.join("repo").is_file() && path.join("snapshots").is_dir() => {
             let location = path
                 .to_str()
@@ -130,6 +133,18 @@ fn open_netcdf(path: &Path) -> Result<Box<dyn ArraySource>> {
 fn open_netcdf(path: &Path) -> Result<Box<dyn ArraySource>> {
     Err(Error::Unsupported(format!(
         "{path:?} needs NetCDF/HDF5 support, which this build doesn't include (the `netcdf` feature)"
+    )))
+}
+
+#[cfg(feature = "grib")]
+fn open_grib(path: &Path) -> Result<Box<dyn ArraySource>> {
+    Ok(Box::new(crate::grib::Grib::open(path)?))
+}
+
+#[cfg(not(feature = "grib"))]
+fn open_grib(path: &Path) -> Result<Box<dyn ArraySource>> {
+    Err(Error::Unsupported(format!(
+        "{path:?} needs GRIB support, which this build doesn't include (the `grib` feature)"
     )))
 }
 
