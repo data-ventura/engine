@@ -156,7 +156,12 @@ fn check_file(file: &str, want: &Json) {
 #[test]
 fn every_variable_matches_cfgrib() {
     let reference = reference();
-    for file in ["forecast.grib2", "analysis.grib1", "grids.grib2"] {
+    for file in [
+        "forecast.grib2",
+        "analysis.grib1",
+        "grids.grib2",
+        "ensemble.grib2",
+    ] {
         check_file(file, &reference[file]);
     }
 }
@@ -210,4 +215,56 @@ fn clashing_coordinates_get_numbered_copies() {
         .filter(|v| base(&v.name) == "time")
         .count();
     assert_eq!(times, 1);
+}
+
+#[test]
+fn lambert_grid_gets_its_own_y_and_x() {
+    let src = open("grids.grib2");
+    // The polar stereographic `z` came first, so the Lambert `r` gets numbered copies.
+    let z = src.variable("z").unwrap();
+    let r = src.variable("r").unwrap();
+    assert_eq!(z.dims, ["y", "x"]);
+    assert_eq!(r.dims, ["y_2", "x_2"]);
+    assert_eq!(r.shape, [5, 7]);
+    assert_eq!(
+        r.attr("GRIB_gridType").and_then(AttrValue::as_text),
+        Some("lambert")
+    );
+    // Latitudes: `latitude` for the reduced Gaussian grid, `_2` polar stereographic, `_3` Lambert.
+    let aux = coordinates(r);
+    assert!(aux.contains(&"latitude_3".to_string()), "{aux:?}");
+    let lat = src.variable("latitude_3").unwrap();
+    assert_eq!(lat.dims, ["y_2", "x_2"]);
+    // A hyperslab of the Lambert field and of its latitudes, against cfgrib.
+    let reference = reference();
+    let want = &reference["grids.grib2"]["r"];
+    let pick = |w: &Json, y: usize, x: usize| w.as_array().unwrap()[y * 7 + x].as_f64().unwrap();
+    let got = array::read(src.as_ref(), "r", &[1, 2], &[2, 3]).unwrap();
+    let lats = array::read(src.as_ref(), "latitude_3", &[1, 2], &[2, 3]).unwrap();
+    for (i, (y, x)) in [(1, 2), (1, 3), (1, 4), (2, 2), (2, 3), (2, 4)]
+        .into_iter()
+        .enumerate()
+    {
+        assert_eq!(got[i], pick(&want["values"], y, x), "r[{y}, {x}]");
+        let lat = pick(&want["coords"]["latitude"]["values"], y, x);
+        assert!(
+            (lats[i] - lat).abs() <= 1e-9 * lat.abs(),
+            "latitude[{y}, {x}]"
+        );
+    }
+}
+
+#[test]
+fn ensemble_members_are_a_dimension() {
+    let src = open("ensemble.grib2");
+    let v = src.variable("t2m").unwrap();
+    assert_eq!(v.dims, ["number", "step", "latitude", "longitude"]);
+    assert_eq!(
+        array::read_all(src.as_ref(), "number").unwrap(),
+        [0.0, 1.0, 2.0, 3.0]
+    );
+    // Member 2 has no step 12: that block reads as missing, the rest as data.
+    let block = array::read(src.as_ref(), "t2m", &[2, 0, 0, 0], &[1, 2, 5, 6]).unwrap();
+    assert!(block[..30].iter().all(|x| x.is_finite()));
+    assert!(block[30..].iter().all(|x| x.is_nan()));
 }

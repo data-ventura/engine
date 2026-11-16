@@ -9,8 +9,10 @@ pressure levels (written out of order, CCSDS packing) at steps 0 and 6, 2 m temp
 bitmap of missing points, 10 m wind (so two heightAboveGround levels clash) and a 0-6 h
 accumulation (second-order complex packing). analysis.grib1 is GRIB 1 on a south-to-north grid,
 with mean sea level pressure at two analysis times and temperature at one. grids.grib2 has a
-reduced Gaussian field (one `values` dimension) and a polar stereographic one (y and x, with
-two-dimensional latitude and longitude).
+reduced Gaussian field (one `values` dimension), a polar stereographic one and a Lambert
+conformal one (each on its own y and x, with two-dimensional latitude and longitude).
+ensemble.grib2 has four members of a GRIB 2 ensemble (product template 4.1, written out of
+order) at two steps, with one member missing at the second step.
 
 The reference is what `cfgrib.open_datasets` reads, with times left as numbers (seconds since
 1970 for times, hours for steps), one entry per data variable.
@@ -141,7 +143,41 @@ p = message("polar_stereographic_pl_grib2", dataDate=20260301, dataTime=0)
 ec.codes_set(p, "shortName", "z")
 ec.codes_set(p, "level", 500)
 ec.codes_set_values(p, field(p, lambda la, lo: 55000 + 100 * la + np.cos(np.radians(lo))))
-write(f"{out}/grids.grib2", [h, p])
+lam = message("GRIB2", dataDate=20260301, dataTime=0)
+ec.codes_set(lam, "gridDefinitionTemplateNumber", 30)
+for k, v in dict(
+    shapeOfTheEarth=6, Nx=7, Ny=5,
+    latitudeOfFirstGridPointInDegrees=38.0, longitudeOfFirstGridPointInDegrees=260.0,
+    LaDInDegrees=40.0, LoVInDegrees=265.0, Latin1InDegrees=33.0, Latin2InDegrees=45.0,
+    DxInMetres=50000, DyInMetres=50000,
+).items():
+    ec.codes_set(lam, k, v)
+ec.codes_set_values(lam, np.zeros(35))
+ec.codes_set(lam, "shortName", "r")
+ec.codes_set(lam, "typeOfLevel", "isobaricInhPa")
+ec.codes_set(lam, "level", 700)
+ec.codes_set_values(lam, field(lam, lambda la, lo: 50 + 2 * (la - 38) + 0.5 * (lo - 260)))
+write(f"{out}/grids.grib2", [h, p, lam])
+
+# ensemble.grib2: members 0 (control) to 3 at steps 0 and 12; member 2 has no step 12.
+msgs = []
+for step in (0, 12):
+    for member in (2, 0, 3, 1):
+        if (member, step) == (2, 12):
+            continue
+        e = message("regular_ll_sfc_grib2", dataDate=20260210, dataTime=1200)
+        regrid(e, grid2)
+        ec.codes_set(e, "productDefinitionTemplateNumber", 1)
+        ec.codes_set(e, "typeOfEnsembleForecast", 3 if member else 1)
+        ec.codes_set(e, "perturbationNumber", member)
+        ec.codes_set(e, "numberOfForecastsInEnsemble", 4)
+        ec.codes_set(e, "shortName", "2t")
+        ec.codes_set(e, "typeOfLevel", "heightAboveGround")
+        ec.codes_set(e, "level", 2)
+        ec.codes_set(e, "step", step)
+        ec.codes_set_values(e, field(e, lambda la, lo: 275 + 0.3 * member - 0.2 * (la - 45) + 0.1 * lo + step / 6))
+        msgs.append(e)
+write(f"{out}/ensemble.grib2", msgs)
 
 
 def values(a):
@@ -152,7 +188,7 @@ ATTRS = ["units", "long_name", "standard_name", "GRIB_shortName", "GRIB_paramId"
          "GRIB_stepType", "GRIB_gridType", "GRIB_cfVarName", "GRIB_missingValue"]
 
 refs = {}
-for name in ("forecast.grib2", "analysis.grib1", "grids.grib2"):
+for name in ("forecast.grib2", "analysis.grib1", "grids.grib2", "ensemble.grib2"):
     file_ref = {}
     for ds in cfgrib.open_datasets(f"{out}/{name}", backend_kwargs={"indexpath": ""},
                                    decode_times=False, decode_timedelta=False):
