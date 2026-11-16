@@ -7,7 +7,7 @@
 /// Mean Earth radius (IUGG), in meters.
 pub const EARTH_RADIUS: f64 = 6_371_008.8;
 
-fn unit(lon: f64, lat: f64) -> [f64; 3] {
+pub(crate) fn unit(lon: f64, lat: f64) -> [f64; 3] {
     let (lon, lat) = (lon.to_radians(), lat.to_radians());
     [lat.cos() * lon.cos(), lat.cos() * lon.sin(), lat.sin()]
 }

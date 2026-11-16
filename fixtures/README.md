@@ -32,6 +32,7 @@ Reference results in `reference/` are computed by other tools, so tests compare 
 | `reference/verification.json` | Synthetic data and xskillscore scores (`scripts/reference/verification.py`) |
 | `reference/cftime.json` | cftime and xarray `convert_calendar` (`scripts/reference/cftime-calendars.py`) |
 | `reference/time-join.json` | polars `join_asof` (`scripts/reference/time-join.py`) |
+| `reference/regrid.json` | xarray-regrid conservative regridding (nested lat-lon and planar grids), and S2 through spherely for spherical overlaps (lat-lon cells with densified parallels, rotated-pole and polar stereographic curvilinear grids) and point-in-cell lookup, on synthetic grids (`scripts/reference/regrid.py`) |
 | `reference/grid.json` | pyproj (PROJ) transforms, xarray pointwise interpolation, scipy nearest nodes, on synthetic grids (`scripts/reference/grid.py`) |
 | `reference/zarr.json` | xarray on zarr-python 3, and Icechunk read-only sessions (`scripts/reference/make-zarr-stores.py`) |
 | `reference/arrays.json` | xarray with cftime (`scripts/reference/make-array-fixtures.py`) |
