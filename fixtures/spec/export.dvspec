@@ -1,0 +1,222 @@
+# The workspace dv-compute's Python export tests run: every formula function, each key-join
+# duplicates policy and time joins in each direction, over the table fixtures.
+dvspec = 0
+
+[sources.trips]
+url = "../tables/trips.csv"
+
+[sources.types]
+url = "../tables/payment-types.csv"
+
+[sources.fees]
+url = "../tables/payment-fees.csv"
+
+[sources.obs]
+url = "../tables/obs.csv"
+
+[sources.visits]
+url = "../tables/visits.csv"
+
+# Ten pickups are null, so windows order by id instead: the first time field.
+[[fixes]]
+source = "trips"
+field = "id"
+role = "time"
+
+[[fixes]]
+source = "trips"
+field = "distance"
+unit = "mi"
+
+[[fixes]]
+source = "obs"
+field = "temp"
+unit = "degC"
+
+[fields.fare_per_km]
+source = "trips"
+formula = 'fare / convert(distance, "km")'
+
+[fields.length]
+source = "trips"
+formula = 'if(distance > 2, "long", "short")'
+
+[fields.root]
+source = "trips"
+formula = "sqrt(fare) * 10 + sqrt(distance * distance)"
+
+[fields.anomaly]
+source = "trips"
+formula = "fare - mean(fare)"
+
+[fields.spread]
+source = "trips"
+formula = "std(fare) + var(distance) + count(note) + sum(payment) + min(fare) + max(fare)"
+
+[fields.lagged]
+source = "trips"
+formula = "lag(fare, 2)"
+
+[fields.next_distance]
+source = "trips"
+formula = "lead(distance)"
+
+[fields.change]
+source = "trips"
+formula = "diff(fare)"
+
+[fields.travelled]
+source = "trips"
+formula = "cumsum(distance)"
+
+[fields.smooth]
+source = "trips"
+formula = "rolling_mean(fare, 3) + rolling_sum(fare, 2) - rolling_min(fare, 5)"
+
+[fields.peak]
+source = "trips"
+formula = "rolling_max(fare, 4)"
+
+[fields.fare_rank]
+source = "trips"
+formula = "rank(fare)"
+
+[fields.doubled]
+source = "trips"
+formula = "coalesce(distance, 0) * 2"
+
+[fields.period]
+source = "trips"
+formula = "year(pickup) * 100 + month(pickup)"
+
+[fields.when]
+source = "trips"
+formula = "weekday(pickup) * 10000 + day(pickup) * 100 + hour(pickup) + minute(pickup) / 100"
+
+[fields.card_tip]
+source = "trips"
+formula = "payment == 1 and tipped"
+
+[fields.remainder]
+source = "trips"
+formula = "5 / 2 + (id - 250) % 7"
+
+[fields.biggest]
+source = "trips"
+formula = "max(fare, distance * 3) + min(fare, 10)"
+
+[fields.power]
+source = "trips"
+formula = "-fare ^ 2 + abs(-distance)"
+
+[fields.flagged]
+source = "trips"
+formula = 'upper(note) == "PLAIN" or contains(lower(note), ",") and not is_null(tipped)'
+
+[fields.halves]
+source = "trips"
+formula = "round(fare / 2 + 0.25) + round(-fare / 2 - 0.25) / 1000 + floor(fare / 3) - ceil(distance)"
+
+[fields.logs]
+source = "trips"
+formula = "ln(fare + 1) + log10(id + 1) + exp(fare / 10) + round(fare / 7, 2)"
+
+[fields.note_length]
+source = "trips"
+formula = "length(note) + if(fare >= 10, 1, 0)"
+
+[fields.mixed_units]
+source = "trips"
+formula = 'distance + convert(distance, "km") - 1'
+
+[fields.temp_f]
+source = "obs"
+formula = 'convert(temp, "degF")'
+
+[fields.warm]
+source = "obs"
+formula = 'temp > convert(temp, "degF") / 10'
+
+[joins.trip_types]
+by = "key"
+left = "trips"
+right = "types"
+left_keys = ["payment"]
+right_keys = ["code"]
+
+[joins.fee_ambiguous]
+by = "key"
+left = "trips"
+right = "fees"
+left_keys = ["payment"]
+right_keys = ["code"]
+
+[joins.fee_all]
+by = "key"
+left = "trips"
+right = "fees"
+left_keys = ["payment"]
+right_keys = ["code"]
+duplicates = "keep_all"
+
+[joins.fee_first]
+by = "key"
+left = "trips"
+right = "fees"
+left_keys = ["payment"]
+right_keys = ["code"]
+duplicates = "first"
+order_by = "since"
+
+[joins.fee_last]
+by = "key"
+left = "trips"
+right = "fees"
+left_keys = ["payment"]
+right_keys = ["code"]
+duplicates = "last"
+order_by = "since"
+
+[joins.fee_mean]
+by = "key"
+left = "trips"
+right = "fees"
+left_keys = ["payment"]
+right_keys = ["code"]
+duplicates = "mean"
+
+[joins.fee_count]
+by = "key"
+left = "trips"
+right = "fees"
+left_keys = ["payment"]
+right_keys = ["code"]
+duplicates = "count"
+
+[joins.trip_weather]
+by = "time"
+left = "trip_types"
+right = "obs"
+left_time = "pickup"
+right_time = "time"
+tolerance = "10m"
+
+[joins.visit_before]
+by = "time"
+left = "visits"
+right = "obs"
+left_time = "at"
+right_time = "time"
+tolerance = "30m"
+direction = "backward"
+match_on = [["station", "station"]]
+
+[joins.visit_after]
+by = "time"
+left = "visits"
+right = "obs"
+left_time = "at"
+right_time = "time"
+tolerance = "20m"
+direction = "forward"
+match_on = [["station", "station"]]

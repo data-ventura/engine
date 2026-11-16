@@ -22,6 +22,10 @@
 //!   `rolling_max`. Rolling windows with fewer than `n` non-null values are null, and `cumsum`
 //!   is null where `x` is null, as in polars and pandas.
 //! - `rank(x)`: 1 for the smallest value, ties sharing the lowest rank (SQL `RANK`).
+//!
+//! **Python.** Every formula also compiles to a polars expression with the same meaning, unit
+//! conversions included, for exported scripts (see [`crate::export`]). Ordered functions use
+//! `.over(order_by=...)`, so they don't depend on the frame's row order.
 
 use arrow::datatypes::DataType;
 use datafusion::common::ScalarValue;
@@ -46,6 +50,7 @@ use datafusion::prelude::ident;
 use dv_model::field::Dataset;
 use dv_model::units::Unit;
 
+use crate::export::{py_float, py_str};
 use crate::parse::{Ast, BinOp, FormulaError, Node, Span, parse};
 
 /// What a formula is compiled against.
@@ -75,6 +80,8 @@ pub struct Formula {
     pub unit: Option<Unit>,
     /// Fields the formula reads.
     pub fields: Vec<String>,
+    /// The same formula as a polars expression (`pl` is polars), for exported scripts.
+    pub python: String,
 }
 
 /// Parses and checks a formula, and compiles it to a DataFusion expression.
@@ -92,6 +99,7 @@ pub fn compile(src: &str, ctx: &Context<'_>) -> Result<Formula, FormulaError> {
             _ => None,
         },
         fields: c.fields,
+        python: v.py,
     })
 }
 
@@ -108,13 +116,16 @@ enum U {
 struct V {
     expr: Expr,
     unit: U,
+    /// The polars expression.
+    py: String,
 }
 
 impl V {
-    fn plain(expr: Expr) -> Self {
+    fn plain(expr: Expr, py: String) -> Self {
         V {
             expr,
             unit: U::None,
+            py,
         }
     }
 }
@@ -128,6 +139,20 @@ fn f64(e: Expr) -> Expr {
     cast(e, DataType::Float64)
 }
 
+fn py_f64(py: &str) -> String {
+    format!("{py}.cast(pl.Float64)")
+}
+
+/// The polars side of a unit conversion, with the same operations as the DataFusion side.
+fn py_convert(py: &str, scale: f64, offset: f64) -> String {
+    format!(
+        "({} * {} + {})",
+        py_f64(py),
+        py_float(scale),
+        py_float(offset)
+    )
+}
+
 fn err<T>(msg: impl Into<String>, span: Span) -> Result<T, FormulaError> {
     Err(FormulaError::new(msg, span))
 }
@@ -135,18 +160,25 @@ fn err<T>(msg: impl Into<String>, span: Span) -> Result<T, FormulaError> {
 impl Compiler<'_, '_> {
     fn node(&mut self, n: &Node) -> Result<V, FormulaError> {
         match &n.ast {
-            Ast::Number(x) => Ok(V::plain(lit(*x))),
-            Ast::Str(s) => Ok(V::plain(lit(s.clone()))),
-            Ast::Bool(b) => Ok(V::plain(lit(*b))),
+            Ast::Number(x) => Ok(V::plain(lit(*x), format!("pl.lit({})", py_float(*x)))),
+            Ast::Str(s) => Ok(V::plain(lit(s.clone()), format!("pl.lit({})", py_str(s)))),
+            Ast::Bool(b) => Ok(V::plain(
+                lit(*b),
+                format!("pl.lit({})", if *b { "True" } else { "False" }),
+            )),
             Ast::Field(name) => self.field(name, n.span),
             Ast::Neg(a) => {
                 let v = self.node(a)?;
                 Ok(V {
                     expr: -v.expr,
                     unit: v.unit,
+                    py: format!("(-{})", v.py),
                 })
             }
-            Ast::Not(a) => Ok(V::plain(!self.node(a)?.expr)),
+            Ast::Not(a) => {
+                let v = self.node(a)?;
+                Ok(V::plain(!v.expr, format!("(~{})", v.py)))
+            }
             Ast::Binary(op, a, b) => self.binary(*op, a, b, n.span),
             Ast::Call(name, args) => self.call(name, args, n.span),
         }
@@ -173,6 +205,7 @@ impl Compiler<'_, '_> {
         Ok(V {
             expr: ident(name),
             unit,
+            py: format!("pl.col({})", py_str(name)),
         })
     }
 
@@ -188,11 +221,15 @@ impl Compiler<'_, '_> {
     }
 
     /// Brings `b` into `a`'s unit, for addition, comparison and the like.
-    fn align(&self, a: &V, b: V, op: &str, span: Span) -> Result<(U, Expr), FormulaError> {
+    fn align(&self, a: &V, b: V, op: &str, span: Span) -> Result<(U, Expr, String), FormulaError> {
         Ok(match (&a.unit, b.unit) {
             (U::Known(ua), U::Known(ub)) => match ub.converter(ua) {
-                Some(c) if c.is_identity() => (a.unit.clone(), b.expr),
-                Some(c) => (a.unit.clone(), f64(b.expr) * lit(c.scale) + lit(c.offset)),
+                Some(c) if c.is_identity() => (a.unit.clone(), b.expr, b.py),
+                Some(c) => (
+                    a.unit.clone(),
+                    f64(b.expr) * lit(c.scale) + lit(c.offset),
+                    py_convert(&b.py, c.scale, c.offset),
+                ),
                 None => {
                     return err(
                         format!("can't {op} {ub} and {ua}: the units don't convert"),
@@ -200,9 +237,9 @@ impl Compiler<'_, '_> {
                     );
                 }
             },
-            (U::Known(_), U::None) => (a.unit.clone(), b.expr),
-            (U::None, u @ U::Known(_)) => (u, b.expr),
-            _ => (U::None, b.expr),
+            (U::Known(_), U::None) => (a.unit.clone(), b.expr, b.py),
+            (U::None, u @ U::Known(_)) => (u, b.expr, b.py),
+            _ => (U::None, b.expr, b.py),
         })
     }
 
@@ -211,12 +248,12 @@ impl Compiler<'_, '_> {
         let vb = self.node(b)?;
         use BinOp::*;
         if matches!(op, And | Or) {
-            let e = if op == And {
-                va.expr.and(vb.expr)
+            let (e, py) = if op == And {
+                (va.expr.and(vb.expr), format!("({} & {})", va.py, vb.py))
             } else {
-                va.expr.or(vb.expr)
+                (va.expr.or(vb.expr), format!("({} | {})", va.py, vb.py))
             };
-            return Ok(V::plain(e));
+            return Ok(V::plain(e, py));
         }
         self.known(&va, a.span)?;
         self.known(&vb, b.span)?;
@@ -228,7 +265,8 @@ impl Compiler<'_, '_> {
         Ok(match op {
             Add | Sub | Eq | Ne | Lt | Le | Gt | Ge => {
                 let left = va.expr.clone();
-                let (unit, right) = self.align(&va, vb, verb, span)?;
+                let left_py = va.py.clone();
+                let (unit, right, right_py) = self.align(&va, vb, verb, span)?;
                 let e = match op {
                     Add => left + right,
                     Sub => left - right,
@@ -244,7 +282,11 @@ impl Compiler<'_, '_> {
                 } else {
                     U::None
                 };
-                V { expr: e, unit }
+                V {
+                    expr: e,
+                    unit,
+                    py: format!("({left_py} {op} {right_py})"),
+                }
             }
             Mul | Div => {
                 let unit = match (&va.unit, &vb.unit) {
@@ -256,17 +298,29 @@ impl Compiler<'_, '_> {
                     (U::None, U::Known(y)) => U::Known(y.powi(-1)),
                     _ => U::None,
                 };
-                let e = if op == Mul {
-                    va.expr * vb.expr
+                let (e, py) = if op == Mul {
+                    (va.expr * vb.expr, format!("({} * {})", va.py, vb.py))
                 } else {
-                    f64(va.expr) / f64(vb.expr)
+                    (
+                        f64(va.expr) / f64(vb.expr),
+                        format!("({} / {})", py_f64(&va.py), py_f64(&vb.py)),
+                    )
                 };
-                V { expr: e, unit }
+                V { expr: e, unit, py }
             }
-            Mod => V {
-                expr: va.expr % vb.expr,
-                unit: va.unit,
-            },
+            // DataFusion's remainder takes the dividend's sign, as in Rust and C; polars' takes
+            // the divisor's, as in Python. The difference is one divisor.
+            Mod => {
+                let (a, b) = (&va.py, &vb.py);
+                let r = format!("({a} % {b})");
+                V {
+                    expr: va.expr % vb.expr,
+                    unit: va.unit,
+                    py: format!(
+                        "pl.when(({r} != 0) & (({r} < 0) != ({a} < 0))).then({r} - {b}).otherwise({r})"
+                    ),
+                }
+            }
             Pow => {
                 let unit = match (&va.unit, &b.ast) {
                     (U::Known(u), Ast::Number(n)) if n.fract() == 0.0 => {
@@ -283,6 +337,7 @@ impl Compiler<'_, '_> {
                 V {
                     expr: math::power(f64(va.expr), f64(vb.expr)),
                     unit,
+                    py: format!("({} ** {})", py_f64(&va.py), py_f64(&vb.py)),
                 }
             }
             And | Or => unreachable!("handled above"),
@@ -317,9 +372,13 @@ impl Compiler<'_, '_> {
         }
     }
 
-    fn order(&self, name: &str, span: Span) -> Result<Vec<SortExpr>, FormulaError> {
+    fn order(&self, name: &str, span: Span) -> Result<(Vec<SortExpr>, String), FormulaError> {
         match self.ctx.order_by {
-            Some(f) => Ok(vec![ident(f).sort(true, true)]),
+            // Nulls first on both sides: polars' `over` puts them first by default.
+            Some(f) => Ok((
+                vec![ident(f).sort(true, true)],
+                format!(".over(None, order_by={})", py_str(f)),
+            )),
             None => err(
                 format!("{name}() needs an order; this dataset has no time field to order by"),
                 span,
@@ -328,9 +387,10 @@ impl Compiler<'_, '_> {
     }
 
     fn call(&mut self, name: &str, args: &[Node], span: Span) -> Result<V, FormulaError> {
-        let same_unit = |v: V, e: Expr| V {
+        let same_unit = |v: V, e: Expr, py: String| V {
             expr: e,
             unit: v.unit,
+            py,
         };
         match name {
             "abs" | "round" | "floor" | "ceil" => {
@@ -341,19 +401,33 @@ impl Compiler<'_, '_> {
                     span,
                 )?;
                 let x = v.remove(0);
-                let e = match name {
-                    "abs" => math::abs(x.expr.clone()),
-                    "floor" => math::floor(f64(x.expr.clone())),
-                    "ceil" => math::ceil(f64(x.expr.clone())),
+                let (e, py) = match name {
+                    "abs" => (math::abs(x.expr.clone()), format!("{}.abs()", x.py)),
+                    "floor" => (
+                        math::floor(f64(x.expr.clone())),
+                        format!("{}.floor()", py_f64(&x.py)),
+                    ),
+                    "ceil" => (
+                        math::ceil(f64(x.expr.clone())),
+                        format!("{}.ceil()", py_f64(&x.py)),
+                    ),
                     _ => {
                         let digits = match args.get(1) {
                             Some(a) => self.int_arg(name, a)?,
                             None => 0,
                         };
-                        math::round(vec![f64(x.expr.clone()), lit(digits)])
+                        // DataFusion rounds halves away from zero; polars rounds them to even
+                        // unless told otherwise.
+                        (
+                            math::round(vec![f64(x.expr.clone()), lit(digits)]),
+                            format!(
+                                "{}.round({digits}, mode=\"half_away_from_zero\")",
+                                py_f64(&x.py)
+                            ),
+                        )
                     }
                 };
-                Ok(same_unit(x, e))
+                Ok(same_unit(x, e, py))
             }
             "sqrt" => {
                 let x = self.args(name, args, 1..=1, span)?.remove(0);
@@ -368,6 +442,7 @@ impl Compiler<'_, '_> {
                 Ok(V {
                     expr: math::sqrt(f64(x.expr)),
                     unit,
+                    py: format!("{}.sqrt()", py_f64(&x.py)),
                 })
             }
             "exp" | "ln" | "log10" => {
@@ -382,11 +457,12 @@ impl Compiler<'_, '_> {
                 }
                 self.known(&x, args[0].span)?;
                 let e = f64(x.expr);
-                Ok(V::plain(match name {
-                    "exp" => math::exp(e),
-                    "ln" => math::ln(e),
-                    _ => math::log10(e),
-                }))
+                let py = py_f64(&x.py);
+                Ok(match name {
+                    "exp" => V::plain(math::exp(e), format!("{py}.exp()")),
+                    "ln" => V::plain(math::ln(e), format!("{py}.log()")),
+                    _ => V::plain(math::log10(e), format!("{py}.log10()")),
+                })
             }
             "min" | "max" if args.len() == 2 => {
                 let mut v = self.args(name, args, 2..=2, span)?;
@@ -395,33 +471,42 @@ impl Compiler<'_, '_> {
                 self.known(&a, args[0].span)?;
                 self.known(&b, args[1].span)?;
                 let left = a.expr.clone();
-                let (unit, right) = self.align(&a, b, "compare", span)?;
+                let left_py = a.py.clone();
+                let (unit, right, right_py) = self.align(&a, b, "compare", span)?;
                 let e = if name == "min" {
                     least(vec![left, right])
                 } else {
                     greatest(vec![left, right])
                 };
-                Ok(V { expr: e, unit })
+                Ok(V {
+                    expr: e,
+                    unit,
+                    py: format!("pl.{name}_horizontal({left_py}, {right_py})"),
+                })
             }
             "coalesce" => {
                 let v = self.args(name, args, 1..=usize::MAX, span)?;
                 let mut it = v.into_iter();
                 let first = it.next().expect("at least one");
                 let mut exprs = vec![first.expr.clone()];
+                let mut pys = vec![first.py.clone()];
                 let mut unit = first.unit.clone();
                 for (v, a) in it.zip(&args[1..]) {
                     self.known(&v, a.span)?;
                     let base = V {
                         expr: lit(0),
                         unit: unit.clone(),
+                        py: String::new(),
                     };
-                    let (u, e) = self.align(&base, v, "combine", a.span)?;
+                    let (u, e, py) = self.align(&base, v, "combine", a.span)?;
                     unit = u;
                     exprs.push(e);
+                    pys.push(py);
                 }
                 Ok(V {
                     expr: coalesce(exprs),
                     unit,
+                    py: format!("pl.coalesce({})", pys.join(", ")),
                 })
             }
             "if" => {
@@ -430,37 +515,55 @@ impl Compiler<'_, '_> {
                 let then = v.pop().expect("three");
                 let cond = v.pop().expect("three");
                 let then_expr = then.expr.clone();
-                let (unit, else_expr) = self.align(&then, otherwise, "combine", args[2].span)?;
+                let then_py = then.py.clone();
+                let (unit, else_expr, else_py) =
+                    self.align(&then, otherwise, "combine", args[2].span)?;
                 let e = when(cond.expr, then_expr)
                     .otherwise(else_expr)
                     .map_err(|e| FormulaError::new(e.to_string(), span))?;
-                Ok(V { expr: e, unit })
+                Ok(V {
+                    expr: e,
+                    unit,
+                    py: format!("pl.when({}).then({then_py}).otherwise({else_py})", cond.py),
+                })
             }
             "is_null" => {
                 let x = self.args(name, args, 1..=1, span)?.remove(0);
-                Ok(V::plain(x.expr.is_null()))
+                Ok(V::plain(x.expr.is_null(), format!("{}.is_null()", x.py)))
             }
             "year" | "month" | "day" | "hour" | "minute" | "weekday" => {
                 let x = self.args(name, args, 1..=1, span)?.remove(0);
                 let part = if name == "weekday" { "dow" } else { name };
-                Ok(V::plain(cast(
-                    date_part(lit(part), x.expr),
-                    DataType::Int64,
-                )))
+                // DataFusion's `dow` counts from Sunday = 0; polars' weekday from Monday = 1.
+                let py = if name == "weekday" {
+                    format!("({}.dt.weekday() % 7)", x.py)
+                } else {
+                    format!("{}.dt.{name}()", x.py)
+                };
+                Ok(V::plain(
+                    cast(date_part(lit(part), x.expr), DataType::Int64),
+                    format!("{py}.cast(pl.Int64)"),
+                ))
             }
             "lower" | "upper" | "length" => {
                 let x = self.args(name, args, 1..=1, span)?.remove(0);
-                Ok(V::plain(match name {
-                    "lower" => lower(x.expr),
-                    "upper" => upper(x.expr),
-                    _ => character_length(x.expr),
-                }))
+                Ok(match name {
+                    "lower" => V::plain(lower(x.expr), format!("{}.str.to_lowercase()", x.py)),
+                    "upper" => V::plain(upper(x.expr), format!("{}.str.to_uppercase()", x.py)),
+                    _ => V::plain(
+                        character_length(x.expr),
+                        format!("{}.str.len_chars()", x.py),
+                    ),
+                })
             }
             "contains" => {
                 let mut v = self.args(name, args, 2..=2, span)?;
                 let needle = v.pop().expect("two");
                 let hay = v.pop().expect("two");
-                Ok(V::plain(contains(hay.expr, needle.expr)))
+                Ok(V::plain(
+                    contains(hay.expr, needle.expr),
+                    format!("{}.str.contains({}, literal=True)", hay.py, needle.py),
+                ))
             }
             "convert" => {
                 let x = self.args(name, args, 2..=2, span)?.remove(0);
@@ -485,6 +588,7 @@ impl Compiler<'_, '_> {
                 Ok(V {
                     expr: f64(x.expr) * lit(c.scale) + lit(c.offset),
                     unit: U::Known(to),
+                    py: py_convert(&x.py, c.scale, c.offset),
                 })
             }
             "mean" | "sum" | "min" | "max" | "count" | "std" | "var" => {
@@ -499,10 +603,10 @@ impl Compiler<'_, '_> {
                     "std" => stddev_udaf(),
                     _ => var_samp_udaf(),
                 };
-                let arg = if matches!(name, "mean" | "std" | "var") {
-                    f64(x.expr)
+                let (arg, arg_py) = if matches!(name, "mean" | "std" | "var") {
+                    (f64(x.expr), py_f64(&x.py))
                 } else {
-                    x.expr
+                    (x.expr, x.py)
                 };
                 let e = window(udaf, arg, vec![], None, span)?;
                 let unit = match (name, x.unit) {
@@ -510,7 +614,13 @@ impl Compiler<'_, '_> {
                     ("var", U::Known(u)) => U::Known(u.powi(2)),
                     (_, u) => u,
                 };
-                Ok(V { expr: e, unit })
+                // Sample standard deviation and variance, as DataFusion's `stddev` and
+                // `var_samp`: polars' default `ddof=1`.
+                Ok(V {
+                    expr: e,
+                    unit,
+                    py: format!("{arg_py}.{name}()"),
+                })
             }
             "lag" | "lead" | "diff" => {
                 let mut v = self.args(name, args, 1..=2, span)?;
@@ -519,7 +629,7 @@ impl Compiler<'_, '_> {
                     None => 1,
                 };
                 let x = v.remove(0);
-                let order = self.order(name, span)?;
+                let (order, over) = self.order(name, span)?;
                 let shifted = |e: Expr| -> Result<Expr, FormulaError> {
                     let f = if name == "lead" {
                         lead(e, Some(n), None)
@@ -530,18 +640,23 @@ impl Compiler<'_, '_> {
                         .build()
                         .map_err(|e| FormulaError::new(e.to_string(), span))
                 };
-                let e = if name == "diff" {
+                let shift = if name == "lead" { -n } else { n };
+                let shifted_py = format!("{}.shift({shift}){over}", x.py);
+                let (e, py) = if name == "diff" {
                     self.known(&x, args[0].span)?;
-                    x.expr.clone() - shifted(x.expr.clone())?
+                    (
+                        x.expr.clone() - shifted(x.expr.clone())?,
+                        format!("({} - {shifted_py})", x.py),
+                    )
                 } else {
-                    shifted(x.expr.clone())?
+                    (shifted(x.expr.clone())?, shifted_py)
                 };
-                Ok(same_unit(x, e))
+                Ok(same_unit(x, e, py))
             }
             "cumsum" => {
                 let x = self.args(name, args, 1..=1, span)?.remove(0);
                 self.known(&x, args[0].span)?;
-                let order = self.order(name, span)?;
+                let (order, over) = self.order(name, span)?;
                 let frame = WindowFrame::new_bounds(
                     WindowFrameUnits::Rows,
                     WindowFrameBound::Preceding(ScalarValue::UInt64(None)),
@@ -551,13 +666,15 @@ impl Compiler<'_, '_> {
                 let e = when(x.expr.clone().is_null(), lit(ScalarValue::Null))
                     .otherwise(running)
                     .map_err(|e| FormulaError::new(e.to_string(), span))?;
-                Ok(same_unit(x, e))
+                // polars' cum_sum already leaves nulls where the input is null.
+                let py = format!("{}.cum_sum(){over}", x.py);
+                Ok(same_unit(x, e, py))
             }
             "rolling_mean" | "rolling_sum" | "rolling_min" | "rolling_max" => {
                 let x = self.args(name, args, 2..=2, span)?.remove(0);
                 self.known(&x, args[0].span)?;
                 let n = self.int_arg(name, &args[1])?.max(1);
-                let order = self.order(name, span)?;
+                let (order, over) = self.order(name, span)?;
                 let frame = WindowFrame::new_bounds(
                     WindowFrameUnits::Rows,
                     WindowFrameBound::Preceding(ScalarValue::UInt64(Some(n as u64 - 1))),
@@ -569,17 +686,19 @@ impl Compiler<'_, '_> {
                     "rolling_min" => min_udaf(),
                     _ => max_udaf(),
                 };
-                let arg = if name == "rolling_mean" {
-                    f64(x.expr.clone())
+                let (arg, arg_py) = if name == "rolling_mean" {
+                    (f64(x.expr.clone()), py_f64(&x.py))
                 } else {
-                    x.expr.clone()
+                    (x.expr.clone(), x.py.clone())
                 };
                 let value = window(udaf, arg, order.clone(), Some(frame.clone()), span)?;
                 let filled = window(count_udaf(), x.expr.clone(), order, Some(frame), span)?;
                 let e = when(filled.gt_eq(lit(n)), value)
                     .end()
                     .map_err(|e| FormulaError::new(e.to_string(), span))?;
-                Ok(same_unit(x, e))
+                // polars' rolling windows need `window_size` non-null values by default, as here.
+                let py = format!("{arg_py}.{name}({n}){over}");
+                Ok(same_unit(x, e, py))
             }
             "rank" => {
                 let x = self.args(name, args, 1..=1, span)?.remove(0);
@@ -591,7 +710,8 @@ impl Compiler<'_, '_> {
                             .map_err(|e| FormulaError::new(e.to_string(), span))?,
                     )
                     .map_err(|e| FormulaError::new(e.to_string(), span))?;
-                Ok(V::plain(e))
+                // polars ranks only non-null values and leaves nulls null.
+                Ok(V::plain(e, format!("{}.rank(\"min\")", x.py)))
             }
             _ => err(format!("unknown function {name}()"), span),
         }

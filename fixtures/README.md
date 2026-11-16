@@ -15,6 +15,7 @@ Small datasets for tests live here (each under a few MB, with its source noted).
 | `geo/cog-*.tif` | Cloud Optimized GeoTIFFs written by GDAL's COG driver: a float32 DEM (deflate + floating-point predictor, nodata, partial edge tiles, three average overviews) and a 3-band uint8 image (zstd, pixel-interleaved, three nearest overviews) | Generated | `scripts/reference/make-cog-fixtures.py` |
 | `proj/us_noaa_conus.tif` | NADCON grid for NAD27 to NAD83 in the conterminous US (173 KB) | NOAA, public domain, from PROJ-data (`cdn.proj.org`) | Copied unchanged |
 | `spec/example.dvspec` | A workspace using every recipe kind | Hand-written | — |
+| `spec/export.dvspec` | A workspace for the Python export tests: every formula function, each key-join duplicates policy, time joins in each direction | Hand-written | — |
 | `zarr/*` | The `packed.nc` variables as a Zarr format 2 store (consolidated; Blosc zstd, gzip, zlib, `/` chunk keys, a Fortran-order array, a missing chunk), a Zarr format 3 store (unconsolidated; zstd, gzip + crc32c, sharding with Blosc LZ4, a missing chunk) and an Icechunk repository with two branches, a tag and three commits | Generated | `scripts/reference/make-zarr-stores.py` |
 | `arco-like.zarr` | A tiny synthetic array in ARCO-ERA5's layout: Zarr format 2, Blosc LZ4 + shuffle, NaN fill, one chunk missing | Generated (no external data) | `scripts/reference/make-zarr-fixture.py` |
 
@@ -44,3 +45,5 @@ Reference results in `reference/` are computed by other tools, so tests compare 
 | `reference/fingerprints.json` | Python hashlib (`scripts/reference/fingerprints.py`) |
 | `reference/cvd.json` | colorspacious (Machado et al. 2009 colour-vision-deficiency simulation) and colour-science (CIELAB, CIEDE2000), and palette checks combining them (`scripts/reference/cvd.py`) |
 | `reference/pdf-text.json` | pdfium (through pypdfium2): the characters and boxes it extracts from dv-render's golden PDFs (`scripts/reference/pdf-text.py`) |
+
+The Python export tests (`crates/dv-compute/tests/python_export.rs`) have no stored reference: they run the exported polars scripts at test time and compare their output to the engine's.
