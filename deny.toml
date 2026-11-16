@@ -34,4 +34,8 @@ ignore = [
     # Unmaintained, with no known vulnerability: a build-time macro crate that zarrs uses. Remove
     # once zarrs moves off it.
     { id = "RUSTSEC-2024-0436", reason = "build-time only, pulled in by zarrs" },
+    # Unmaintained, with no known vulnerability: the YAML parser under serde_yaml_ng, which the
+    # icechunk crate uses for its configuration files. The engine only reads repositories and
+    # never parses Icechunk YAML. Remove once icechunk moves off it.
+    { id = "RUSTSEC-2024-0449", reason = "icechunk's YAML config, unused by the engine" },
 ]

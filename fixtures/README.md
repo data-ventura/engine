@@ -12,6 +12,7 @@ Small datasets for tests live here (each under a few MB, with its source noted).
 | `geo/*` | Small vector layers (GeoJSON with mixed types, Shapefile, FlatGeobuf in EPSG:3857, a two-layer GeoPackage, GeoParquet) with non-ASCII names, a hole and a multipolygon; and two GeoTIFFs (tiled deflate float32 in UTM 33N with nodata, striped LZW uint8 in WGS 84) | Generated | `scripts/reference/make-geo-fixtures.py` |
 | `proj/us_noaa_conus.tif` | NADCON grid for NAD27 to NAD83 in the conterminous US (173 KB) | NOAA, public domain, from PROJ-data (`cdn.proj.org`) | Copied unchanged |
 | `spec/example.dvspec` | A workspace using every recipe kind | Hand-written | — |
+| `zarr/*` | The `packed.nc` variables as a Zarr format 2 store (consolidated; Blosc zstd, gzip, zlib, `/` chunk keys, a Fortran-order array, a missing chunk), a Zarr format 3 store (unconsolidated; zstd, gzip + crc32c, sharding with Blosc LZ4, a missing chunk) and an Icechunk repository with two branches, a tag and three commits | Generated | `scripts/reference/make-zarr-stores.py` |
 | `arco-like.zarr` | A tiny synthetic array in ARCO-ERA5's layout: Zarr format 2, Blosc LZ4 + shuffle, NaN fill, one chunk missing | Generated (no external data) | `scripts/reference/make-zarr-fixture.py` |
 
 Reference results in `reference/` are computed by other tools, so tests compare against an independent implementation:
@@ -29,6 +30,7 @@ Reference results in `reference/` are computed by other tools, so tests compare 
 | `reference/cftime.json` | cftime and xarray `convert_calendar` (`scripts/reference/cftime-calendars.py`) |
 | `reference/time-join.json` | polars `join_asof` (`scripts/reference/time-join.py`) |
 | `reference/grid.json` | pyproj (PROJ) transforms, xarray pointwise interpolation, scipy nearest nodes, on synthetic grids (`scripts/reference/grid.py`) |
+| `reference/zarr.json` | xarray on zarr-python 3, and Icechunk read-only sessions (`scripts/reference/make-zarr-stores.py`) |
 | `reference/arrays.json` | xarray with cftime (`scripts/reference/make-array-fixtures.py`) |
 | `reference/geo.json` | GDAL through pyogrio and rasterio; geopandas for GeoParquet (`scripts/reference/make-geo-fixtures.py`) |
 | `reference/fingerprints.json` | Python hashlib (`scripts/reference/fingerprints.py`) |

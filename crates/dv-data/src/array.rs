@@ -1,5 +1,6 @@
-//! N-dimensional arrays from files: NumPy `.npy`/`.npz`, GeoTIFF rasters, and NetCDF 3/4 and
-//! HDF5 (with the `netcdf` feature, through the netCDF-C library).
+//! N-dimensional arrays from files: NumPy `.npy`/`.npz`, GeoTIFF rasters, Zarr stores and
+//! Icechunk repositories (see [`crate::zarr`]), and NetCDF 3/4 and HDF5 (with the `netcdf`
+//! feature, through the netCDF-C library).
 //!
 //! Every format opens as an [`ArraySource`]: named variables on named dimensions, with their
 //! attributes. [`read`] returns a hyperslab as `f64`, decoded as xarray decodes CF data: values
@@ -84,7 +85,9 @@ pub trait ArraySource: Send + Sync + std::fmt::Debug {
 }
 
 /// Opens an array file by its extension: `.npy`, `.npz`, `.tif` (GeoTIFF), or (with the `netcdf` feature) `.nc`,
-/// `.nc4`, `.cdf`, `.h5`, `.hdf5`, `.he5`, `.h5ad`.
+/// `.nc4`, `.cdf`, `.h5`, `.hdf5`, `.he5`, `.h5ad`. A directory opens as a Zarr store (the root
+/// group) when it has Zarr metadata, or as an Icechunk repository (branch `main`, with the
+/// `icechunk` feature) when it has Icechunk's `repo` file.
 pub fn open(path: impl AsRef<Path>) -> Result<Box<dyn ArraySource>> {
     let path = path.as_ref();
     let ext = path
@@ -97,6 +100,21 @@ pub fn open(path: impl AsRef<Path>) -> Result<Box<dyn ArraySource>> {
         "npz" => Ok(Box::new(npy::Npy::open_npz(path)?)),
         "tif" | "tiff" => Ok(Box::new(crate::raster::GeoTiff::open(path)?)),
         "nc" | "nc4" | "cdf" | "netcdf" | "h5" | "hdf5" | "he5" | "h5ad" => open_netcdf(path),
+        _ if path.join("repo").is_file() && path.join("snapshots").is_dir() => {
+            let location = path
+                .to_str()
+                .ok_or_else(|| Error::Unsupported(format!("{path:?} isn't valid UTF-8")))?;
+            let main = crate::zarr::IcechunkVersion::Branch("main".into());
+            Ok(Box::new(crate::zarr::ZarrSource::open_icechunk(
+                location, &main, "/",
+            )?))
+        }
+        _ if ["zarr.json", ".zgroup", ".zarray", ".zmetadata"]
+            .iter()
+            .any(|m| path.join(m).is_file()) =>
+        {
+            Ok(Box::new(crate::zarr::ZarrSource::open_dir(path, "/")?))
+        }
         _ => Err(Error::Unsupported(format!(
             "{path:?} isn't a known array format"
         ))),
@@ -180,8 +198,8 @@ pub fn decode(data: &mut [f64], v: &Variable) {
     }
 }
 
-/// Copies a hyperslab out of a whole row-major array.
-pub(crate) fn slab(data: &[f64], shape: &[u64], start: &[u64], count: &[u64]) -> Result<Vec<f64>> {
+/// Checks that a hyperslab lies inside an array of `shape`.
+pub(crate) fn check_slab(shape: &[u64], start: &[u64], count: &[u64]) -> Result<()> {
     if start.len() != shape.len() || count.len() != shape.len() {
         return Err(Error::Unsupported(
             "start and count need one entry per dimension".into(),
@@ -197,6 +215,12 @@ pub(crate) fn slab(data: &[f64], shape: &[u64], start: &[u64], count: &[u64]) ->
             )));
         }
     }
+    Ok(())
+}
+
+/// Copies a hyperslab out of a whole row-major array.
+pub(crate) fn slab(data: &[f64], shape: &[u64], start: &[u64], count: &[u64]) -> Result<Vec<f64>> {
+    check_slab(shape, start, count)?;
     let total: u64 = count.iter().product();
     let mut out = Vec::with_capacity(total as usize);
     let mut idx = vec![0u64; shape.len()];
