@@ -35,6 +35,13 @@ jobs:
       - run: cargo fmt --all --check
       - run: cargo clippy --all-targets --all-features -- -D warnings
       - run: cargo test --all-targets --all-features
+      # dv-render's golden-image tests write what they drew, and diffs, here when they fail.
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: golden-diffs-${{ matrix.os }}
+          path: target/golden/
+          if-no-files-found: ignore
 
   deny:
     runs-on: ubuntu-latest

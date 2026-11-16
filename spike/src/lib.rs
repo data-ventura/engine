@@ -312,54 +312,15 @@ pub fn save_png(gpu: &dv_render::gpu::Gpu, texture: &wgpu::Texture, size: [u32; 
 
 /// Copies an `Rgba8Unorm` texture's pixels back to the CPU, row by row from the top.
 pub fn read_rgba(gpu: &dv_render::gpu::Gpu, texture: &wgpu::Texture, size: [u32; 2]) -> Vec<u8> {
-    let row = (size[0] * 4).div_ceil(256) * 256;
-    let buf = gpu.device.create_buffer(&wgpu::BufferDescriptor {
-        label: None,
-        size: u64::from(row) * u64::from(size[1]),
-        usage: wgpu::BufferUsages::MAP_READ | wgpu::BufferUsages::COPY_DST,
-        mapped_at_creation: false,
-    });
-    let mut enc = gpu.device.create_command_encoder(&Default::default());
-    enc.copy_texture_to_buffer(
-        texture.as_image_copy(),
-        wgpu::TexelCopyBufferInfo {
-            buffer: &buf,
-            layout: wgpu::TexelCopyBufferLayout {
-                offset: 0,
-                bytes_per_row: Some(row),
-                rows_per_image: None,
-            },
-        },
-        wgpu::Extent3d {
-            width: size[0],
-            height: size[1],
-            depth_or_array_layers: 1,
-        },
-    );
-    gpu.queue.submit([enc.finish()]);
-    buf.map_async(wgpu::MapMode::Read, .., |r| r.expect("map"));
-    gpu.wait();
-    let data = buf.get_mapped_range(..).expect("mapped");
-    let mut pixels = Vec::with_capacity((size[0] * size[1] * 4) as usize);
-    for y in 0..size[1] as usize {
-        let start = y * row as usize;
-        pixels.extend_from_slice(&data[start..start + size[0] as usize * 4]);
-    }
-    pixels
+    gpu.read_rgba(texture, size)
 }
 
 /// Writes RGBA pixels to `target/spike/<name>`.
 pub fn write_png(pixels: &[u8], size: [u32; 2], name: &str) {
     let path = workspace_root().join("target/spike").join(name);
     std::fs::create_dir_all(path.parent().expect("parent")).expect("mkdir");
-    let file = std::io::BufWriter::new(std::fs::File::create(&path).expect("create png"));
-    let mut enc = png::Encoder::new(file, size[0], size[1]);
-    enc.set_color(png::ColorType::Rgba);
-    enc.set_depth(png::BitDepth::Eight);
-    enc.write_header()
-        .expect("png header")
-        .write_image_data(pixels)
-        .expect("png data");
+    let png = dv_render::vector::encode_png(pixels, size).expect("encode png");
+    std::fs::write(&path, png).expect("write png");
 }
 
 #[cfg(test)]

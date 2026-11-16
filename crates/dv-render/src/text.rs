@@ -51,6 +51,7 @@ impl TextBlock {
                         y: g.y + y,
                     })
                     .collect(),
+                text: r.text.clone(),
             })
             .collect()
     }
@@ -112,6 +113,20 @@ impl Fonts {
             baseline = line.metrics().baseline;
             for item in line.items() {
                 if let PositionedLayoutItem::GlyphRun(run) = item {
+                    // Clusters in the glyphs' (visual) order; a ligature's continuations have no
+                    // glyphs of their own, so their text joins the cluster that starts it.
+                    let mut clusters: Vec<(usize, String)> = Vec::new();
+                    let mut n = 0;
+                    for c in run.run().visual_clusters() {
+                        let s = &text[c.text_range()];
+                        let count = c.glyphs().count();
+                        if count > 0 {
+                            clusters.push((n, s.to_string()));
+                            n += count;
+                        } else if let Some(last) = clusters.last_mut() {
+                            last.1.push_str(s);
+                        }
+                    }
                     runs.push(GlyphRun {
                         font: run.run().font().clone(),
                         size: run.run().font_size(),
@@ -123,6 +138,7 @@ impl Fonts {
                                 y: g.y,
                             })
                             .collect(),
+                        text: clusters,
                     });
                 }
             }

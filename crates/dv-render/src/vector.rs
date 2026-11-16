@@ -1,9 +1,11 @@
 //! The vector scene for everything people read closely: axes, text, marks and annotations.
 //!
 //! Drawing goes through the [`Scene`] trait, so the backend can change without touching the charts:
-//! [`VelloScene`] draws on the GPU with vello's analytic anti-aliasing, and [`SvgScene`] writes the
-//! same calls as SVG for export (text as glyph outlines, so the file needs no fonts and matches the
-//! screen). A lyon + MSAA backend can take vello's place behind the same trait.
+//! [`VelloScene`] draws on the GPU with vello's analytic anti-aliasing (read back with
+//! [`Gpu::read_rgba`] and [`encode_png`] for PNG export), [`SvgScene`] writes the same calls as SVG
+//! for export (text as glyph outlines, so the file needs no fonts and matches the screen), and
+//! [`PdfScene`](crate::pdf::PdfScene) writes them as PDF (text kept as text). A lyon + MSAA backend
+//! can take vello's place behind the same trait.
 //!
 //! Coordinates are device pixels, y down.
 
@@ -57,6 +59,9 @@ pub struct GlyphRun {
     /// Pixels per em.
     pub size: f32,
     pub glyphs: Vec<Glyph>,
+    /// The text behind the glyphs, for exports that keep text as text: the index of the first
+    /// glyph of each cluster, with the cluster's text (a ligature's whole text).
+    pub text: Vec<(usize, String)>,
 }
 
 /// What every vector backend draws.
@@ -241,6 +246,38 @@ impl skrifa::outline::OutlinePen for SvgPen {
     fn close(&mut self) {
         self.path.close_path();
     }
+}
+
+/// Encodes straight-alpha RGBA8 pixels, `size` wide and high, as an sRGB PNG.
+pub fn encode_png(pixels: &[u8], size: [u32; 2]) -> Result<Vec<u8>, String> {
+    let mut out = Vec::new();
+    let mut enc = png::Encoder::new(&mut out, size[0], size[1]);
+    enc.set_color(png::ColorType::Rgba);
+    enc.set_depth(png::BitDepth::Eight);
+    enc.set_source_srgb(png::SrgbRenderingIntent::Perceptual);
+    enc.write_header()
+        .and_then(|mut w| w.write_image_data(pixels))
+        .map_err(|e| format!("png: {e}"))?;
+    Ok(out)
+}
+
+/// Decodes a PNG into straight-alpha RGBA8 pixels and its size.
+pub fn decode_png(data: &[u8]) -> Result<(Vec<u8>, [u32; 2]), String> {
+    let mut dec = png::Decoder::new(std::io::Cursor::new(data));
+    dec.set_transformations(png::Transformations::EXPAND | png::Transformations::ALPHA);
+    let mut reader = dec.read_info().map_err(|e| format!("png: {e}"))?;
+    let mut buf = vec![0; reader.output_buffer_size().ok_or("png: too large")?];
+    let info = reader
+        .next_frame(&mut buf)
+        .map_err(|e| format!("png: {e}"))?;
+    buf.truncate(info.buffer_size());
+    if info.color_type != png::ColorType::Rgba || info.bit_depth != png::BitDepth::Eight {
+        return Err(format!(
+            "png: expected 8-bit RGBA, got {:?} {:?}",
+            info.bit_depth, info.color_type
+        ));
+    }
+    Ok((buf, [info.width, info.height]))
 }
 
 /// Draws [`VelloScene`]s into textures with vello's analytic (area) anti-aliasing.

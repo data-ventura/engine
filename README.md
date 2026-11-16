@@ -15,7 +15,7 @@ This repository holds everything that reads, computes and draws data, so results
 | `dv-model` | Datasets, fields, roles, units, profiles, selections |
 | `dv-grid` | Projections (PROJ), regridding, curvilinear and unstructured meshes |
 | `dv-compute` | Expression language, window functions, reductions, verification metrics |
-| `dv-render` | wgpu renderer, including `dv-plot` (charts drawn with vello) and SVG/PDF/PNG export |
+| `dv-render` | wgpu renderer, including `dv-plot` (charts drawn with vello, light and dark themes), SVG/PDF/PNG export and colour-vision-deficiency checks for palettes |
 | `dv-spec` | The `.dvspec` workspace format, JSON Schema and lock files |
 | `dv-ext` | The `dv:ext` WebAssembly extension host and Rust SDK |
 | `dv-py` | The connected-runtime host (Arrow shared memory) for Python, later R and Julia |

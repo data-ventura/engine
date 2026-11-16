@@ -27,7 +27,17 @@ skrifa = "0.49"
 icu_decimal = "2"
 icu_locale_core = "2"
 fixed_decimal = "0.7"
+# PDF export: pdf-writer writes the objects, subsetter cuts embedded fonts down to the glyphs used
+# and miniz_oxide compresses the streams. All pure Rust.
+pdf-writer = "0.15"
+subsetter = "0.2"
+miniz_oxide = "0.9"
+png = "0.18"
 
 [dev-dependencies]
+# Golden-image tests: resvg rasterizes the SVG export and hayro the PDF export, both on the CPU, so
+# the goldens are checked on machines without a GPU. Fonts are embedded, so neither needs its own.
+hayro = { version = "0.9", default-features = false }
+resvg = { version = "0.50", default-features = false }
 # float_roundtrip: reference values must parse to the exact doubles R wrote.
 serde_json = { version = "1", features = ["float_roundtrip"] }

@@ -42,3 +42,5 @@ Reference results in `reference/` are computed by other tools, so tests compare 
 | `reference/geo.json` | GDAL through pyogrio and rasterio; geopandas for GeoParquet (`scripts/reference/make-geo-fixtures.py`) |
 | `reference/cog.json` | GDAL through rasterio: levels, windows, tile sizes (`BLOCK_SIZE`) and the overviews reads into smaller buffers chose (`scripts/reference/make-cog-fixtures.py`) |
 | `reference/fingerprints.json` | Python hashlib (`scripts/reference/fingerprints.py`) |
+| `reference/cvd.json` | colorspacious (Machado et al. 2009 colour-vision-deficiency simulation) and colour-science (CIELAB, CIEDE2000), and palette checks combining them (`scripts/reference/cvd.py`) |
+| `reference/pdf-text.json` | pdfium (through pypdfium2): the characters and boxes it extracts from dv-render's golden PDFs (`scripts/reference/pdf-text.py`) |

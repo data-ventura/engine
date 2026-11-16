@@ -1,4 +1,5 @@
-//! Chart views drawn through the vector [`Scene`]: a line chart with a band, and a bar chart.
+//! Chart views drawn through the vector [`Scene`]: a line chart with a band, and a bar chart, in a
+//! light or a dark [`Theme`].
 //!
 //! The layout follows the chart quality bar: a 4 pt grid with 16 pt margins; a title at 1.2× the
 //! label size with a subtitle; light gridlines one device pixel wide, snapped to pixel centers,
@@ -26,7 +27,23 @@ pub struct Theme {
     /// The zero line and the baseline of bars.
     pub axis: Rgba,
     pub series: Rgba,
+    /// Categorical colors, assigned in order: Okabe & Ito's colorblind-safe set, ordered for the
+    /// background (the low-contrast yellow last on light, the dark blue last on dark). Every pair
+    /// clears [`cvd::MIN_DELTA_E`](crate::cvd::MIN_DELTA_E) under each simulated deficiency.
+    pub palette: [Rgba; 7],
 }
+
+/// Okabe & Ito (2008), "Color Universal Design": orange, sky blue, bluish green, yellow, blue,
+/// vermillion and reddish purple.
+const OKABE_ITO: [Rgba; 7] = [
+    Rgba::rgb(230, 159, 0),
+    Rgba::rgb(86, 180, 233),
+    Rgba::rgb(0, 158, 115),
+    Rgba::rgb(240, 228, 66),
+    Rgba::rgb(0, 114, 178),
+    Rgba::rgb(213, 94, 0),
+    Rgba::rgb(204, 121, 167),
+];
 
 pub const LIGHT: Theme = Theme {
     background: Rgba::rgb(255, 255, 255),
@@ -35,6 +52,36 @@ pub const LIGHT: Theme = Theme {
     grid: Rgba::rgb(0, 0, 0).with_alpha(48),
     axis: Rgba::rgb(0, 0, 0).with_alpha(90),
     series: Rgba::rgb(37, 99, 235),
+    palette: [
+        OKABE_ITO[4],
+        OKABE_ITO[0],
+        OKABE_ITO[2],
+        OKABE_ITO[6],
+        OKABE_ITO[1],
+        OKABE_ITO[5],
+        OKABE_ITO[3],
+    ],
+};
+
+/// The light theme's roles on a near-black background, at WCAG contrasts close to the light
+/// theme's: text 15:1 (light 17:1), secondary text 5.9:1 (5.1:1), and the series blue lightened
+/// to 6.1:1 (5.2:1).
+pub const DARK: Theme = Theme {
+    background: Rgba::rgb(28, 28, 30),
+    text: Rgba::rgb(242, 242, 247),
+    secondary: Rgba::rgb(152, 152, 159),
+    grid: Rgba::rgb(255, 255, 255).with_alpha(40),
+    axis: Rgba::rgb(255, 255, 255).with_alpha(90),
+    series: Rgba::rgb(96, 155, 250),
+    palette: [
+        OKABE_ITO[1],
+        OKABE_ITO[0],
+        OKABE_ITO[2],
+        OKABE_ITO[6],
+        OKABE_ITO[3],
+        OKABE_ITO[5],
+        OKABE_ITO[4],
+    ],
 };
 
 /// Points.

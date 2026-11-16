@@ -95,6 +95,45 @@ impl Gpu {
         }
         buffer
     }
+
+    /// Copies an `Rgba8Unorm` texture's pixels back to the CPU, row by row from the top. Waits for
+    /// the GPU.
+    pub fn read_rgba(&self, texture: &wgpu::Texture, size: [u32; 2]) -> Vec<u8> {
+        let row = (size[0] * 4).div_ceil(256) * 256;
+        let buf = self.device.create_buffer(&wgpu::BufferDescriptor {
+            label: None,
+            size: u64::from(row) * u64::from(size[1]),
+            usage: wgpu::BufferUsages::MAP_READ | wgpu::BufferUsages::COPY_DST,
+            mapped_at_creation: false,
+        });
+        let mut enc = self.device.create_command_encoder(&Default::default());
+        enc.copy_texture_to_buffer(
+            texture.as_image_copy(),
+            wgpu::TexelCopyBufferInfo {
+                buffer: &buf,
+                layout: wgpu::TexelCopyBufferLayout {
+                    offset: 0,
+                    bytes_per_row: Some(row),
+                    rows_per_image: None,
+                },
+            },
+            wgpu::Extent3d {
+                width: size[0],
+                height: size[1],
+                depth_or_array_layers: 1,
+            },
+        );
+        self.queue.submit([enc.finish()]);
+        buf.map_async(wgpu::MapMode::Read, .., |r| r.expect("map"));
+        self.wait();
+        let data = buf.get_mapped_range(..).expect("mapped");
+        let mut pixels = Vec::with_capacity((size[0] * size[1] * 4) as usize);
+        for y in 0..size[1] as usize {
+            let start = y * row as usize;
+            pixels.extend_from_slice(&data[start..start + size[0] as usize * 4]);
+        }
+        pixels
+    }
 }
 
 /// Bytes copied to the GPU at a time by [`Gpu::storage_buffer`].
