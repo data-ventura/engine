@@ -28,6 +28,7 @@ Reference results in `reference/` are computed by other tools, so tests compare 
 | `reference/units.json` | pint (`scripts/reference/units.py`) |
 | `reference/tables.json` | DuckDB reading each file; pandas + openpyxl for Excel, pyarrow for Arrow (`scripts/reference/make-table-fixtures.py`) |
 | `reference/query.json` | DuckDB (`scripts/reference/query.py`) |
+| `reference/spill.json` | DuckDB, on 1,000,000-row tables both sides make from the same integer formulas, too large to check in (`scripts/reference/spill.py`) |
 | `reference/formulas.json` | polars (`scripts/reference/formulas.py`) |
 | `reference/verification.json` | Synthetic data and xskillscore scores (`scripts/reference/verification.py`) |
 | `reference/cftime.json` | cftime and xarray `convert_calendar` (`scripts/reference/cftime-calendars.py`) |

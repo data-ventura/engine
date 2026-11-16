@@ -11,7 +11,7 @@ This repository holds everything that reads, computes and draws data, so results
 | Crate | Purpose |
 |---|---|
 | `dv-data` | Readers for tables (Parquet, CSV, Arrow, JSON, Excel, SQLite/DuckDB), arrays (NetCDF, HDF5, Zarr/Icechunk, GRIB, .npy) and geospatial data (GeoParquet, GeoJSON, Shapefile, GeoPackage, FlatGeobuf, GeoTIFF/COG); object storage and SFTP |
-| `dv-query` | Lazy table queries on Apache DataFusion |
+| `dv-query` | Lazy table queries on Apache DataFusion, spilling sorts, aggregates and joins to disk when they outgrow their memory |
 | `dv-model` | Datasets, fields, roles, units, profiles, selections |
 | `dv-grid` | Projections (PROJ), regridding, curvilinear and unstructured meshes |
 | `dv-compute` | Expression language, window functions, reductions, verification metrics |

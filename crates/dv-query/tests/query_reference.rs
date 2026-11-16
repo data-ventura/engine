@@ -14,7 +14,7 @@ use dv_data::request;
 use dv_data::table::Table;
 use dv_model::selection::{Predicate, Selection};
 use dv_query::join::{Aggregate, Duplicates, JoinError, JoinReport, KeyJoin, key_join};
-use dv_query::{Engine, Error, selection_expr};
+use dv_query::{Config, Engine, Error, selection_expr};
 use serde_json::Value as Json;
 
 fn fixtures() -> PathBuf {
@@ -263,7 +263,11 @@ async fn stale_generations_are_cancelled() {
 #[tokio::test]
 async fn query_memory_comes_from_the_budget() {
     let budget = Budget::new(64 * 1024);
-    let e = Engine::new(budget.clone()).unwrap();
+    let e = Engine::with_config(Config {
+        max_spill: 0,
+        ..Config::new(budget.clone())
+    })
+    .unwrap();
     e.register(
         "taxi",
         &Table::open(fixtures().join("taxi-20k.parquet")).unwrap(),
@@ -274,8 +278,10 @@ async fn query_memory_comes_from_the_budget() {
         .sql("select * from taxi order by \"fareAmount\"")
         .await
         .unwrap();
-    let err = df.collect().await.unwrap_err().to_string();
-    assert!(err.contains("memory budget"), "{err}");
+    let (submitter, _requests) = request::channel::<()>();
+    let err = e.collect(df, &submitter.submit(())).await.unwrap_err();
+    assert!(matches!(err, Error::OutOfMemory(_)), "{err}");
+    assert!(err.to_string().contains("66 KB of memory"), "{err}");
     assert_eq!(
         budget.used_by(Consumer::Query),
         0,

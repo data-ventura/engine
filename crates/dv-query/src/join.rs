@@ -175,7 +175,7 @@ async fn report(
             sum(n.gt(lit(1)).cast_to_int()).alias("ambiguous"),
         ],
     )?;
-    let batches = summary.collect().await?;
+    let batches = crate::spill::collect(summary, None).await?;
     let b = &batches[0];
     let get = |i: usize| -> u64 {
         let c = arrow::compute::cast(b.column(i), &arrow::datatypes::DataType::Int64)
